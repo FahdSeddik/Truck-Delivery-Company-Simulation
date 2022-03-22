@@ -16,8 +16,6 @@ Classes to be developed:
 
 int main()
 {
-    cout << "ayman-man"<<endl;
-    cout << "gaser el top yshwyt kantalob";
-
+    cout << "amr ashf 3tya el 3twy" << endl;
 }
 
