@@ -147,6 +147,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Cargo.cpp" />
     <ClCompile Include="Truck.cpp" />
+    <ClCompile Include="UI\UI_Class.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cargo.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Events\ReadyEvent.h" />
     <ClInclude Include="INFO.h" />
     <ClInclude Include="Truck.h" />
+    <ClInclude Include="UI\UI_Class.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

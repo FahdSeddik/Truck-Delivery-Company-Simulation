@@ -19,6 +19,9 @@
     <Filter Include="Events">
       <UniqueIdentifier>{e6868bb1-8527-4bc3-9ffc-1359a3fd7c63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{15c82829-90fd-4714-9bb9-f4e213a05c95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="Events\ReadyEvent.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI_Class.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="DS\Linked_List.h">
       <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI_Class.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
