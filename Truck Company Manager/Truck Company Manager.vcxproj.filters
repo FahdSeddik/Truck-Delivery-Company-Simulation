@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="DS">
+      <UniqueIdentifier>{e9dd2677-71c5-4ef0-aef3-e44aef93eb80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{e6868bb1-8527-4bc3-9ffc-1359a3fd7c63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -24,16 +30,70 @@
     <ClCompile Include="Truck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Company.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\CancellationEvent.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\PromotionEvent.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\ReadyEvent.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DS\BagADT.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\LLBag.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\LLQ.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\Node.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\PQ.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\PQNode.h">
+      <Filter>DS</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\QueueADT.h">
+      <Filter>DS</Filter>
+    </ClInclude>
     <ClInclude Include="Cargo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INFO.h">
+    <ClInclude Include="Company.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Truck.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\CancellationEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\PromotionEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\ReadyEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="INFO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DS\Linked_List.h">
+      <Filter>DS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

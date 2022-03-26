@@ -29,7 +29,7 @@ public:
 	Cargo(int PREPT, int LOADTIME,int DELIVERYDIST, int COST, Cargo_Type CT);//def constructor.
 	~Cargo();//def destructor.
 
-
+	
 	//GETTERS
 	int getLoad_Unload_Time();//load/Unload Time getter.
 	int getDeliveryDistance();//DeliveryDistance getter.
