@@ -23,7 +23,7 @@ private:
 	LLQ<Cargo*> Wait_NC, Wait_SC; //first come first served
 	PQ<Cargo*> Wait_VC; //priority queues  array or tree (load when you have truck cap)
 	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
-	//LLBag<Cargo*> MovingCargos; //Bag and remove cargos when delivered   (know delivered from each truck)
+	LLBag<Cargo*> MovingCargos_NC, MovingCargos_SC, MovingCargos_VC; //Bag and remove cargos when delivered   (know delivered from each truck)
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
 	
@@ -62,7 +62,7 @@ public:
 
 
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
-	void ReadFile();
+	void ReadFile(ifstream& input, string filename);
 
 
 	//TODO: ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
