@@ -39,8 +39,7 @@ public:
 	~Cargo();//destructor.
 	Cargo(Cargo& c);//copy constructor
 
-	//METHODS
-	void AssignToTruck(bool stat);//mark cargo as assigned (isAssigned=true)
+	
 
 
 	//PUBLIC GETTERS

@@ -21,10 +21,12 @@ Classes to be developed:
 
 //TODO @GASER
 /*
+*   Method Update() in truck to call UpdateStatus() at end of implementation
     Method in trucks to return cargo list
-    Method in trucks to return delivered cargos and clear them when delivered
+    Method in trucks to return delivered cargos and clear them when delivered 
     add truck status data member to take enum implemented in INFO.h 
     truck status data member would be updated when method Update is called in truck from company
+
 */
 
 /*@Ayman
