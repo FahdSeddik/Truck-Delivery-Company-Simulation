@@ -12,6 +12,14 @@ UI_Class::UI_Class()
 	}
 }
 
+string UI_Class::ReadFileName()
+{
+	string filename;
+	cout << "Please enter the input file's name: ";
+	cin >> filename;
+	return filename;
+}
+
 void UI_Class::Print()
 {
 	switch (mode)
