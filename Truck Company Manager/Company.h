@@ -38,7 +38,7 @@ private:
 	Linked_List<Truck*> NotAvailTrucks; //Linked-List to traverse and call update    TO ADDD AN INTERFACEEE
 
 	////LoadingTrucks;  //Linked-List use find by index to access Truck* Find(i)
-	////Under_Check; //LL based on checkup time needed
+	PQ<Truck*>Under_Check; //LL based on checkup time needed
 	////PQ<Truck*> MovingTrucks; //priority queue based on return time
 
 	
