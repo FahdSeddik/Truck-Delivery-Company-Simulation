@@ -1,6 +1,5 @@
 #include "Company.h"
 #include <iostream>
-#include <fstream>
 using namespace std;
 
 
@@ -82,7 +81,7 @@ void Company::ReadFile(ifstream & inputFile, string filename)
 // moves cargos from waiting to moving
 // returns false if there are no available cargos to assign (ie. empty cargo list)
 bool Company:: AssignCargos() {
-
+	return true;
 }
 
 
@@ -91,6 +90,7 @@ bool Company:: AssignCargos() {
 // moves cargos/trucks across lists
 // Calls ExecuteEvent()
 bool Company::UpdateAll() {
+	return true;
 
 }
 
