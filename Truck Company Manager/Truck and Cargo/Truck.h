@@ -73,7 +73,7 @@ public:
 	void CalculateDeliveryTime(); //calculates DT and set el data member
 
 	//Update method to be called from company
-	void Update();
+	void Update(int Global_Time);
 
 
 };

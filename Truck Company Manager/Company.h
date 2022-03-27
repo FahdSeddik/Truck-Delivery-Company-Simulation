@@ -8,7 +8,6 @@
 #include "Events/CancellationEvent.h"
 #include "Events/PromotionEvent.h"
 #include "Events/ReadyEvent.h"
-#include <string>
 #include "DS/Linked_List.h"
 
 
