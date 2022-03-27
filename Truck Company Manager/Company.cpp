@@ -1,13 +1,12 @@
 #include "Company.h"
 #include <iostream>
 #include <fstream>
-#include <string>
 using namespace std;
 
 
 
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
-void Company:: ReadFile(ifstream & inputFile, string filename)
+void Company::ReadFile(ifstream & inputFile, string filename)
 {
 	inputFile.open(filename, ios::in); // opens the file for input 
 	int N, S, V;//numbers of each type of truck

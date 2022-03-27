@@ -9,7 +9,7 @@
 #include "Events/PromotionEvent.h"
 #include "Events/ReadyEvent.h"
 #include "DS/Linked_List.h"
-
+#include <string>
 
 class Company
 {
