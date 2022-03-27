@@ -26,3 +26,10 @@ enum Truck_Type {
 	VT,		//vip
 	ST		//special
 };
+
+enum Truck_Status {
+	INCHECK,
+	MOVING,
+	AVAILABLE,
+	LOADING
+};

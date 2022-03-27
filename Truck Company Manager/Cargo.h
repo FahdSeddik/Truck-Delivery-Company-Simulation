@@ -44,6 +44,8 @@ public:
 
 
 	//PUBLIC GETTERS
+	
+	//GETTERS
 	int getLoad_Unload_Time();//load/Unload Time getter.
 	int getDeliveryDistance();//DeliveryDistance getter.
 	int getcost();//cost getter.

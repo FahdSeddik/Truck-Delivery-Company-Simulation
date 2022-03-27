@@ -139,14 +139,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Company.cpp" />
+    <ClCompile Include="Events\CancellationEvent.cpp" />
+    <ClCompile Include="Events\Event.cpp" />
+    <ClCompile Include="Events\PromotionEvent.cpp" />
+    <ClCompile Include="Events\ReadyEvent.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Cargo.cpp" />
     <ClCompile Include="Truck.cpp" />
+    <ClCompile Include="UI\UI_Class.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cargo.h" />
+    <ClInclude Include="Company.h" />
+    <ClInclude Include="DS\BagADT.h" />
+    <ClInclude Include="DS\Linked_List.h" />
+    <ClInclude Include="DS\LLBag.h" />
+    <ClInclude Include="DS\LLQ.h" />
+    <ClInclude Include="DS\Node.h" />
+    <ClInclude Include="DS\PQ.h" />
+    <ClInclude Include="DS\PQNode.h" />
+    <ClInclude Include="DS\QueueADT.h" />
+    <ClInclude Include="Events\CancellationEvent.h" />
+    <ClInclude Include="Events\Event.h" />
+    <ClInclude Include="Events\PromotionEvent.h" />
+    <ClInclude Include="Events\ReadyEvent.h" />
     <ClInclude Include="INFO.h" />
     <ClInclude Include="Truck.h" />
+    <ClInclude Include="UI\UI_Class.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
