@@ -51,4 +51,13 @@ public:
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
 	Cargo_Type getType();//Cargo Type getter.
 
+
+
+	//Methods
+
+	//TODO: to be used when a cargo is assigned to a truck to have cargo sorted in prio queue in truck
+	// gets movetime passed from truck
+	// assigns data member: deliveryTime with appriopriate value
+	void CalculateDeliveryTime(int MoveTime);
+
 };

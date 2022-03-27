@@ -25,7 +25,7 @@ private:
 	LLQ<Cargo*> Wait_NC, Wait_SC; //first come first served
 	PQ<Cargo*> Wait_VC; //priority queues  array or tree (load when you have truck cap)
 	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
-	LLBag<Cargo*> MovingCargos_NC, MovingCargos_SC, MovingCargos_VC; //Bag and remove cargos when delivered   (know delivered from each truck)
+	//LLBag<Cargo*> MovingCargos_NC, MovingCargos_SC, MovingCargos_VC; //Bag and remove cargos when delivered   (know delivered from each truck)
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
 	
@@ -37,11 +37,9 @@ private:
 	Moving for all truck types
 	*/
 	LLQ<Truck*> Avail_NT, Avail_VT, Avail_ST;
-	Linked_List<Truck*> NotAvailTrucks; //Linked-List to traverse and call update    TO ADDD AN INTERFACEEE
-
-	////LoadingTrucks;  //Linked-List use find by index to access Truck* Find(i)
-	PQ<Truck*>Under_Check; //LL based on checkup time needed
-	////PQ<Truck*> MovingTrucks; //priority queue based on return time
+	LLQ<Truck*> Loading_NT, Loading_VT, Loading_ST;
+	PQ<Truck*> Under_Check; //PQ based on who finished first
+	LLQ<Truck*> MovingTrucks; //Q based on return time
 
 	
 
@@ -86,7 +84,8 @@ public:
 	// simply can be Ready::Execute for example
 	void ExecuteEvent();
 
-	
-
+	//TODO: to be used form each truck when a cargo is delivered
+	// appends a cargo to delivered list
+	void AppendDeliveredCargo(Cargo* c);
 };
 

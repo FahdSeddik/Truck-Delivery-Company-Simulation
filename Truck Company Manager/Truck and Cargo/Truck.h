@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Cargo.h"
 #include "../INFO.h"
-
+#include "../Company.h"
  
 class Truck
 {
@@ -18,7 +18,7 @@ private:
 	int CurCapacity;//current capacity.
 	int deliveryInterval;//time needed to deliver all cargos.
 	int currentJourneyCount;//current number of journeys done by the truck
-	Cargo** AssignedCargos; //array of pointers (points to the assigned cargos)
+	
 	int CurAssignedCargos;//count of Current assigned cargos (0 initialy)
 	int MoveTime;//the time at which the truck carrying the cargo starts to move.
 	int activeTime;//time a truck is loading or in delivering cargos,
@@ -33,7 +33,7 @@ private:
 						//TSim total simulation time
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
 
-
+	PQ<Cargo*> AssignedCargos; //priority queue sorted based on delivery time
 
 	//PRIVATE SETTERS
 	void setSpeed(int speed);//speed setter.
