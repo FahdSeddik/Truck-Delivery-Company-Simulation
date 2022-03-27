@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Cargo.h"
-#include "INFO.h"
+#include "../INFO.h"
 
  
 class Truck

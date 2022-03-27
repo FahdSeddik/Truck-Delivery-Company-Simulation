@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "INFO.h"
+#include "../INFO.h"
 //GENERAL CARGO CLASS
 class Cargo
 {

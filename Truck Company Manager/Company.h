@@ -1,7 +1,7 @@
 #pragma once
 #include "INFO.h"
-#include "Cargo.h"
-#include "Truck.h"
+#include "Truck and Cargo/Truck.h"
+#include "Truck and Cargo/Cargo.h"
 #include "DS/LLBag.h"
 #include "DS/LLQ.h"
 #include "DS/PQ.h"

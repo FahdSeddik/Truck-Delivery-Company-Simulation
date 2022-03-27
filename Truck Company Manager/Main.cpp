@@ -40,7 +40,7 @@ int main()
     cout << "amr ashf 3tya el 3twy" << endl;
 
     Company TC; //truck company instantiation
-    while (TC.UpdateAll());
+//    while (TC.UpdateAll());
 
 
 }
