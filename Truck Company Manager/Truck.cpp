@@ -1,17 +1,13 @@
 #include "Truck.h"
-Truck::Truck(int CAP, int MAINT, int SPEED, int JBM, Truck_Type TT)
+Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT)
 {
 	CurCapacity = 0;
 	deliveryInterval = 0;
 	currentJourneyCount = 0;
 	CurAssignedCargos = 0;
-	MoveTime = 0;
 	activeTime = 0;
 	TotalCargosDel = 0;
-	TotalDeliveryJour = 0;
-	TotalSimTime=0;
 	Capacity = CAP;
-	maintenanceTime = MAINT;
 	speed = SPEED;
 	J = JBM;
 	Ttype = TT;
@@ -23,25 +19,25 @@ Truck::~Truck()
 	
 }//def destructor.
 
-Truck::Truck(Truck& T)
-{
-	Capacity=T.Capacity;
-	maintenanceTime=T.maintenanceTime;
-	speed=T.speed;
-	J=T.J;
-	Ttype=T.Ttype;
-	CurCapacity=T.CurCapacity;
-	deliveryInterval = T.deliveryInterval;
-	currentJourneyCount=T.currentJourneyCount;
-	T.AssignedCargos = new Cargo * [Capacity];//allocating a newarray of max Capacity Size for the copied object
-	CurAssignedCargos=T.CurAssignedCargos;
-	MoveTime=T.MoveTime;
-	activeTime=T.activeTime;
-	TruckUtlization=T.TruckUtlization;		
-	TotalCargosDel=T.TotalCargosDel;
-	TotalDeliveryJour=T.TotalDeliveryJour;
-	TotalSimTime = T.TotalSimTime;
-};//copy constructor
+//Truck::Truck(Truck& T)
+//{
+//	Capacity=T.Capacity;
+//	maintenanceTime=T.maintenanceTime;
+//	speed=T.speed;
+//	J=T.J;
+//	Ttype=T.Ttype;
+//	CurCapacity=T.CurCapacity;
+//	deliveryInterval = T.deliveryInterval;
+//	currentJourneyCount=T.currentJourneyCount;
+//	T.AssignedCargos = new Cargo * [Capacity];//allocating a newarray of max Capacity Size for the copied object
+//	CurAssignedCargos=T.CurAssignedCargos;
+//	MoveTime=T.MoveTime;
+//	activeTime=T.activeTime;
+//	TruckUtlization=T.TruckUtlization;		
+//	TotalCargosDel=T.TotalCargosDel;
+//	TotalDeliveryJour=T.TotalDeliveryJour;
+//	TotalSimTime = T.TotalSimTime;
+//};//copy constructor
 
 //GETTERS
 int Truck::getCapacity()
@@ -53,11 +49,6 @@ int Truck::getCurCapacity()
 {
 	return CurCapacity;
 };//Current capacity getter.
-
-int Truck::getMaintenanceTime()
-{
-	return maintenanceTime;
-};//maintenanceTime getter.
 
 
 int  Truck::getDeliveryInterval()
@@ -80,11 +71,6 @@ int Truck::getSpeed()
 	return speed;
 };//Truck Speed Getter.
 
-int Truck::getMoveTime()
-{
-	return MoveTime;
-
-};//getter for the time at which the truck carrying the cargo starts to move deliver the cargo.
 
 int Truck::getActiveTime()
 {
@@ -119,30 +105,30 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 void Truck::CalculateDeliveryTime()
 {
-	int furthestDeliveryTime = -9999;//getting the furthest delivery to calculate deliveryInterval
+	int furthestCargoDist = -9999;//getting the furthest delivery to calculate deliveryInterval
 								//setting initialy with a verylow value to get max(futhest delivery time)
 
 	int totalUnLoadingTime = 0;//total UnLoading Time of the cargos
-	for (int i = 0; i < getCurrentAssignedCargosCount(); i++)
+	for (int i = 0; i < CurAssignedCargos; i++)
 	{
-		if ((AssignedCargos[i]->getDeliveryDistance()) > furthestDeliveryTime)//getting the furthest delivery to calculate deliveryInterval
-			furthestDeliveryTime = AssignedCargos[i]->getDeliveryDistance();
+		if ((AssignedCargos[i]->getDeliveryDistance()) > furthestCargoDist)//getting the furthest delivery to calculate deliveryInterval
+			furthestCargoDist = AssignedCargos[i]->getDeliveryDistance();
 
 		totalUnLoadingTime = totalUnLoadingTime + AssignedCargos[i]->getLoad_Unload_Time();
 	}
 	//deliveryInterval=(Delivery distance of the furthest cargo/truck speed)+sum of unload times of 
 	//all its cargos+time to come back(Delivery distance of the furthest cargo)
-	deliveryInterval = ((furthestDeliveryTime / speed) + totalUnLoadingTime + furthestDeliveryTime);
+	deliveryInterval = ((furthestCargoDist / speed) + totalUnLoadingTime);
 }//calculates DT and set el data member
 
 bool Truck::NeedsRepairing()
 {
-	return currentJourneyCount % J;
+	return currentJourneyCount % J == 0;
 };//return journeycount % J;
 
-void  Truck::CalculateTruckUtlization()
+void  Truck::CalculateTruckUtlization(int SimTime)
 {
-	TruckUtlization=((TotalCargosDel / (Capacity * TotalDeliveryJour) * (activeTime * TotalSimTime)));
+	TruckUtlization=((TotalCargosDel / (Capacity * currentJourneyCount) * (activeTime * SimTime)));
 };//Calculated the percentage
 
 void Truck::update()
@@ -165,18 +151,6 @@ void Truck::setCapacity(int TCap)
 	}
 	
 };//capacity setter.
-
-void Truck::setMaintenanceTime(int MTime)
-{
-	if (MTime > 0)//validation for Time to be Postive
-	{
-		maintenanceTime = MTime;
-	}
-	else//else throw exception
-	{
-		//throw Exception
-	}
-};//maintenanceTime setter.
 
 void Truck::setSpeed(int speed)
 {

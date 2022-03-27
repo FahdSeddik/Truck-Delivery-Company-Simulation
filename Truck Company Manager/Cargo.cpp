@@ -1,6 +1,6 @@
 #include "Cargo.h"
 
-Cargo::Cargo(int PREPT, int LOADTIME, int DELIVERYDIST, int COST,Cargo_Type CT)
+Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT)
 {
 	prepTime = PREPT;
 	load_Unload_Time = LOADTIME;
@@ -18,6 +18,9 @@ Cargo::~Cargo()
 
 
 //SETTERS
+void Cargo::setCargoType(Cargo_Type CT) {
+	Ctype = CT;
+}//Cargo Type Setter
 void Cargo::setload_Unload_Time(int LTime)
 {
 	load_Unload_Time = LTime;
@@ -32,8 +35,6 @@ void Cargo::setCost(int cost)
 {
 	Cost = cost;
  };//cost setter.
-
-
 
 int Cargo::getLoad_Unload_Time()
 {

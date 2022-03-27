@@ -48,9 +48,11 @@ private:
 	//Events
 	LLQ<Event*> EventList;   // to be implemented
 
-	int time; //time in hours
+	int time; //time in hours is also simulation time
 
 	int AutoP, MaxW; //in hours
+	int MT_N, MT_V, MT_S; //maintenance time of each truck type
+	
 
 public:
 	//Constructor to read from file and set time to 0 
@@ -70,11 +72,14 @@ public:
 	bool AssignCargos();
 
 
-	//TODO: calls Update of each truck and event
+	//TODO: 
+	// increments time
+	// calls Update of each truck and event
 	// Calls AssignCargos()
 	// moves cargos/trucks across lists
 	// Calls ExecuteEvent()
-	void UpdateAll();
+	// returns false when program is done
+	bool UpdateAll();
 
 	//TODO: to be used in update in case an event is to be done 
 	// simply can be Ready::Execute for example
