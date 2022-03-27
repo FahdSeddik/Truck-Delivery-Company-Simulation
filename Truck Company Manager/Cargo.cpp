@@ -7,6 +7,7 @@ Cargo::Cargo(int PREPT, int LOADTIME, int DELIVERYDIST, int COST,Cargo_Type CT)
 	deliveryDistance = DELIVERYDIST;
 	Cost = COST;
 	Ctype = CT;
+	CDT = -1;
 };//constructor.
 
 
@@ -31,7 +32,12 @@ void Cargo::setDeliveryDistance(int DDistance)
 void Cargo::setCost(int cost)
 {
 	Cost = cost;
- };//cost setter.
+ }
+void Cargo::setCDT(int time)
+{
+	CDT = time;
+}
+;//cost setter.
 
 
 
@@ -48,4 +54,9 @@ int Cargo::getDeliveryDistance()
 int Cargo::getcost()
 {
 	return Cost;
- };//cost getter.
+ }
+int Cargo::GetCDT()
+{
+	return CDT;
+}
+;//cost getter.

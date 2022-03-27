@@ -16,13 +16,17 @@ private:
 	int Cost;
 	//cargo type
 	Cargo_Type Ctype;
-
+	//Time of Delivery
+	int CDT;
 
 	
 	//SETTERS
 	void setload_Unload_Time(int LTime);//load/Unload Time setter.
 	void setDeliveryDistance(int DDistance);//DeliveryDistance setter.
 	void setCost(int cost);//cost setter.
+	void setCDT(int time);// CDT setter
+
+
 
 public:
 
@@ -34,6 +38,6 @@ public:
 	int getLoad_Unload_Time();//load/Unload Time getter.
 	int getDeliveryDistance();//DeliveryDistance getter.
 	int getcost();//cost getter.
-
+	int GetCDT();//CDT getter
 
 };
