@@ -75,6 +75,7 @@ void Company:: ReadFile(ifstream & inputFile, string filename)
 			}
 		}
 	}
+	inputFile.close();
 }
 
 
