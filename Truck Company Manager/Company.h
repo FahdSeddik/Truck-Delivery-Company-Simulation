@@ -9,7 +9,9 @@
 #include "Events/PromotionEvent.h"
 #include "Events/ReadyEvent.h"
 #include "DS/Linked_List.h"
+#include <fstream>
 #include <string>
+using namespace std;
 
 class Company
 {
