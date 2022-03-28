@@ -25,7 +25,7 @@ private:
 	LLQ<Cargo*> Wait_NC, Wait_SC; //first come first served
 	PQ<Cargo*> Wait_VC; //priority queues  array or tree (load when you have truck cap)
 	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
-	//LLBag<Cargo*> MovingCargos_NC, MovingCargos_SC, MovingCargos_VC; //Bag and remove cargos when delivered   (know delivered from each truck)
+	PQ<Cargo*> MovingCargos; //PQ sorted based on deliverytime of each cargo
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
 	
@@ -39,7 +39,7 @@ private:
 	LLQ<Truck*> Avail_NT, Avail_VT, Avail_ST;
 	LLQ<Truck*> Loading_NT, Loading_VT, Loading_ST;
 	PQ<Truck*> Under_Check; //PQ based on who finished first
-	LLQ<Truck*> MovingTrucks; //Q based on return time
+	LLQ<Truck*> MovingTrucks; //queue
 
 	
 
@@ -73,7 +73,7 @@ public:
 
 	//TODO: 
 	// increments time
-	// calls Update of each truck and event
+	// calls Update of each truck 
 	// Calls AssignCargos()
 	// moves cargos/trucks across lists
 	// Calls ExecuteEvent()

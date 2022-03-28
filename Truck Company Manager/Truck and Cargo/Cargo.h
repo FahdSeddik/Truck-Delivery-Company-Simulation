@@ -19,7 +19,7 @@ private:
 	//(MoveTime-PrepTime)
 	int deliveryTime;//cargo delivery time from company to the destination 
 					 //((MT)+(cargo distance/truck speed)+(cargo unload time))
-
+	
 	
 	//PRIVATE SETTERS TO GET INPUT IN LEGAL LIMIT(VALIDATION)
 	void setload_Unload_Time(int LTime);//load/Unload Time setter.

@@ -33,7 +33,7 @@ private:
 						//TSim total simulation time
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
 
-	PQ<Cargo*> AssignedCargos; //priority queue sorted based on delivery time
+	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
 	//PRIVATE SETTERS
 	void setSpeed(int speed);//speed setter.
@@ -64,16 +64,18 @@ public:
 
 	//METHODS
 	bool isFull();//checks if the truck is full(max capacity) 
-	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck
+	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
 	bool NeedsRepairing();//return journeycount % J;
 	void  CalculateTruckUtlization(int SimTime);//Calculated the percentage
-	void update();//update status of the truck
+	
 
 	//called when company class moves truck to moving trucks list
 	void CalculateDeliveryTime(); //calculates DT and set el data member
 
 	//Update method to be called from company
-	void Update(int Global_Time);
+	// call NotifyMovingCargo(Cargo) in company for each cargo when start moving
+	// and when it start moving be sure to make cargo calculate the global delivery time by passing movetime of truck
+	Truck_Status Update(int Global_Time);
 
 
 };

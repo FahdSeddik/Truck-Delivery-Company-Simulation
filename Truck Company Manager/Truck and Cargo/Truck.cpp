@@ -105,20 +105,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 void Truck::CalculateDeliveryTime()
 {
-	int furthestCargoDist = -9999;//getting the furthest delivery to calculate deliveryInterval
-								//setting initialy with a verylow value to get max(futhest delivery time)
-
-	int totalUnLoadingTime = 0;//total UnLoading Time of the cargos
-	for (int i = 0; i < CurAssignedCargos; i++)
-	{
-		if ((AssignedCargos[i]->getDeliveryDistance()) > furthestCargoDist)//getting the furthest delivery to calculate deliveryInterval
-			furthestCargoDist = AssignedCargos[i]->getDeliveryDistance();
-
-		totalUnLoadingTime = totalUnLoadingTime + AssignedCargos[i]->getLoad_Unload_Time();
-	}
-	//deliveryInterval=(Delivery distance of the furthest cargo/truck speed)+sum of unload times of 
-	//all its cargos+time to come back(Delivery distance of the furthest cargo)
-	deliveryInterval = ((furthestCargoDist / speed) + totalUnLoadingTime);
+	
 }//calculates DT and set el data member
 
 bool Truck::NeedsRepairing()
@@ -130,11 +117,6 @@ void  Truck::CalculateTruckUtlization(int SimTime)
 {
 	TruckUtlization=((TotalCargosDel / (Capacity * currentJourneyCount) * (activeTime * SimTime)));
 };//Calculated the percentage
-
-void Truck::update()
-{
-	//TODO
-};//update status of the truck
 
 
 
