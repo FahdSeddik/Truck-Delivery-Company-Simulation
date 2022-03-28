@@ -1,6 +1,6 @@
 #include "Cargo.h"
 
-Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT)
+Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT, int Id)
 {
 	prepTime = PREPT;
 	load_Unload_Time = LOADTIME;
@@ -8,6 +8,7 @@ Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT)
 	Cost = COST;
 	Ctype = CT;
 	deliveryTime = -1;
+	ID = Id;
 };//constructor.
 
 
@@ -53,5 +54,9 @@ int Cargo::getcost()
 {
 	return Cost;
  }
-
 ;//cost getter.
+
+int Cargo::getID()
+{
+	return ID;
+};//getter for ID

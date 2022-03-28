@@ -9,6 +9,7 @@ private:
 	int load_Unload_Time;//time to load/unload cargo to/from the truck.
 	int deliveryDistance;//the distance (in kilometers) from the company to the delivery location of the cargo.
 	int Cost;//the cost of delivering the cargo.
+	int ID; //unique ID for cargo.
 	Cargo_Type Ctype;//cargo type.
 	
 
@@ -30,7 +31,7 @@ private:
 
 public:
 
-	Cargo(int PREPT, int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT);//Non default destructor.
+	Cargo(int PREPT, int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT, int ID);//Non default destructor.
 	~Cargo();//destructor.
 
 	
@@ -49,7 +50,9 @@ public:
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
 	int getDeliveryTime();///getter cargo delivery time from company to the destination 
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
+	int getID();//getter for ID
 	Cargo_Type getType();//Cargo Type getter.
+	
 
 
 

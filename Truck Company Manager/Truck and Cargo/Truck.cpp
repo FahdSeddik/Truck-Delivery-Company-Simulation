@@ -1,5 +1,5 @@
 #include "Truck.h"
-Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT)
+Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 {
 	CurCapacity = 0;
 	deliveryInterval = 0;
@@ -11,7 +11,7 @@ Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT)
 	speed = SPEED;
 	J = JBM;
 	Ttype = TT;
-	AssignedCargos = new Cargo*[Capacity];//allocating array of max Capacity Size
+	ID = Id;
 }//constructor.
 
 Truck::~Truck()
@@ -84,6 +84,11 @@ Truck_Type Truck::getTruckType()
 	return Ttype;
 };//type of truck getter.
 
+int Truck::getID()
+{
+	return ID;
+};//getter for ID
+
 
 //METHODS
 bool Truck::isFull()
@@ -97,7 +102,8 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 		return false;
 	if (NeedsRepairing())
 		return false;
-	AssignedCargos[CurAssignedCargos] = CargoToAssign;//add the cargo to the array
+	AssignedCargos.enqueue(CargoToAssign, CargoToAssign->getDeliveryDistance());
+	//add the cargo to the array
 	CurAssignedCargos++;//incrementing current Assigned Cargos Count by 1
 	return true;//succesfully assigned
 
@@ -105,6 +111,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 void Truck::CalculateDeliveryTime()
 {
+
 	
 }//calculates DT and set el data member
 

@@ -12,6 +12,7 @@ private:
 	int speed;//speed of the Truck (KM/hour).
 	int J;//Number of journeys after which the Truck needs maintenance
 	Truck_Type Ttype; //type of truck
+	int ID; //unique ID for truck
 
 
 	//DATA MEMBERS CHANGES THROUGHOUT PROGRAM
@@ -40,11 +41,10 @@ private:
 	void setJ(int j);//Number of journeys after which the Truck needs maintenance setter (J)
 	void setCapacity(int TCap);//capacity setter.
 
-
 public:
 
 
-	Truck(int CAP,int SPEED,int JBM,Truck_Type TT);//def constructor.
+	Truck(int CAP,int SPEED,int JBM,Truck_Type TT,int Id);//def constructor.
 	~Truck();//destructor.
 	//Truck(Truck& T);//copy constructor
 
@@ -58,7 +58,9 @@ public:
 	int getActiveTime();//getter for active time
 					//time a truck is loading or in delivering cargos,
 				   //doesn't include time for a truck to return after delivery
+	int getID();//getter for ID
 	Truck_Type getTruckType();//type of truck getter.
+	
 
 
 
