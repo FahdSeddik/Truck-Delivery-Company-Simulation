@@ -39,7 +39,7 @@ private:
 	LLQ<Truck*> Avail_NT, Avail_VT, Avail_ST;
 	LLQ<Truck*> Loading_NT, Loading_VT, Loading_ST;
 	PQ<Truck*> Under_Check; //PQ based on who finished first
-	LLQ<Truck*> MovingTrucks; //queue
+	PQ<Truck*> MovingTrucks; //PQ based on next cargo delivery time
 
 	
 
