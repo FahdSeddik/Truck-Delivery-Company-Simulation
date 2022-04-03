@@ -20,17 +20,14 @@
       <UniqueIdentifier>{e6868bb1-8527-4bc3-9ffc-1359a3fd7c63}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
-      <UniqueIdentifier>{15c82829-90fd-4714-9bb9-f4e213a05c95}</UniqueIdentifier>
+      <UniqueIdentifier>{156f1390-162e-4f82-81d6-f2b8bb2493ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Truck and Cargo">
+      <UniqueIdentifier>{d0e9ce68-8e6e-4ac1-b284-696f91f733bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cargo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Truck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Company.cpp">
@@ -50,6 +47,12 @@
     </ClCompile>
     <ClCompile Include="UI\UI_Class.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Truck and Cargo\Cargo.cpp">
+      <Filter>Truck and Cargo</Filter>
+    </ClCompile>
+    <ClCompile Include="Truck and Cargo\Truck.cpp">
+      <Filter>Truck and Cargo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,13 +77,7 @@
     <ClInclude Include="DS\QueueADT.h">
       <Filter>DS</Filter>
     </ClInclude>
-    <ClInclude Include="Cargo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Company.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Truck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Events\CancellationEvent.h">
@@ -103,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="UI\UI_Class.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Truck and Cargo\Cargo.h">
+      <Filter>Truck and Cargo</Filter>
+    </ClInclude>
+    <ClInclude Include="Truck and Cargo\Truck.h">
+      <Filter>Truck and Cargo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

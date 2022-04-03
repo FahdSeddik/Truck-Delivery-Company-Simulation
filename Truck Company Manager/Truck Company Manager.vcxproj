@@ -29,13 +29,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -145,12 +145,11 @@
     <ClCompile Include="Events\PromotionEvent.cpp" />
     <ClCompile Include="Events\ReadyEvent.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Cargo.cpp" />
-    <ClCompile Include="Truck.cpp" />
+    <ClCompile Include="Truck and Cargo\Cargo.cpp" />
+    <ClCompile Include="Truck and Cargo\Truck.cpp" />
     <ClCompile Include="UI\UI_Class.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cargo.h" />
     <ClInclude Include="Company.h" />
     <ClInclude Include="DS\BagADT.h" />
     <ClInclude Include="DS\Linked_List.h" />
@@ -165,7 +164,8 @@
     <ClInclude Include="Events\PromotionEvent.h" />
     <ClInclude Include="Events\ReadyEvent.h" />
     <ClInclude Include="INFO.h" />
-    <ClInclude Include="Truck.h" />
+    <ClInclude Include="Truck and Cargo\Cargo.h" />
+    <ClInclude Include="Truck and Cargo\Truck.h" />
     <ClInclude Include="UI\UI_Class.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

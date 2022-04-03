@@ -22,7 +22,7 @@ public:
 		return Head == nullptr;
 	} //checks if empty
 
-	bool add(const ItemType& newEntry) {
+	bool add( ItemType& newEntry) {
 		Head = new Node<ItemType>(newEntry, Head);
 		return true;
 	} //adds new entry

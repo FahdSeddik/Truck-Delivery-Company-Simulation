@@ -1,13 +1,14 @@
 #include "Cargo.h"
 
-Cargo::Cargo(int PREPT, int LOADTIME, int DELIVERYDIST, int COST,Cargo_Type CT)
+Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT, int Id)
 {
 	prepTime = PREPT;
 	load_Unload_Time = LOADTIME;
 	deliveryDistance = DELIVERYDIST;
 	Cost = COST;
 	Ctype = CT;
-	CDT = -1;
+	deliveryTime = -1;
+	ID = Id;
 };//constructor.
 
 
@@ -19,6 +20,9 @@ Cargo::~Cargo()
 
 
 //SETTERS
+void Cargo::setCargoType(Cargo_Type CT) {
+	Ctype = CT;
+}//Cargo Type Setter
 void Cargo::setload_Unload_Time(int LTime)
 {
 	load_Unload_Time = LTime;
@@ -33,13 +37,8 @@ void Cargo::setCost(int cost)
 {
 	Cost = cost;
  }
-void Cargo::setCDT(int time)
-{
-	CDT = time;
-}
+
 ;//cost setter.
-
-
 
 int Cargo::getLoad_Unload_Time()
 {
@@ -55,8 +54,9 @@ int Cargo::getcost()
 {
 	return Cost;
  }
-int Cargo::GetCDT()
-{
-	return CDT;
-}
 ;//cost getter.
+
+int Cargo::getID()
+{
+	return ID;
+};//getter for ID
