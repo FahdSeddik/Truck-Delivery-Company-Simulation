@@ -12,6 +12,7 @@ void Company::ReadFile(ifstream & inputFile, string filename)
 	int NS, SS, VS;//speeds of each type of truck
 	int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
+	int ID = 0;//ID used to identify each truck
 	if (inputFile.is_open()) // checks if file has been opened successfully and ready to be read from
 	{
 		inputFile >> N >> S >> V; // reads number of trucks frome input file
@@ -21,20 +22,23 @@ void Company::ReadFile(ifstream & inputFile, string filename)
 		// create the specified trucks based on read info
 		for (int i = 0; i < N; i++)
 		{
-			Truck* T = new Truck(NTC,NS,J,NT);
+			Truck* T = new Truck(NTC,NS,J,NT,ID);
 			Avail_NT.enqueue(T);
+			ID++;
 		}
 
 		for (int i = 0; i < S; i++)
 		{
-			Truck* T = new Truck(STC, SS, J, ST);
+			Truck* T = new Truck(STC, SS, J, ST,ID);
 			Avail_ST.enqueue(T);
+			ID++;
 		}
 
 		for (int i = 0; i < V; i++)
 		{
-			Truck* T = new Truck(VTC, VS, J, VT);
+			Truck* T = new Truck(VTC, VS, J, VT,ID);
 			Avail_VT.enqueue(T);
+			ID++;
 		}
 		inputFile.ignore(); // ignores blank line
 		inputFile >> AutoP >> MaxW; //reads auto promotion limit in days and MaxW in hours
@@ -46,6 +50,7 @@ void Company::ReadFile(ifstream & inputFile, string filename)
 			char State;// the type of event
 			int ET;//the time of the event
 			int ID;//the ID of the cargo for which the event is to be applied
+			int days;
 			inputFile >> State;// reads the type of the event
 			if(State=='R') // decides how to read the info of the event based on the type of the event
 			{
@@ -53,20 +58,33 @@ void Company::ReadFile(ifstream & inputFile, string filename)
 				int DIST;
 				int LT;
 				int Cost;
-				inputFile >> TYP >> ET >> ID >> DIST >> LT >> Cost;
+				inputFile >> TYP;
+				inputFile >> days; // inputs the day part of the time
+				inputFile.ignore();// ignores the ":"
+				inputFile >> ET;// inputs the hour part of the time
+				ET = ET + days * 24; // converts the time to be in hours
+				inputFile >> ID >> DIST >> LT >> Cost;
 				Event* E = new ReadyEvent(ET, ID, TYP, DIST, LT, Cost, State);
 				EventList.enqueue(E);
 			}
 			else if (State == 'X')
 			{
-				inputFile >> ET >> ID;
+				inputFile >> days; // inputs the day part of the time
+				inputFile.ignore();// ignores the ":"
+				inputFile >> ET;// inputs the hour part of the time
+				ET = ET + days * 24; // converts the time to be in hours
+				inputFile >> ID;
 				Event* E = new CancellationEvent(ET, ID, State);
 				EventList.enqueue(E);
 			}
 			else if (State == 'P')
 			{
 				int ExtraMoney;
-				inputFile >> ET >> ID >> ExtraMoney;
+				inputFile >> days; // inputs the day part of the time
+				inputFile.ignore();// ignores the ":"
+				inputFile >> ET;// inputs the hour part of the time
+				ET = ET + days * 24; // converts the time to be in hours
+				inputFile >> ID >> ExtraMoney;
 				Event* E = new PromotionEvent(ET, ID, ExtraMoney, State);
 				EventList.enqueue(E);
 			}
