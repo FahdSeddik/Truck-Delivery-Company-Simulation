@@ -8,6 +8,6 @@ public:
     ~CancellationEvent(); //destructor
 
     //execute function
-    virtual void Execute();
+    virtual void Execute(Company* pComp);
 };
 

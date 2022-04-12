@@ -11,6 +11,6 @@ public:
     virtual void SetExtraMoney(int money); //setter
     virtual int GetValueOfExtraMoney();//getter
      //execute function
-    virtual void Execute();
+    virtual void Execute(Company* pComp);
 };
 

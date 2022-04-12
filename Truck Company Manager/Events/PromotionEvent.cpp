@@ -22,6 +22,7 @@ int PromotionEvent::GetValueOfExtraMoney()
 }
 
 // TO DO: should move a normal cargo to the VIP list and update the cargo's data(IF FOUND!!)
-void PromotionEvent::Execute()
+void PromotionEvent::Execute(Company* pComp)
 {
+	pComp->PromoteCargo(ID);
 }

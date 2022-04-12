@@ -33,7 +33,9 @@ private:
 						//tAt total truck active time
 						//TSim total simulation time
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
-
+	int nextDT;//Time at which the truck reaches its next destination
+	int finishCheck;//time at which the check-up ends
+	int LastReturnTime; // 
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
 	
@@ -62,10 +64,16 @@ public:
 					//time a truck is loading or in delivering cargos,
 				   //doesn't include time for a truck to return after delivery
 	int getID();//getter for ID
+	int getMoveTime();//getter for Move Time
+	int getNextDT();//getter for next DT
+	int getFinishCheck();//getter for finish check
+	int getLastReturnTime();//getter for LastReturnTime
 	Truck_Type getTruckType();//type of truck getter.
 	
 
-
+	//SETTERS
+	void UpdateLastReturnTime(int LastReturn);
+	void setMoveTime(int time);
 
 	//METHODS
 	bool isFull();//checks if the truck is full(max capacity) 
@@ -80,7 +88,7 @@ public:
 	int CalcNextDT();
 
 	//called when company class moves truck to moving trucks list
-	void CalculateDeliveryTime(); //calculates DT and set el data member
+	int CalculateDeliveryTime(); //calculates DT and set el data member
 
 	//Update method to be called from company
 	// checks first if there is cargo to be delivered in Global_Time

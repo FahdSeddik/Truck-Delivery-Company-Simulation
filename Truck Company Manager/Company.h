@@ -51,7 +51,7 @@ private:
 
 	int AutoP, MaxW; //in hours
 	int MT_N, MT_V, MT_S; //maintenance time of each truck type
-	
+	int NTC, STC, VTC; // capacity of each truck type
 	UI_Class* pUI;
 
 
@@ -73,8 +73,7 @@ private:
 
 	//TODO: ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
 	// moves cargos from waiting to moving
-	// returns false if there are no available cargos to assign (ie. empty cargo list)
-	bool AssignCargos();
+	void AssignCargos();
 
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 	void ReadFile(string filename);
@@ -114,7 +113,7 @@ public:
 
 	//TODO: takes a cargo ID
 	// checks if found then cancels
-	void CancelCargo(Cargo_Type CT, int ID);
+	void CancelCargo(int ID);
 
 	//TODO: takes a cargo pointer
 	//enqueues cargo to its waiting list

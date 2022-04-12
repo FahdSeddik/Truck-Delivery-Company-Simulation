@@ -57,7 +57,9 @@ int ReadyEvent::GetCost()
 }
 
 //TO DO :should create a new cargo and add it to the appropriate list
-void ReadyEvent::Execute()
+void ReadyEvent::Execute(Company* pComp)
 {
+	Cargo* pC = new Cargo(Time, LT, Dist, Cost, TYP, ID);
+	pComp->AppendWaitingCargo(pC);
 }
 

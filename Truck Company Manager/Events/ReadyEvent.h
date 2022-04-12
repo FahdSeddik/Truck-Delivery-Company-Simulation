@@ -23,6 +23,6 @@ public:
     virtual int GetCost();
 
     //execute function
-    virtual void Execute();
+    virtual void Execute(Company* C);
 };
 
