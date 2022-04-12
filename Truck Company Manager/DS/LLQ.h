@@ -24,7 +24,7 @@ public:
 		return size;
 	}
 
-	bool isEmpty() {
+	bool isEmpty()const {
 		return Tail == nullptr;
 	} //if queue is empty
 

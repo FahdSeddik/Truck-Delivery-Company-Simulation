@@ -24,6 +24,11 @@ public:
 		
 	}
 
+	//size of queue
+	int getSize()const {
+		return size;
+	}
+
 	bool isEmpty() {
 		return Head == nullptr;
 	} //if queue is empty

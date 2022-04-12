@@ -27,9 +27,3 @@ enum Truck_Type {
 	ST		//special
 };
 
-enum Truck_Status {
-	INCHECK,
-	MOVING,
-	AVAILABLE,
-	LOADING
-};

@@ -3,7 +3,13 @@
 
 UI_Class::UI_Class()
 {
-	cout << " Choose the desired program mode" << endl << "1- Interactive mode" << endl << "2- Step-by-step mode" << endl << "3- Silent mode";
+	pSilent = false;
+
+	cout << " Choose the desired program mode" << endl 
+		<< "1- Interactive mode" << endl 
+		<< "2- Step-by-step mode" << endl 
+		<< "3- Silent mode" <<endl;
+
 	cin >> mode;
 	while (mode < 1 || mode>3)
 	{
@@ -46,8 +52,12 @@ void UI_Class::Print()
 		*/
 
 	case(3):
-		cout << "Silent Mode " << endl;
-		cout << "Simulation Starts... " << endl;
-		cout << "Simulation end, Output file create " << endl;
+		if (!pSilent) {
+			cout << "Silent Mode " << endl;
+			cout << "Simulation Starts... " << endl;
+			cout << "Simulation end, Output file create " << endl;
+			pSilent = true;
+		}
+		break;
 	}
 }

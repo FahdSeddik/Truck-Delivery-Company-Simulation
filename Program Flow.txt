@@ -1,0 +1,109 @@
+
+
+
+	*******************************************
+	*******************************************
+	--==== Demonstration and Explanation ====--
+	--==== 	       of program flow       ====--
+	*******************************************
+	*******************************************
+	
+
+Program Flow:
+
+	Main:
+		CONSTANT FOR EVERY MODE:
+		Calls Constructor of UI_Class
+		Calls Constructor of Company and passes UI pointer
+		initializes Global_Time = 0
+		Iterates on UpdateAll(Global_Time) method in Company using a while loop 
+		then calls "PrintStatus()" in Company (name could change)
+		increments Global_Time (+1)		
+
+
+		until UpdateAll() returns false (meaning all cargos delivered and no events left)
+
+		when it exits out of while loop it calls "WriteOutput()" in Company (to get output file)
+
+	
+	UI_Class:
+		Constructor : reads program interface mode (Interactive, s-by-s, Silent)
+
+	Company:
+		Constructor:
+			resets time and Calls ReadFile() method with approprate file name
+			
+
+		Controller of class and program (MOST IMPORTANT FUNCTION) is UpdateAll() in Company
+		UpdateAll():
+			Calls ExecuteEvent(): this function checks if front of event queue is due execution
+			if so then it calls it's Execute() method
+			
+			Calls CheckTruckStatus(): this function checks fronts of queue and moves it to its new list
+			accordingly
+				main points: 
+				Check front of Available truck if reached maxW then call AssignCargos()				
+
+	
+				Loading and Under_Check would need to just check for its finish time
+				if a truck would be moved from loading to moving then you have to call and call its setMoveTime(Global_Time)
+				and update activetime of truck to be updated with loading time + trip time(not including return time)
+				and CalcNextDT() in truck which returns its next cargo delivery time 
+				which would act as its priority in the moving queue
+			
+				MovingTrucks: you would need to check front of queue if its next delivery time is due then call
+				Update(Company, Global_time) in truck so it can check 
+				for the cargo delivery (this update calls AppendDeliveredCargo())
+				then calculate next delivery time and enqueue truck again
+				
+
+				if return of Update is false meaning it has returned to company
+				call bool NeedsRepairing() in Truck if its true move to Under_Check
+				(by calculating checkup time first and enqueue)
+				else it would move truck to available list
+
+
+
+			Calls AssignCargos(): this function would check truck capacities and waiting cargos list size
+			if requirements met (either size reached truck capacity or truck reached maxw)
+			then moves truck to Loading list calculating its load time 
+			
+			if normal cargo reached its AutoP then move to vip list
+
+			return true
+			RETURNS FALSE IF NO EVENTS AND NO MOVING AND NO CARGO (ie. delivered all cargos/finished simulation)
+
+
+
+		Event Classes:
+			Ready Event: its execute makes a new cargo and calls AppendWaitingCargo(Cargo) in Company 
+			PromotionEvent: its execute calls PromoteCargo(ID) in Company
+			Cancellation Event: its execute calls CancelCargo(Cargo type, ID) in Company
+
+		Truck Class:
+
+			AssignCargo(cargo): enqueues a cargo based on delivery distance and updates furthestDistance data member
+				Note: furthestDistance is used in CalcNextDT() when calculating company return time (ie. finished all cargos)
+
+			CalcNextDT(): peeks front of priority queue and calculate delivery time then return it
+			if priority queue is empty then calculate company return time and return it
+
+
+			Update() : checks first if there is cargo to be delivered in Global_Time
+				if so call AppendDeliveredCargo() method in Company passing the cargo and return true
+	 			if no cargos to deliver then this means it has returned (ie. finished cargos)
+				return false in this case
+
+		Cargo Class:
+			just an information holder
+
+		
+		
+		********IMPORTANT********
+		Method in Company
+
+		GENERATES OUTPUT FILE 
+		WriteOutput(): iterates on delivered cargos (dequeue) and write to file
+		follows output file format and calculates needed statistics 
+		This would call functions in the Available trucks lists to get utilization of each truck and calculate average
+		and so on...

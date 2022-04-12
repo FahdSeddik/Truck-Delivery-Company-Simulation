@@ -19,7 +19,7 @@ private:
 	int CurCapacity;//current capacity.
 	int deliveryInterval;//time needed to deliver all cargos.
 	int currentJourneyCount;//current number of journeys done by the truck
-	
+	int furthestDistance;
 	int CurAssignedCargos;//count of Current assigned cargos (0 initialy)
 	int MoveTime;//the time at which the truck carrying the cargo starts to move.
 	int activeTime;//time a truck is loading or in delivering cargos,
@@ -35,6 +35,9 @@ private:
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
 
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
+
+	
+
 
 	//PRIVATE SETTERS
 	void setSpeed(int speed);//speed setter.
@@ -69,15 +72,22 @@ public:
 	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
 	bool NeedsRepairing();//return journeycount % J;
 	void  CalculateTruckUtlization(int SimTime);//Calculated the percentage
-	
+
+
+	//TODO: (could be called Action time)
+	// calculate next cargo delivery time and returns it
+	//if finished cargos then calculate the return time to company
+	int CalcNextDT();
 
 	//called when company class moves truck to moving trucks list
 	void CalculateDeliveryTime(); //calculates DT and set el data member
 
 	//Update method to be called from company
-	// call NotifyMovingCargo(Cargo) in company for each cargo when start moving
-	// and when it start moving be sure to make cargo calculate the global delivery time by passing movetime of truck
-	Truck_Status Update(int Global_Time);
+	// checks first if there is cargo to be delivered in Global_Time
+	// if so call AppendDeliveredCargo() method in Company passing the cargo and return true
+	// if no cargos to deliver then this means it has returned (ie. finished cargos)
+	// return false in this case
+	bool Update(Company* C,int Global_Time);
 
 
 };

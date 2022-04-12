@@ -5,8 +5,9 @@ using namespace std;
 
 
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
-void Company::ReadFile(ifstream & inputFile, string filename)
+void Company::ReadFile(string filename)
 {
+	ifstream inputFile;
 	inputFile.open(filename, ios::in); // opens the file for input 
 	int N, S, V;//numbers of each type of truck
 	int NS, SS, VS;//speeds of each type of truck

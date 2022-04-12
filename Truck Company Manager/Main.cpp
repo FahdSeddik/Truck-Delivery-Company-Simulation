@@ -13,35 +13,18 @@ Classes to be developed:
 3- Company Class
 
 4- UI Class
-*/
-
-//instantiate company object 
-//call update
-
-
-//TODO @GASER
-/*
-*   Method Update() in truck to call UpdateStatus() at end of implementation
-    Method in trucks to return cargo list
-    Method in trucks to return delivered cargos and clear them when delivered 
-    add truck status data member to take enum implemented in INFO.h 
-    truck status data member would be updated when method Update is called in truck from company
 
 */
 
-/*@Ayman
-* STEP BY STEP
-UI.DisplayTruck(Truck *) to print ID[cid,cid,cid] 3ala 7asab cout<<truck->getID()<<"["<<truck->getCargoID(i)   ]
-
-*/
 
 int main()
 {
-    cout << "amr ashf 3tya el 3twy" << endl;
+    
+    //UI_Class UI;
+    //Company TC(&UI); //truck company instantiation
+    //int Global_Time = 0; //global time in hours
+    //    while (TC.UpdateAll());
 
-    Company TC; //truck company instantiation
-//    while (TC.UpdateAll());
-
-
+       
 }
 
