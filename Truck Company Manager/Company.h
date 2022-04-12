@@ -67,6 +67,7 @@ private:
 	// however, if so, then they should be after each other due to implemented data structure
 	void CheckTruckStatus();
 
+	//PHASE-1
 	//TODO: to be used in update in case an event is to be done 
 	// simply can be Ready::Execute for example
 	void ExecuteEvent();
@@ -76,6 +77,7 @@ private:
 	// returns false if there are no available cargos to assign (ie. empty cargo list)
 	bool AssignCargos();
 
+	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 	void ReadFile(string filename);
 
@@ -90,6 +92,7 @@ public:
 	}
 
 
+	//PHASE-1 (only part of the implementaion)
 	//TODO: 
 	// increments time
 	// Calls AssignCargos()
@@ -103,19 +106,22 @@ public:
 	// appends a cargo to delivered list
 	void AppendDeliveredCargo(Cargo* c);
 
-
+	//PHASE-1
 	//TODO: takes care of all print functions in UI Class
 	void PrintStatus();
 
 
+	//PHASE-1
 	//TODO: takes a cargo ID
 	// checks normal cargo waiting list and moves if found
 	void PromoteCargo(int ID);
 
+	//PHASE-1
 	//TODO: takes a cargo ID
 	// checks if found then cancels
-	void CancelCargo(Cargo_Type CT, int ID);
+	void CancelCargo( int ID);
 
+	//PHASE-1
 	//TODO: takes a cargo pointer
 	//enqueues cargo to its waiting list
 	// this method is only called by Read Event

@@ -4,10 +4,10 @@ class CancellationEvent :
     public Event
 {
 public:
-    CancellationEvent(int eventtime, int id, char state = 'X'); //constructor
+    CancellationEvent(int eventtime, int id); //constructor
     ~CancellationEvent(); //destructor
 
     //execute function
-    virtual void Execute();
+    virtual void Execute(Company* pComp);
 };
 

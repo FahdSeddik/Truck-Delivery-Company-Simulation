@@ -6,11 +6,11 @@ class PromotionEvent :
 protected:
     int ExtraMoney; // money needed to promote
 public:
-    PromotionEvent(int eventtime, int id, int extramoney, char c = 'P'); //constructor
+    PromotionEvent(int eventtime, int id, int extramoney); //constructor
     ~PromotionEvent(); //destructor
     virtual void SetExtraMoney(int money); //setter
     virtual int GetValueOfExtraMoney();//getter
      //execute function
-    virtual void Execute();
+    virtual void Execute(Company* pComp);
 };
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Company.h"
 class Event
 {
 protected:
@@ -17,6 +18,6 @@ public:
 	virtual int GetID();
 
 	//execute function
-	virtual void Execute() = 0;
+	virtual void Execute(Company* pComp) = 0;
 };
 

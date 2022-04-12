@@ -55,17 +55,31 @@ void Company::ReadFile(string filename)
 			inputFile >> State;// reads the type of the event
 			if(State=='R') // decides how to read the info of the event based on the type of the event
 			{
+				
 				char TYP;
 				int DIST;
 				int LT;
 				int Cost;
+				Cargo_Type type;
 				inputFile >> TYP;
 				inputFile >> days; // inputs the day part of the time
 				inputFile.ignore();// ignores the ":"
 				inputFile >> ET;// inputs the hour part of the time
 				ET = ET + days * 24; // converts the time to be in hours
 				inputFile >> ID >> DIST >> LT >> Cost;
-				Event* E = new ReadyEvent(ET, ID, TYP, DIST, LT, Cost, State);
+				if (TYP=='N')
+				{
+					type = NC;
+				}
+				else if (TYP == 'S')
+				{
+					type = SC;
+				}
+				else
+				{
+					type = VC;
+				}
+				Event* E = new ReadyEvent(ET, ID, type, DIST, LT, Cost);
 				EventList.enqueue(E);
 			}
 			else if (State == 'X')
@@ -75,7 +89,7 @@ void Company::ReadFile(string filename)
 				inputFile >> ET;// inputs the hour part of the time
 				ET = ET + days * 24; // converts the time to be in hours
 				inputFile >> ID;
-				Event* E = new CancellationEvent(ET, ID, State);
+				Event* E = new CancellationEvent(ET, ID);
 				EventList.enqueue(E);
 			}
 			else if (State == 'P')
@@ -86,7 +100,7 @@ void Company::ReadFile(string filename)
 				inputFile >> ET;// inputs the hour part of the time
 				ET = ET + days * 24; // converts the time to be in hours
 				inputFile >> ID >> ExtraMoney;
-				Event* E = new PromotionEvent(ET, ID, ExtraMoney, State);
+				Event* E = new PromotionEvent(ET, ID, ExtraMoney);
 				EventList.enqueue(E);
 			}
 			
@@ -108,7 +122,7 @@ bool Company:: AssignCargos() {
 // Calls AssignCargos()
 // moves cargos/trucks across lists
 // Calls ExecuteEvent()
-bool Company::UpdateAll() {
+bool Company::UpdateAll(int Global_Time) {
 	return true;
 
 }

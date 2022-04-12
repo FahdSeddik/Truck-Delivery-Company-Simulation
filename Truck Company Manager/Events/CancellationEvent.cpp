@@ -1,6 +1,6 @@
 #include "CancellationEvent.h"
 
-CancellationEvent::CancellationEvent(int eventtime, int id, char state)
+CancellationEvent::CancellationEvent(int eventtime, int id)
 {
 	Time = eventtime;
 	ID = id;
@@ -11,6 +11,7 @@ CancellationEvent::~CancellationEvent()
 }
 
 // TO DO: should cancel the requested normal cargo(IF FOUND!!)
-void CancellationEvent::Execute()
+void CancellationEvent::Execute(Company* pComp)
 {
+	pComp->CancelCargo(ID);
 }
