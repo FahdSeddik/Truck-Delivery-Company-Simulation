@@ -10,7 +10,7 @@ private:
 	PQNode<ItemType>* next;
 public:
 	//Constructor takes item and next pointer
-	PQNode<ItemType>(ItemType& ITEM,int PRIO ,PQNode<ItemType>* NEXT = nullptr) {
+	PQNode(ItemType& ITEM,int PRIO ,PQNode<ItemType>* NEXT = nullptr) {
 		item = ITEM;
 		next = NEXT;
 		priority = PRIO;
@@ -39,7 +39,7 @@ public:
 	}
 
 
-	~PQNode<ItemType>() {
+	~PQNode() {
 		next = nullptr;
 	}
 

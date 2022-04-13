@@ -8,7 +8,7 @@ private:
 	Node<ItemType>* next;
 public:
 	//Constructor takes item and next pointer
-	Node<ItemType>(ItemType& ITEM, Node<ItemType>* NEXT = nullptr) {
+	Node(ItemType& ITEM, Node<ItemType>* NEXT = nullptr) {
 		item = ITEM;
 		next = NEXT;
 	}
@@ -29,7 +29,7 @@ public:
 		return next;
 	}
 
-	~Node<ItemType>() {
+	~Node() {
 		next = nullptr;
 	}
 };

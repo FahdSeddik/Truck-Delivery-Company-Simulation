@@ -25,7 +25,7 @@ private:
 	//PRIVATE SETTERS TO GET INPUT IN LEGAL LIMIT(VALIDATION)
 	void setload_Unload_Time(int LTime);//load/Unload Time setter.
 	void setDeliveryDistance(int DDistance);//Delivery Distance setter.
-	void setCost(int cost);//cost setter.
+	
 	void setCargoType(Cargo_Type CT);//Cargo Type Setter
 	//(the Time from the preration of the cargo untill its truck starts to move to deliver it (MoveTime-PrepTime))
 
@@ -50,17 +50,17 @@ public:
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
 	int getDeliveryTime();///getter cargo delivery time from company to the destination 
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
-	int getID();//getter for ID
+	
 	Cargo_Type getType();//Cargo Type getter.
 	
+	int getID();//getter for ID
 
-
-
+	void setCost(int cost);//cost setter.
 	//Methods
 
 	//TODO: to be used when a cargo is assigned to a truck to have cargo sorted in prio queue in truck
 	// gets movetime passed from truck
 	// assigns data member: deliveryTime with appriopriate value
-	void CalculateDeliveryTime(int MoveTime);
+	//void CalculateDeliveryTime(int MoveTime);
 
 };

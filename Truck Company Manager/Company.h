@@ -1,19 +1,22 @@
 #pragma once
 #include "INFO.h"
-#include "Truck and Cargo/Truck.h"
-#include "Truck and Cargo/Cargo.h"
 #include "DS/LLBag.h"
 #include "DS/LLQ.h"
 #include "DS/PQ.h"
-#include "Events/CancellationEvent.h"
-#include "Events/PromotionEvent.h"
-#include "Events/ReadyEvent.h"
 #include "DS/Linked_List.h"
+#include "Truck and Cargo/Cargo.h"
+#include "Truck and Cargo/Truck.h" //after company
+#include "Events/Event.h"
+
 #include "UI/UI_Class.h"
 #include <fstream>
 #include <string>
 using namespace std;
-
+class Truck;
+class Event;
+class ReadyEvent;
+class PromotionEvent;
+class CancellationEvent;
 class Company
 {
 private:
@@ -59,7 +62,7 @@ private:
 	//---====UTILITY METHODS====---
 	//*****************************
 	
-	//TODO: checks truck status in Loading, Moving, and Under_Check
+	//TODO: Phase2 - checks truck status in Loading, Moving, and Under_Check
 	//if front of queue(ie. truck) needs updating
 	//moves each of the trucks that needs updating to its new list
 	//NOTE:
@@ -81,19 +84,14 @@ private:
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 	void ReadFile(string filename);
 
-
+	int lastcmove; //temp data member just for phase1 to keep track of last time cargos moved (functions like a counter)
 public:
 	//Constructor to read from file and set time to 0 
-	Company(UI_Class * pUI) {
-		time = 0;
-		this->pUI = pUI;
-		string filename = pUI->ReadFileName();
-		ReadFile(filename);
-	}
+	Company(UI_Class* pUI);
 
 
 	//PHASE-1 (only part of the implementaion)
-	//TODO: 
+	//TODO:
 	// increments time
 	// Calls AssignCargos()
 	// moves cargos/trucks across lists
@@ -114,7 +112,7 @@ public:
 	//PHASE-1
 	//TODO: takes a cargo ID
 	// checks normal cargo waiting list and moves if found
-	void PromoteCargo(int ID);
+	void PromoteCargo(int ID, int ExtraMoney);
 
 	//PHASE-1
 	//TODO: takes a cargo ID

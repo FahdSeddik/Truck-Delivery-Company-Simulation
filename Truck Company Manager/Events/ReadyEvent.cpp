@@ -1,7 +1,6 @@
 #include "ReadyEvent.h"
 
-
-ReadyEvent::ReadyEvent(int eventtime, int id, Cargo_Type cargotype, int dist, int loadtime, int cost)
+ReadyEvent::ReadyEvent(int eventtime, int id, Cargo_Type cargotype, int dist, int loadtime, int cost) :Event()
 {
 	Time = eventtime;
 	ID = id;

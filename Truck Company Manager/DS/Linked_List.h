@@ -6,10 +6,10 @@ class Linked_List {
 private:
 	Node<ItemType>* Head;
 public:
-	Linked_List<ItemType>() {
+	Linked_List() {
 		Head = nullptr;
 	}
-	~Linked_List<ItemType>() {
+	~Linked_List() {
 		Node<ItemType>* ptr = Head;
 		while (ptr) {
 			Head = Head->getNext();

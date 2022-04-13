@@ -14,7 +14,7 @@ private:
 	Node<ItemType>* Tail;
 	int size;
 public:
-	LLQ<ItemType>() {
+	LLQ() {
 		Tail = nullptr;
 		size = 0;
 	}

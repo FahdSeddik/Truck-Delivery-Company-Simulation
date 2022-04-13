@@ -1,5 +1,9 @@
 #pragma once
 #include "Event.h"
+
+
+class Event; //forward declaration
+
 class PromotionEvent :
     public Event
 {

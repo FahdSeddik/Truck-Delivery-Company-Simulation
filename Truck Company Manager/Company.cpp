@@ -2,7 +2,17 @@
 #include <iostream>
 using namespace std;
 
-
+#include "Events/CancellationEvent.h" //after company
+#include "Events/PromotionEvent.h" //after company
+#include "Events/ReadyEvent.h" //after company
+Company::Company(UI_Class* pUI) {
+	time = 0;
+	lastcmove = 0;
+	this->pUI = pUI;
+	string filename = pUI->ReadFileName();
+	ReadFile(filename);
+	
+}
 
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 void Company::ReadFile(string filename)
@@ -110,7 +120,7 @@ void Company::ReadFile(string filename)
 }
 
 
-//TODO: ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
+//TODO:Phase2 - ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES  
 // moves cargos from waiting to moving
 // returns false if there are no available cargos to assign (ie. empty cargo list)
 bool Company:: AssignCargos() {
@@ -123,6 +133,29 @@ bool Company:: AssignCargos() {
 // moves cargos/trucks across lists
 // Calls ExecuteEvent()
 bool Company::UpdateAll(int Global_Time) {
+	//Phase1 - used as the Simple Simulate function
+	//Phase2 - does proper function
+	time = Global_Time;
+	
+	ExecuteEvent();
+
+	if (time - lastcmove >= 5) {
+		lastcmove = time;
+		Cargo* c;
+		if (Wait_NC.dequeue(c)) {
+			AppendDeliveredCargo(c);
+		}
+		if (Wait_SC.dequeue(c)) {
+			AppendDeliveredCargo(c);
+		}
+		if (Wait_VC.dequeue(c)) {
+			AppendDeliveredCargo(c);
+		}
+	}		
+
+	if (EventList.isEmpty() && Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty())
+		return false;
+
 	return true;
 
 }
@@ -130,6 +163,110 @@ bool Company::UpdateAll(int Global_Time) {
 //TODO: to be used in update in case an event is to be done 
 // simply can be Ready::Execute for example
 void Company::ExecuteEvent() {
+	Event* pE;
+	if (EventList.peekFront(pE) && pE->GetTime() == time) {
+		EventList.dequeue(pE);
+		pE->Execute(this);
+	}
+}
+
+
+
+//TODO: to be used form each truck when a cargo is delivered
+// appends a cargo to delivered list
+void Company::AppendDeliveredCargo(Cargo* c) {
+	DeliveredCargos.enqueue(c);
+}
+
+//PHASE-1
+//TODO: takes care of all print functions in UI Class
+void Company::PrintStatus() {
+
+}
+
+
+//PHASE-1
+//TODO: takes a cargo ID
+// checks normal cargo waiting list and moves if found
+void Company::PromoteCargo(int ID,int ExtraMoney) {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	while (Wait_NC.dequeue(c)) {
+		if (c->getID() == ID) {
+			c->setCost(c->getcost() + ExtraMoney);
+			int prio = 0; //perform prio calculation
+			Wait_VC.enqueue(c, prio);
+			break;
+		}
+	}
+
+	//make sure to empty all remaining cargos in tempq
+	//to maintain order
+	while (Wait_NC.dequeue(c))
+		tempq.enqueue(c);
+
+	//put back all other cargos in main queue
+	while (tempq.dequeue(c))
+		Wait_NC.enqueue(c);
+
+}
+
+//PHASE-1
+//TODO: takes a cargo ID
+// checks if found then cancels
+void Company::CancelCargo(int ID) {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	//Checks for cargo in waiting (ie. you can cancel the cargo)
+	while (Wait_NC.dequeue(c)) {
+		if (c->getID() == ID) { //if found
+			delete c;
+			c = nullptr;
+			break;
+		}
+	}
+	//make sure to empty all remaining cargos in tempq
+	//to maintain order
+	while (Wait_NC.dequeue(c)) 
+		tempq.enqueue(c);
+
+	//put back all other cargos in main queue
+	while (tempq.dequeue(c))
+		Wait_NC.enqueue(c);
+}
+
+//PHASE-1
+//TODO: takes a cargo pointer
+//enqueues cargo to its waiting list
+// this method is only called by Read Event
+void Company::AppendWaitingCargo(Cargo* c) {
+	if (!c)
+		return;
+
+	if (c->getType() == NC) {
+		Wait_NC.enqueue(c);
+	}
+	else if (c->getType() == VC) {
+		int prio = 0; //calculation to be done
+		Wait_VC.enqueue(c,prio);
+	}
+	else if (c->getType() == SC) {
+		Wait_SC.enqueue(c);
+	}
+}
+
+//TODO: Phase2 - checks truck status in Loading, Moving, and Under_Check
+//if front of queue(ie. truck) needs updating
+//moves each of the trucks that needs updating to its new list
+//NOTE:
+// multiple trucks may need moving to another list
+// however, if so, then they should be after each other due to implemented data structure
+void Company::CheckTruckStatus() {
+
+}
+
+//TODO: writes output file
+void Company::WriteOutput() {
 
 }
 

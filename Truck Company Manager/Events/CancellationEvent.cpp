@@ -1,6 +1,6 @@
 #include "CancellationEvent.h"
 
-CancellationEvent::CancellationEvent(int eventtime, int id)
+CancellationEvent::CancellationEvent(int eventtime, int id):Event()
 {
 	Time = eventtime;
 	ID = id;

@@ -10,7 +10,7 @@ class LLBag : public BagADT<ItemType> {
 	int numEntries; //number of contents
 
 public:
-	LLBag<ItemType>() {
+	LLBag() {
 		Head = nullptr;
 		numEntries = 0;
 	}
@@ -84,7 +84,7 @@ public:
 		return found;
 	} //Tests whether the bag contains a given entry
 
-	~LLBag<ItemType>() {
+	~LLBag() {
 		clear();
 	}
 };

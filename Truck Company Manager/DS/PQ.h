@@ -14,11 +14,11 @@ private:
 	PQNode<ItemType>* Head;
 	int size;
 public:
-	PQ<ItemType>() {
+	PQ() {
 		Head = nullptr;
 		size = 0;
 	}
-	~PQ<ItemType>() {
+	~PQ() {
 		ItemType x;
 		while (dequeue(x));
 		
@@ -33,7 +33,7 @@ public:
 		return Head == nullptr;
 	} //if queue is empty
 
-	bool enqueue(const ItemType& newEntry, int prio) {
+	bool enqueue( ItemType& newEntry, int prio) {
 		
 		if (!Head) {
 			Head = new PQNode<ItemType>(newEntry, prio);

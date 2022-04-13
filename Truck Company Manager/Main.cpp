@@ -20,11 +20,16 @@ Classes to be developed:
 int main()
 {
     
-    //UI_Class UI;
-    //Company TC(&UI); //truck company instantiation
-    //int Global_Time = 0; //global time in hours
-    //    while (TC.UpdateAll());
+    UI_Class UI;
+    Company TC(&UI); //truck company instantiation
+    int Global_Time = 0; //global time in hours
 
+    while (TC.UpdateAll(Global_Time)) {
+        TC.PrintStatus();
+        Global_Time++;
+    }
+
+    TC.WriteOutput();
        
 }
 

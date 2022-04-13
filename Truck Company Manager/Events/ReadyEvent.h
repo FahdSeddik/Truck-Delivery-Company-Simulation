@@ -1,5 +1,10 @@
 #pragma once
 #include "Event.h"
+#include "../INFO.h"
+#include "../Company.h"
+class Event; //forward declaration
+
+
 class ReadyEvent :
     public Event
 {

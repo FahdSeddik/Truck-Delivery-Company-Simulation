@@ -60,3 +60,34 @@ int Cargo::getID()
 {
 	return ID;
 };//getter for ID
+
+
+//getter for PrepTIme(time when the cargo is ready to be assigned to truck stored in hours).
+int Cargo::getPrepTime() {
+	return 0;
+}
+
+//getter for Current waiting time
+//(the Time from the preration of the cargo untill its truck starts to move to deliver it (MoveTime-PrepTime))
+int Cargo::getCurrWait() {
+	return 0;
+}
+
+//getter for cargo delivery time from company to the destination 
+//((MT)+(cargo distance/truck speed)+(cargo unload time))
+int Cargo::getWatingTime() {
+	return 0;
+}
+
+
+///getter cargo delivery time from company to the destination 
+//((MT)+(cargo distance/truck speed)+(cargo unload time))
+int Cargo::getDeliveryTime() {
+	return 0;
+}
+
+
+//Cargo Type getter.
+Cargo_Type Cargo::getType() {
+	return Ctype;
+}

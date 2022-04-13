@@ -4,6 +4,8 @@
 #include "../INFO.h"
 #include "../Company.h"
  
+class Company; //forward declaration
+
 class Truck
 {
 private:
