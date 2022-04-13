@@ -58,7 +58,7 @@ public:
 	int getID();//getter for ID
 	void setDeliveryTime(int t);
 	void setCost(int cost);//cost setter.
-
+	void setType(Cargo_Type type);
 	int getTID(); // getter for TID
 
 	
