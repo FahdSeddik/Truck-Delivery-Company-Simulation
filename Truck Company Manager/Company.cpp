@@ -139,196 +139,9 @@ void Company:: AssignCargos() {
 	LoadTrucks(&Wait_SC, &Avail_ST, &Loading_ST, STC);
 	LoadTrucks(&Wait_NC, &Avail_NT, &Loading_NT, NTC);
 	LoadTrucks(&Wait_NC, &Avail_VT, &Loading_VT, VTC);
-	/*while (Wait_VC.peekFront(pC) && Avail_VT.peekFront(pT))
-	{
-		temp = Wait_VC.getSize();
-		if (temp >= VTC)
-		{
-			Avail_VT.dequeue(pT);
-			for (int i = 0; i < VTC; i++)
-			{
-				Wait_VC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_VT.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			t = 0;
-			while (Wait_VC.dequeue(pC) && t <= VTC)
-			{
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_VT.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}
-	while (Wait_VC.peekFront(pC) && Avail_NT.peekFront(pT))
-	{
-		temp = Wait_VC.getSize();
-		if (temp >= NTC)
-		{
-			Avail_NT.dequeue(pT);
-			for (int i = 0; i < NTC; i++)
-			{
-				Wait_VC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_NT.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			t = 0;
-			while (Wait_VC.dequeue(pC) && t <= NTC)
-			{
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_VT.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}
-	while (Wait_VC.peekFront(pC) && Avail_ST.peekFront(pT))
-	{
-		temp = Wait_VC.getSize();
-		if (temp >= STC)
-		{
-			Avail_ST.dequeue(pT);
-			for (int i = 0; i < STC; i++)
-			{
-				Wait_VC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_ST.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			while (Wait_VC.dequeue(pC) && t <= STC)
-			{
-				t = 0;
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_ST.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}
-	while (Wait_SC.peekFront(pC) && Avail_ST.peekFront(pT))
-	{
-		temp = Wait_SC.getSize();
-		if (temp >= STC)
-		{
-			Avail_ST.dequeue(pT);
-			for (int i = 0; i < STC; i++)
-			{
-				Wait_SC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_ST.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			while (Wait_SC.dequeue(pC) && t <= STC)
-			{
-				t = 0;
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_ST.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}
-	while (Wait_NC.peekFront(pC) && Avail_NT.peekFront(pT))
-	{
-		temp = Wait_NC.getSize();
-		if (temp >= NTC)
-		{
-			Avail_NT.dequeue(pT);
-			for (int i = 0; i < NTC; i++)
-			{
-				Wait_NC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_NT.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			while (Wait_NC.dequeue(pC) && t <= STC)
-			{
-				t = 0;
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_NT.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}
-	while (Wait_NC.peekFront(pC) && Avail_VT.peekFront(pT))
-	{
-		temp = Wait_NC.getSize();
-		if (temp >= STC)
-		{
-			Avail_VT.dequeue(pT);
-			for (int i = 0; i < VTC; i++)
-			{
-				Wait_NC.dequeue(pC);
-				pT->AssignCargo(pC);
-			}
-			pT->setMoveTime(time);
-			Loading_VT.enqueue(pT);
-
-		}
-		else if (pC->getCurrWait() > MaxW)
-		{
-			while (Wait_NC.dequeue(pC) && t <= VTC)
-			{
-				t = 0;
-				pT->AssignCargo(pC);
-				t++;
-			}
-			pT->setMoveTime(time);
-			Loading_VT.enqueue(pT);
-		}
-		else
-		{
-			break;
-		}
-	}*/
-
 }
 
-void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*>* LoadingList, int Cap)
+void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*>* LoadingList, int Cap)
 {
 	int temp;
 	int t;
@@ -345,11 +158,11 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 				CargoList->dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
-
+			int x = pT->CalcLoadTime()+time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT,-x);	//prio call calc load time in truck
 		}
-		else if (pC->getCurrWait() > MaxW)
+		else if (time - pC->getPrepTime() >= MaxW)
 		{
 			t = 0;
 			while (CargoList->dequeue(pC) && t <= Cap)
@@ -357,8 +170,9 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 				pT->AssignCargo(pC);
 				t++;
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x);	//prio call calc load time in truck
 		}
 		else
 		{
@@ -367,7 +181,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 	}
 }
 
-void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*> * LoadingList, int Cap)
+void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*> * LoadingList, int Cap)
 {
 	int temp;
 	int t;
@@ -384,11 +198,12 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Tru
 				CargoList->dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
 
 		}
-		else if (pC->getCurrWait() > MaxW)
+		else if (time - pC->getPrepTime() >= MaxW)
 		{
 			t = 0;
 			while (CargoList->dequeue(pC) && t <= Cap)
@@ -396,8 +211,9 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Tru
 				pT->AssignCargo(pC);
 				t++;
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
 		}
 		else
 		{

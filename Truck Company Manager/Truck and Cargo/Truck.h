@@ -18,7 +18,7 @@ private:
 
 
 	//DATA MEMBERS CHANGES THROUGHOUT PROGRAM
-	int CurCapacity;//current capacity.
+	
 	int deliveryInterval;//time needed to deliver all cargos.
 	int currentJourneyCount;//current number of journeys done by the truck
 	int furthestDistance;
@@ -56,7 +56,6 @@ public:
 	//Truck(Truck& T);//copy constructor
 
 	//GETTERS
-	int getCurCapacity();//Curent capacity getter.
 	int getCapacity();//capacity getter.
 	int getDeliveryInterval();//delivery Interval getter. //returns data member.
 	int getCurrentJourneyCount();//Number of Current journeys .
@@ -82,9 +81,12 @@ public:
 	bool isFull();//checks if the truck is full(max capacity) 
 	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
 	bool NeedsRepairing();//return journeycount % J;
-	void  CalculateTruckUtlization(int SimTime);//Calculated the percentage
+	int  CalculateTruckUtlization(int SimTime);//Calculated the percentage
 
 
+	//TODO: calculates loading time 
+	// goes through cargos and adds up loading times
+	int CalcLoadTime();
 	//TODO: (could be called Action time)
 	// calculate next cargo delivery time and returns it
 	//if finished cargos then calculate the return time to company
