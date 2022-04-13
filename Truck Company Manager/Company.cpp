@@ -77,7 +77,7 @@ void Company::ReadFile(string filename)
 				inputFile >> days; // inputs the day part of the time
 				inputFile.ignore();// ignores the ":"
 				inputFile >> ET;// inputs the hour part of the time
-				ET = ET + days * 24; // converts the time to be in hours
+				ET = ET + (days - 1) * 24; // converts the time to be in hours
 				inputFile >> ID >> DIST >> LT >> Cost;
 				if (TYP=='N')
 				{
@@ -102,7 +102,7 @@ void Company::ReadFile(string filename)
 				inputFile >> days; // inputs the day part of the time
 				inputFile.ignore();// ignores the ":"
 				inputFile >> ET;// inputs the hour part of the time
-				ET = ET + days * 24; // converts the time to be in hours
+				ET = ET + (days-1) * 24; // converts the time to be in hours
 				inputFile >> ID;
 				Event* E = new CancellationEvent(ET, ID);
 				EventList.enqueue(E);
@@ -113,7 +113,7 @@ void Company::ReadFile(string filename)
 				inputFile >> days; // inputs the day part of the time
 				inputFile.ignore();// ignores the ":"
 				inputFile >> ET;// inputs the hour part of the time
-				ET = ET + days * 24; // converts the time to be in hours
+				ET = ET + (days - 1) * 24; // converts the time to be in hours
 				inputFile >> ID >> ExtraMoney;
 				Event* E = new PromotionEvent(ET, ID, ExtraMoney);
 				EventList.enqueue(E);
@@ -128,13 +128,21 @@ void Company::ReadFile(string filename)
 //TODO:Phase2 - ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES  
 // moves cargos from waiting to moving
 void Company:: AssignCargos() {
-	int temp1, t;
+	int temp;
+	int t;
 	Cargo* pC;
 	Truck* pT;
-	if (Avail_VT.peekFront(pT)) {
-		temp1 = Wait_VC.getSize();
-		t = time - pT->getLastReturnTime();
-		if (temp1 >= VTC)
+	LLQ<Truck*> * pList;
+	LoadTrucks(&Wait_VC, &Avail_VT, &Loading_VT, VTC);
+	LoadTrucks(&Wait_VC, &Avail_NT, &Loading_NT, NTC);
+	LoadTrucks(&Wait_VC, &Avail_ST, &Loading_ST, STC);
+	LoadTrucks(&Wait_SC, &Avail_ST, &Loading_ST, STC);
+	LoadTrucks(&Wait_NC, &Avail_NT, &Loading_NT, NTC);
+	LoadTrucks(&Wait_NC, &Avail_VT, &Loading_VT, VTC);
+	/*while (Wait_VC.peekFront(pC) && Avail_VT.peekFront(pT))
+	{
+		temp = Wait_VC.getSize();
+		if (temp >= VTC)
 		{
 			Avail_VT.dequeue(pT);
 			for (int i = 0; i < VTC; i++)
@@ -143,24 +151,91 @@ void Company:: AssignCargos() {
 				pT->AssignCargo(pC);
 			}
 			pT->setMoveTime(time);
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			Loading_VT.enqueue(pT);
+
 		}
-		else if (t >= MaxW && temp1 > 0)
+		else if (pC->getCurrWait() > MaxW)
 		{
-			while (Wait_VC.dequeue(pC))
+			t = 0;
+			while (Wait_VC.dequeue(pC) && t <= VTC)
 			{
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			Loading_VT.enqueue(pT);
+		}
+		else
+		{
+			break;
+		}
+	}
+	while (Wait_VC.peekFront(pC) && Avail_NT.peekFront(pT))
+	{
+		temp = Wait_VC.getSize();
+		if (temp >= NTC)
+		{
+			Avail_NT.dequeue(pT);
+			for (int i = 0; i < NTC; i++)
+			{
+				Wait_VC.dequeue(pC);
 				pT->AssignCargo(pC);
 			}
 			pT->setMoveTime(time);
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			Loading_NT.enqueue(pT);
+
+		}
+		else if (pC->getCurrWait() > MaxW)
+		{
+			t = 0;
+			while (Wait_VC.dequeue(pC) && t <= NTC)
+			{
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			Loading_VT.enqueue(pT);
+		}
+		else
+		{
+			break;
 		}
 	}
-	if (Avail_ST.peekFront(pT)) {
-		temp1 = Wait_SC.getSize();
-		t = time - pT->getLastReturnTime();
-		if (temp1 >= STC)
+	while (Wait_VC.peekFront(pC) && Avail_ST.peekFront(pT))
+	{
+		temp = Wait_VC.getSize();
+		if (temp >= STC)
+		{
+			Avail_ST.dequeue(pT);
+			for (int i = 0; i < STC; i++)
+			{
+				Wait_VC.dequeue(pC);
+				pT->AssignCargo(pC);
+			}
+			pT->setMoveTime(time);
+			Loading_ST.enqueue(pT);
+
+		}
+		else if (pC->getCurrWait() > MaxW)
+		{
+			while (Wait_VC.dequeue(pC) && t <= STC)
+			{
+				t = 0;
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			Loading_ST.enqueue(pT);
+		}
+		else
+		{
+			break;
+		}
+	}
+	while (Wait_SC.peekFront(pC) && Avail_ST.peekFront(pT))
+	{
+		temp = Wait_SC.getSize();
+		if (temp >= STC)
 		{
 			Avail_ST.dequeue(pT);
 			for (int i = 0; i < STC; i++)
@@ -168,24 +243,30 @@ void Company:: AssignCargos() {
 				Wait_SC.dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			pT->setMoveTime(time);
+			Loading_ST.enqueue(pT);
+
 		}
-		else if (t >= MaxW && temp1 > 0)
+		else if (pC->getCurrWait() > MaxW)
 		{
-			while (Wait_SC.dequeue(pC))
+			while (Wait_SC.dequeue(pC) && t <= STC)
 			{
+				t = 0;
 				pT->AssignCargo(pC);
+				t++;
 			}
 			pT->setMoveTime(time);
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			Loading_ST.enqueue(pT);
+		}
+		else
+		{
+			break;
 		}
 	}
-	if (Avail_NT.peekFront(pT)) {
-		temp1 = Wait_NC.getSize();
-		t = time - pT->getLastReturnTime();
-		if (temp1 >= NTC || t >= MaxW)
+	while (Wait_NC.peekFront(pC) && Avail_NT.peekFront(pT))
+	{
+		temp = Wait_NC.getSize();
+		if (temp >= NTC)
 		{
 			Avail_NT.dequeue(pT);
 			for (int i = 0; i < NTC; i++)
@@ -193,18 +274,134 @@ void Company:: AssignCargos() {
 				Wait_NC.dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			pT->setMoveTime(time);
+			Loading_NT.enqueue(pT);
+
 		}
-		else if (t >= MaxW && temp1 > 0)
+		else if (pC->getCurrWait() > MaxW)
 		{
-			while (Wait_NC.dequeue(pC))
+			while (Wait_NC.dequeue(pC) && t <= STC)
 			{
+				t = 0;
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			Loading_NT.enqueue(pT);
+		}
+		else
+		{
+			break;
+		}
+	}
+	while (Wait_NC.peekFront(pC) && Avail_VT.peekFront(pT))
+	{
+		temp = Wait_NC.getSize();
+		if (temp >= STC)
+		{
+			Avail_VT.dequeue(pT);
+			for (int i = 0; i < VTC; i++)
+			{
+				Wait_NC.dequeue(pC);
 				pT->AssignCargo(pC);
 			}
 			pT->setMoveTime(time);
-			temp1 = pT->CalculateDeliveryTime();
-			MovingTrucks.enqueue(pT, -temp1);
+			Loading_VT.enqueue(pT);
+
+		}
+		else if (pC->getCurrWait() > MaxW)
+		{
+			while (Wait_NC.dequeue(pC) && t <= VTC)
+			{
+				t = 0;
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			Loading_VT.enqueue(pT);
+		}
+		else
+		{
+			break;
+		}
+	}*/
+
+}
+
+void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*>* LoadingList, int Cap)
+{
+	int temp;
+	int t;
+	Cargo* pC;
+	Truck* pT;
+	while (CargoList->peekFront(pC) && TruckList->peekFront(pT))
+	{
+		temp = CargoList->getSize();
+		if (temp >= Cap)
+		{
+			TruckList->dequeue(pT);
+			for (int i = 0; i < Cap; i++)
+			{
+				CargoList->dequeue(pC);
+				pT->AssignCargo(pC);
+			}
+			pT->setMoveTime(time);
+			LoadingList->enqueue(pT);
+
+		}
+		else if (pC->getCurrWait() > MaxW)
+		{
+			t = 0;
+			while (CargoList->dequeue(pC) && t <= Cap)
+			{
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			LoadingList->enqueue(pT);
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*> * LoadingList, int Cap)
+{
+	int temp;
+	int t;
+	Cargo* pC;
+	Truck* pT;
+	while (CargoList->peekFront(pC) && TruckList->peekFront(pT))
+	{
+		temp = CargoList->getSize();
+		if (temp >= Cap)
+		{
+			TruckList->dequeue(pT);
+			for (int i = 0; i < Cap; i++)
+			{
+				CargoList->dequeue(pC);
+				pT->AssignCargo(pC);
+			}
+			pT->setMoveTime(time);
+			LoadingList->enqueue(pT);
+
+		}
+		else if (pC->getCurrWait() > MaxW)
+		{
+			t = 0;
+			while (CargoList->dequeue(pC) && t <= Cap)
+			{
+				pT->AssignCargo(pC);
+				t++;
+			}
+			pT->setMoveTime(time);
+			LoadingList->enqueue(pT);
+		}
+		else
+		{
+			break;
 		}
 	}
 }
@@ -219,11 +416,18 @@ bool Company::UpdateAll(int Global_Time) {
 	ExecuteEvent();
 	CheckTruckStatus();
 	AssignCargos();
-	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_NT.isEmpty() && Loading_ST.isEmpty() && Loading_VT.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty())
+	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_NT.isEmpty() && Loading_ST.isEmpty() && Loading_VT.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty() && EventList.isEmpty())
 		return false;
 	return true;
 }
 
+
+//TODO: Phase2 - checks truck status in Loading, Moving, and Under_Check
+//if front of queue(ie. truck) needs updating
+//moves each of the trucks that needs updating to its new list
+//NOTE:
+// multiple trucks may need moving to another list
+// however, if so, then they should be after each other due to implemented data structure
 void Company::CheckTruckStatus()
 {
 	int temp;
@@ -367,6 +571,7 @@ void Company::PromoteCargo(int ID,int ExtraMoney) {
 			Wait_VC.enqueue(c, prio);
 			break;
 		}
+		tempq.enqueue(c);
 	}
 
 	//make sure to empty all remaining cargos in tempq
@@ -393,6 +598,7 @@ void Company::CancelCargo(int ID) {
 			c = nullptr;
 			break;
 		}
+		tempq.enqueue(c);
 	}
 	//make sure to empty all remaining cargos in tempq
 	//to maintain order
@@ -424,54 +630,44 @@ void Company::AppendWaitingCargo(Cargo* c) {
 	}
 }
 
-//TODO: Phase2 - checks truck status in Loading, Moving, and Under_Check
-//if front of queue(ie. truck) needs updating
-//moves each of the trucks that needs updating to its new list
-//NOTE:
-// multiple trucks may need moving to another list
-// however, if so, then they should be after each other due to implemented data structure
-void Company::CheckTruckStatus() {
-
-}
 
 //TODO: writes output file
 void Company::WriteOutput() {
 	ofstream OutputFile;
 	int temp, day;
-	int waitTime=0;
+	int waitTime = 0;
 	Cargo* pC;
 	OutputFile.open("OutPut.txt", ios::out);
-	OutputFile << "CDT   ID   PT    WT    TID" << endl;
+	OutputFile << "CDT\tID\tPT\tWT\tTID" << endl;
 	while (DeliveredCargos.dequeue(pC))
 	{
 		temp = pC->getDeliveryTime();
-		day = temp / 24;
+		day = temp / 24 + 1;
 		temp = temp % 24;
-		OutputFile << day << ":" << temp << "   ";
-		OutputFile << pC->getID() << "   ";
+		OutputFile << day << ":" << temp << "\t";
+		OutputFile << pC->getID() << "\t";
 		temp = pC->getPrepTime();
-		day = temp / 24;
+		day = temp / 24 + 1;
 		temp = temp % 24;
-		OutputFile << day << ":" << temp << "   ";
+		OutputFile << day << ":" << temp << "\t";
 		temp = pC->getWatingTime();
-		day = temp / 24;
+		day = temp / 24 + 1;
 		temp = temp % 24;
 		waitTime += temp;
-		OutputFile << day << ":" << temp << "   ";
+		OutputFile << day << ":" << temp << "\t";
 		temp = pC->getTID();
 		OutputFile << temp << endl;
 	}
-	OutputFile << "-----------------------------" << endl;
-	OutputFile << "-----------------------------" << endl;
-	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount <<"]" << endl;
-	day = waitTime / 24;
+	OutputFile << "-------------------------------------------" << endl;
+	OutputFile << "-------------------------------------------" << endl;
+	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount << "]" << endl;
+	day = waitTime / 24 + 1;
 	temp = waitTime % 24;
 	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
 	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;
 	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
-	OutputFile << "Trucks: " << N+V+S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
+	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
 
 	OutputFile.close();
-
 }
 

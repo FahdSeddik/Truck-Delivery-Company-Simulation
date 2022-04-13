@@ -92,6 +92,18 @@ int Truck::getMoveTime()
 {
 	return MoveTime;
 }
+int Truck::getNextDT()
+{
+	return 0;
+}
+int Truck::getFinishCheck()
+{
+	return 0;
+}
+int Truck::getLastReturnTime()
+{
+	return 0;
+}
 ;//getter for ID
 
 int* Truck::getCargoIDs() {
@@ -109,6 +121,12 @@ int* Truck::getCargoIDs() {
 		AssignCargo(c);
 
 	return ids;
+}
+void Truck::UpdateLastReturnTime(int LastReturn)
+{
+}
+void Truck::setMoveTime(int time)
+{
 }
 //METHODS
 bool Truck::isFull()
@@ -129,11 +147,11 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 };//Assign cargo to Truck
 
-int Truck::CalculateDeliveryTime()
-{
-
-	
-}//calculates DT and set el data member
+//int Truck::CalculateDeliveryTime()
+//{
+//	return 0;
+//	
+//}//calculates DT and set el data member
 
 bool Truck::NeedsRepairing()
 {
@@ -143,7 +161,17 @@ bool Truck::NeedsRepairing()
 void  Truck::CalculateTruckUtlization(int SimTime)
 {
 	TruckUtlization=((TotalCargosDel / (Capacity * currentJourneyCount) * (activeTime * SimTime)));
-};//Calculated the percentage
+}
+int Truck::CalcNextDT()
+{
+
+	return 0;
+}
+bool Truck::Update(Company* C, int Global_Time)
+{
+	return false;
+}
+;//Calculated the percentage
 
 
 

@@ -45,7 +45,7 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		break;
 		*/
 		cin.ignore();
-		cout << "Current Time (Day:Hour): " << time / 24 << ":" << time % 24 << endl;
+		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
 		cout << "Waiting Cargos: ";
 		
 		cout << "[";
@@ -106,7 +106,7 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		}
 		break;
 		*/
-		cout << "Current Time (Day:Hour): " << time / 24 << ":" << time % 24 << endl;
+		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
 		cout << "Waiting Cargos: ";
 
 		cout << "[";
@@ -266,10 +266,10 @@ void UI_Class::PrintCargoList(LLQ<Cargo*>& cl) {
 			cout << "[" << c->getID() << "]" << " ";
 		}
 		else if (c->getType() == VC) {
-			cout << "[" << c->getID() << "]" << " ";
+			cout << "{" << c->getID() << "}" << " ";
 		}
 		else if (c->getType() == SC) {
-			cout << "[" << c->getID() << "]" << " ";
+			cout << "(" << c->getID() << ")" << " ";
 		}
 	}
 }
@@ -280,10 +280,10 @@ void UI_Class::PrintCargoListP(PQ<Cargo*>& cl) {
 			cout << "[" << c->getID() << "]" << " ";
 		}
 		else if (c->getType() == VC) {
-			cout << "[" << c->getID() << "]" << " ";
+			cout << "{" << c->getID() << "}" << " ";
 		}
 		else if (c->getType() == SC) {
-			cout << "[" << c->getID() << "]" << " ";
+			cout << "(" << c->getID() << ")" << " ";
 		}
 	}
 }

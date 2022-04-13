@@ -90,8 +90,7 @@ public:
 	//if finished cargos then calculate the return time to company
 	int CalcNextDT();
 
-	//called when company class moves truck to moving trucks list
-	int CalculateDeliveryTime(); //calculates DT and set el data member
+	//int CalculateDeliveryTime(); //calculates DT and set el data member
 
 	//Update method to be called from company
 	// checks first if there is cargo to be delivered in Global_Time

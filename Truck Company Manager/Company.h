@@ -81,6 +81,9 @@ private:
 	// moves cargos from waiting to moving
 	void AssignCargos();
 
+	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList , LLQ<Truck*>* LoadingList,int Cap);
+	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*>* LoadingList, int Cap);
+
 	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 	void ReadFile(string filename);
