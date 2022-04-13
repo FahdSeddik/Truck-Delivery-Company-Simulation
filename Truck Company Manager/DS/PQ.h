@@ -23,7 +23,15 @@ public:
 		while (dequeue(x));
 		
 	}
-
+	PQ(PQ<ItemType>& q) {
+		Head = nullptr;
+		size = 0;
+		PQNode<ItemType>* ptr = q.Head;
+		while (ptr) {
+			enqueue(ptr->getItem(), ptr->getPrio());
+			ptr = ptr->getNext();
+		}
+	}
 	//size of queue
 	int getSize()const {
 		return size;
@@ -45,7 +53,7 @@ public:
 		PQNode<ItemType>* prev = Head;
 
 		//if highest prio
-		if (Head->getPrio() <= prio) {
+		if (Head->getPrio() < prio) {
 			Head = new PQNode<ItemType>(newEntry, prio);
 			Head->setNext(cur);
 			size++;
@@ -53,7 +61,7 @@ public:
 		}
 		
 		while (cur) {
-			if (cur->getPrio() <= prio) {
+			if (cur->getPrio() < prio) {
 				prev->setNext(new PQNode<ItemType>(newEntry, prio));
 				prev = prev->getNext();
 				prev->setNext(cur);
@@ -78,7 +86,6 @@ public:
 		Entry = Head->getItem();
 		PQNode<ItemType>* cur = Head;
 		Head = Head->getNext();
-		delete cur;
 		size--;
 		return true;
 	} //remove an item

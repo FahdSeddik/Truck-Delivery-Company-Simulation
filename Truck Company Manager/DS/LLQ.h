@@ -18,7 +18,23 @@ public:
 		Tail = nullptr;
 		size = 0;
 	}
-
+	~LLQ() {
+		ItemType t;
+		while (dequeue(t));
+	}
+	LLQ(LLQ<ItemType>& q) {
+		Tail = nullptr;
+		size = 0;
+		ItemType t;
+		LLQ<ItemType> tempq;
+		while (q.dequeue(t)) {
+			tempq.enqueue(t);
+			enqueue(t);
+		}
+		while (tempq.dequeue(t)) {
+			q.enqueue(t);
+		}
+	}
 	//size of queue
 	int getSize()const {
 		return size;

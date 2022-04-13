@@ -67,7 +67,7 @@ public:
 	Truck_Type getTruckType();//type of truck getter.
 	
 
-
+	int* getCargoIDs();
 
 	//METHODS
 	bool isFull();//checks if the truck is full(max capacity) 

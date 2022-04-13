@@ -39,8 +39,5 @@ public:
 	}
 
 
-	~PQNode() {
-		next = nullptr;
-	}
-
+	
 };

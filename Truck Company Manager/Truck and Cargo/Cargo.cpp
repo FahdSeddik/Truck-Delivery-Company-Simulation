@@ -91,3 +91,9 @@ int Cargo::getDeliveryTime() {
 Cargo_Type Cargo::getType() {
 	return Ctype;
 }
+
+
+
+void Cargo::setDeliveryTime(int t) {
+	deliveryTime = t;
+}

@@ -84,7 +84,7 @@ private:
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 	void ReadFile(string filename);
 
-	int lastcmove; //temp data member just for phase1 to keep track of last time cargos moved (functions like a counter)
+	
 public:
 	//Constructor to read from file and set time to 0 
 	Company(UI_Class* pUI);

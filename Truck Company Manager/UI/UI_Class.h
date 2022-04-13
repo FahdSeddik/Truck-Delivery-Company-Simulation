@@ -1,6 +1,12 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "../DS/LLQ.h"
+#include "../DS/PQ.h"
+
+class Cargo;
+class Truck;
+
 using namespace std;
 class UI_Class
 {
@@ -14,14 +20,16 @@ public:
 
 	//TODO: takes copies of all lists
 	//calls other print methods
-	void Print();
+	void Print(int time,LLQ<Cargo*> wn,LLQ<Cargo*> ws,PQ<Cargo*>wv,LLQ<Cargo*> dc,LLQ<Truck*> an, LLQ<Truck*> av, LLQ<Truck*> as
+	, LLQ<Truck*> ln, LLQ<Truck*> lv, LLQ<Truck*> ls,PQ<Truck*> uc,PQ<Truck*> m);
 
 	//TODO: takes a truck list copy and its name
 	//prints it with appropriate format
-	void PrintTruckList();
-
+	void PrintTruckList(LLQ<Truck*>& tl);
+	void PrintTruckListP(PQ<Truck*>& tl);
 	//TODO: take a cargo list copy and its name
 	//prints it with appropriate format
-	void PrintCargoList();
+	void PrintCargoList(LLQ<Cargo*>& cl);
+	void PrintCargoListP(PQ<Cargo*>& cl);
 };
 

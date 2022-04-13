@@ -7,7 +7,7 @@ using namespace std;
 #include "Events/ReadyEvent.h" //after company
 Company::Company(UI_Class* pUI) {
 	time = 0;
-	lastcmove = 0;
+	
 	this->pUI = pUI;
 	string filename = pUI->ReadFileName();
 	ReadFile(filename);
@@ -139,8 +139,7 @@ bool Company::UpdateAll(int Global_Time) {
 	
 	ExecuteEvent();
 
-	if (time - lastcmove >= 5) {
-		lastcmove = time;
+	if (time %5==0) {
 		Cargo* c;
 		if (Wait_NC.dequeue(c)) {
 			AppendDeliveredCargo(c);
@@ -175,13 +174,14 @@ void Company::ExecuteEvent() {
 //TODO: to be used form each truck when a cargo is delivered
 // appends a cargo to delivered list
 void Company::AppendDeliveredCargo(Cargo* c) {
+	c->setDeliveryTime(time);
 	DeliveredCargos.enqueue(c);
 }
 
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-	pUI->Print();
+	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DeliveredCargos,Avail_NT,Avail_VT,Avail_ST,Loading_NT,Loading_VT,Loading_ST,Under_Check,MovingTrucks);
 }
 
 

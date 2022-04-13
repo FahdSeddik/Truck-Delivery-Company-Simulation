@@ -54,7 +54,7 @@ public:
 	Cargo_Type getType();//Cargo Type getter.
 	
 	int getID();//getter for ID
-
+	void setDeliveryTime(int t);
 	void setCost(int cost);//cost setter.
 	//Methods
 

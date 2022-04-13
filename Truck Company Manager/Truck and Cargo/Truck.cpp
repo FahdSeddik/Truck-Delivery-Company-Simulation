@@ -89,7 +89,22 @@ int Truck::getID()
 	return ID;
 };//getter for ID
 
+int* Truck::getCargoIDs() {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	int* ids = new int[CurAssignedCargos];
+	int i = 0;
+	while (AssignedCargos.dequeue(c)) {
+		ids[i] = c->getID();
+		i++;
+		tempq.enqueue(c);
+	}
 
+	while (tempq.dequeue(c))
+		AssignCargo(c);
+
+	return ids;
+}
 //METHODS
 bool Truck::isFull()
 {
@@ -102,7 +117,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 		return false;
 	if (NeedsRepairing())
 		return false;
-	AssignedCargos.enqueue(CargoToAssign, CargoToAssign->getDeliveryDistance());
+	AssignedCargos.enqueue(CargoToAssign, -CargoToAssign->getDeliveryDistance());
 	//add the cargo to the array
 	CurAssignedCargos++;//incrementing current Assigned Cargos Count by 1
 	return true;//succesfully assigned
