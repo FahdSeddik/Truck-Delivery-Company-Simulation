@@ -48,8 +48,10 @@ private:
 	LLQ<Event*> EventList;   // to be implemented
 
 	int time; //time in hours is also simulation time
-
+	int N, S, V;//numbers of each type of truck
+	int NCcount, SCcount, VCcount; // count number of each type of cargo
 	int AutoP, MaxW; //in hours
+	int AutoPcount; // number of cargos auto-promoted
 	int MT_N, MT_V, MT_S; //maintenance time of each truck type
 	
 	UI_Class* pUI;

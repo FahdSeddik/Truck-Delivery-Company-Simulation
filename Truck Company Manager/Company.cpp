@@ -2,14 +2,28 @@
 #include <iostream>
 using namespace std;
 
+<<<<<<< Updated upstream
 
+=======
+#include "Events/CancellationEvent.h" //after company
+#include "Events/PromotionEvent.h" //after company
+#include "Events/ReadyEvent.h" //after company
+Company::Company(UI_Class* pUI) {
+	time = 0;
+	lastcmove = 0;
+	NCcount = SCcount = VCcount = 0;
+	this->pUI = pUI;
+	string filename = pUI->ReadFileName();
+	ReadFile(filename);
+	
+}
+>>>>>>> Stashed changes
 
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 void Company::ReadFile(string filename)
 {
 	ifstream inputFile;
 	inputFile.open(filename, ios::in); // opens the file for input 
-	int N, S, V;//numbers of each type of truck
 	int NS, SS, VS;//speeds of each type of truck
 	int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
@@ -70,14 +84,17 @@ void Company::ReadFile(string filename)
 				if (TYP=='N')
 				{
 					type = NC;
+					NCcount++;
 				}
 				else if (TYP == 'S')
 				{
 					type = SC;
+					SCcount++;
 				}
 				else
 				{
 					type = VC;
+					VCcount++;
 				}
 				Event* E = new ReadyEvent(ET, ID, type, DIST, LT, Cost);
 				EventList.enqueue(E);
@@ -130,6 +147,149 @@ bool Company::UpdateAll(int Global_Time) {
 //TODO: to be used in update in case an event is to be done 
 // simply can be Ready::Execute for example
 void Company::ExecuteEvent() {
+<<<<<<< Updated upstream
+=======
+	Event* pE;
+	while (EventList.peekFront(pE) && pE->GetTime() == time) {
+		EventList.dequeue(pE);
+		pE->Execute(this);
+	}
+}
+
+
+
+//TODO: to be used form each truck when a cargo is delivered
+// appends a cargo to delivered list
+void Company::AppendDeliveredCargo(Cargo* c) {
+	DeliveredCargos.enqueue(c);
+}
+
+//PHASE-1
+//TODO: takes care of all print functions in UI Class
+void Company::PrintStatus() {
+	pUI->Print();
+}
+
+
+//PHASE-1
+//TODO: takes a cargo ID
+// checks normal cargo waiting list and moves if found
+void Company::PromoteCargo(int ID,int ExtraMoney) {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	while (Wait_NC.dequeue(c)) {
+		if (c->getID() == ID) {
+			c->setCost(c->getcost() + ExtraMoney);
+			int prio = 0; //perform prio calculation
+			Wait_VC.enqueue(c, prio);
+			break;
+		}
+	}
+
+	//make sure to empty all remaining cargos in tempq
+	//to maintain order
+	while (Wait_NC.dequeue(c))
+		tempq.enqueue(c);
+
+	//put back all other cargos in main queue
+	while (tempq.dequeue(c))
+		Wait_NC.enqueue(c);
+
+}
+
+//PHASE-1
+//TODO: takes a cargo ID
+// checks if found then cancels
+void Company::CancelCargo(int ID) {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	//Checks for cargo in waiting (ie. you can cancel the cargo)
+	while (Wait_NC.dequeue(c)) {
+		if (c->getID() == ID) { //if found
+			delete c;
+			c = nullptr;
+			break;
+		}
+	}
+	//make sure to empty all remaining cargos in tempq
+	//to maintain order
+	while (Wait_NC.dequeue(c)) 
+		tempq.enqueue(c);
+
+	//put back all other cargos in main queue
+	while (tempq.dequeue(c))
+		Wait_NC.enqueue(c);
+}
+
+//PHASE-1
+//TODO: takes a cargo pointer
+//enqueues cargo to its waiting list
+// this method is only called by Read Event
+void Company::AppendWaitingCargo(Cargo* c) {
+	if (!c)
+		return;
+
+	if (c->getType() == NC) {
+		Wait_NC.enqueue(c);
+	}
+	else if (c->getType() == VC) {
+		int prio = 0; //calculation to be done
+		Wait_VC.enqueue(c,prio);
+	}
+	else if (c->getType() == SC) {
+		Wait_SC.enqueue(c);
+	}
+}
+
+//TODO: Phase2 - checks truck status in Loading, Moving, and Under_Check
+//if front of queue(ie. truck) needs updating
+//moves each of the trucks that needs updating to its new list
+//NOTE:
+// multiple trucks may need moving to another list
+// however, if so, then they should be after each other due to implemented data structure
+void Company::CheckTruckStatus() {
+
+}
+
+//TODO: writes output file
+void Company::WriteOutput() {
+	ofstream OutputFile;
+	int temp, day;
+	int waitTime=0;
+	Cargo* pC;
+	OutputFile.open("OutPut.txt", ios::out);
+	OutputFile << "CDT   ID   PT    WT    TID" << endl;
+	while (DeliveredCargos.dequeue(pC))
+	{
+		temp = pC->getDeliveryTime();
+		day = temp / 24;
+		temp = temp % 24;
+		OutputFile << day << ":" << temp << "   ";
+		OutputFile << pC->getID() << "   ";
+		temp = pC->getPrepTime();
+		day = temp / 24;
+		temp = temp % 24;
+		OutputFile << day << ":" << temp << "   ";
+		temp = pC->getWatingTime();
+		day = temp / 24;
+		temp = temp % 24;
+		waitTime += temp;
+		OutputFile << day << ":" << temp << "   ";
+		temp = pC->getTID();
+		OutputFile << temp << endl;
+	}
+	OutputFile << "-----------------------------" << endl;
+	OutputFile << "-----------------------------" << endl;
+	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount <<"]" << endl;
+	day = waitTime / 24;
+	temp = waitTime % 24;
+	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
+	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;
+	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
+	OutputFile << "Trucks: " << N+V+S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
+
+	OutputFile.close();
+>>>>>>> Stashed changes
 
 }
 
