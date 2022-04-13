@@ -2,24 +2,26 @@
 #include <iostream>
 using namespace std;
 
+
+
 #include "Events/CancellationEvent.h" //after company
 #include "Events/PromotionEvent.h" //after company
 #include "Events/ReadyEvent.h" //after company
 Company::Company(UI_Class* pUI) {
 	time = 0;
-	
+	NCcount = SCcount = VCcount = 0;
 	this->pUI = pUI;
 	string filename = pUI->ReadFileName();
 	ReadFile(filename);
 	
 }
 
+
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
 void Company::ReadFile(string filename)
 {
 	ifstream inputFile;
 	inputFile.open(filename, ios::in); // opens the file for input 
-	int N, S, V;//numbers of each type of truck
 	int NS, SS, VS;//speeds of each type of truck
 	int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
@@ -80,14 +82,17 @@ void Company::ReadFile(string filename)
 				if (TYP=='N')
 				{
 					type = NC;
+					NCcount++;
 				}
 				else if (TYP == 'S')
 				{
 					type = SC;
+					SCcount++;
 				}
 				else
 				{
 					type = VC;
+					VCcount++;
 				}
 				Event* E = new ReadyEvent(ET, ID, type, DIST, LT, Cost);
 				EventList.enqueue(E);
@@ -267,6 +272,42 @@ void Company::CheckTruckStatus() {
 
 //TODO: writes output file
 void Company::WriteOutput() {
+	ofstream OutputFile;
+	int temp, day;
+	int waitTime=0;
+	Cargo* pC;
+	OutputFile.open("OutPut.txt", ios::out);
+	OutputFile << "CDT   ID   PT    WT    TID" << endl;
+	while (DeliveredCargos.dequeue(pC))
+	{
+		temp = pC->getDeliveryTime();
+		day = temp / 24;
+		temp = temp % 24;
+		OutputFile << day << ":" << temp << "   ";
+		OutputFile << pC->getID() << "   ";
+		temp = pC->getPrepTime();
+		day = temp / 24;
+		temp = temp % 24;
+		OutputFile << day << ":" << temp << "   ";
+		temp = pC->getWatingTime();
+		day = temp / 24;
+		temp = temp % 24;
+		waitTime += temp;
+		OutputFile << day << ":" << temp << "   ";
+		temp = pC->getTID();
+		OutputFile << temp << endl;
+	}
+	OutputFile << "-----------------------------" << endl;
+	OutputFile << "-----------------------------" << endl;
+	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount <<"]" << endl;
+	day = waitTime / 24;
+	temp = waitTime % 24;
+	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
+	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;
+	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
+	OutputFile << "Trucks: " << N+V+S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
+
+	OutputFile.close();
 
 }
 

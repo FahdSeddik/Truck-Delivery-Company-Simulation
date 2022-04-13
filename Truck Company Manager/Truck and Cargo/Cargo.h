@@ -10,6 +10,7 @@ private:
 	int deliveryDistance;//the distance (in kilometers) from the company to the delivery location of the cargo.
 	int Cost;//the cost of delivering the cargo.
 	int ID; //unique ID for cargo.
+	int TID; // ID of the truck that delived the cargo
 	Cargo_Type Ctype;//cargo type.
 	
 
@@ -50,12 +51,22 @@ public:
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
 	int getDeliveryTime();///getter cargo delivery time from company to the destination 
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))
+
 	
 	Cargo_Type getType();//Cargo Type getter.
 	
 	int getID();//getter for ID
 	void setDeliveryTime(int t);
 	void setCost(int cost);//cost setter.
+
+	int getID();//getter for ID
+	int getTID(); // getter for TID
+	Cargo_Type getType();//Cargo Type getter.
+	
+
+	void setCost(int cost);//cost setter.
+	void setTID(int id); //TID setter
+
 	//Methods
 
 	//TODO: to be used when a cargo is assigned to a truck to have cargo sorted in prio queue in truck

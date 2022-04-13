@@ -38,6 +38,10 @@ void Cargo::setCost(int cost)
 	Cost = cost;
  }
 
+void Cargo::setTID(int id)
+{
+}
+
 ;//cost setter.
 
 int Cargo::getLoad_Unload_Time()
@@ -64,7 +68,7 @@ int Cargo::getID()
 
 //getter for PrepTIme(time when the cargo is ready to be assigned to truck stored in hours).
 int Cargo::getPrepTime() {
-	return 0;
+	return prepTime;
 }
 
 //getter for Current waiting time
@@ -83,9 +87,14 @@ int Cargo::getWatingTime() {
 ///getter cargo delivery time from company to the destination 
 //((MT)+(cargo distance/truck speed)+(cargo unload time))
 int Cargo::getDeliveryTime() {
-	return 0;
+	return deliveryTime;
 }
 
+
+int Cargo::getTID()
+{
+	return 0;
+}
 
 //Cargo Type getter.
 Cargo_Type Cargo::getType() {
