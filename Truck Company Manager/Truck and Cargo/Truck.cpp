@@ -87,7 +87,12 @@ Truck_Type Truck::getTruckType()
 int Truck::getID()
 {
 	return ID;
-};//getter for ID
+}
+int Truck::getMoveTime()
+{
+	return MoveTime;
+}
+;//getter for ID
 
 int* Truck::getCargoIDs() {
 	LLQ<Cargo*> tempq;
@@ -124,7 +129,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 };//Assign cargo to Truck
 
-void Truck::CalculateDeliveryTime()
+int Truck::CalculateDeliveryTime()
 {
 
 	
