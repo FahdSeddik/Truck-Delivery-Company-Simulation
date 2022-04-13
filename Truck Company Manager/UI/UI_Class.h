@@ -21,7 +21,7 @@ public:
 	//TODO: takes copies of all lists
 	//calls other print methods
 	void Print(int time,LLQ<Cargo*> wn,LLQ<Cargo*> ws,PQ<Cargo*>wv,LLQ<Cargo*> dc,LLQ<Truck*> an, LLQ<Truck*> av, LLQ<Truck*> as
-	, PQ<Truck*> ln, PQ<Truck*> lv, PQ<Truck*> ls,PQ<Truck*> uc,PQ<Truck*> m);
+	, PQ<Truck*> l,PQ<Truck*> uc,PQ<Truck*> m);
 
 	//TODO: takes a truck list copy and its name
 	//prints it with appropriate format

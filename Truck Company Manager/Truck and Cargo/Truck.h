@@ -76,7 +76,7 @@ public:
 	//SETTERS
 	void UpdateLastReturnTime(int LastReturn);
 	void setMoveTime(int time);
-
+	void incrementActiveTime(int time);
 	//METHODS
 	bool isFull();//checks if the truck is full(max capacity) 
 	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
@@ -90,7 +90,7 @@ public:
 	//TODO: (could be called Action time)
 	// calculate next cargo delivery time and returns it
 	//if finished cargos then calculate the return time to company
-	int CalcNextDT();
+	int CalcNextDT(int GT);
 
 	//int CalculateDeliveryTime(); //calculates DT and set el data member
 

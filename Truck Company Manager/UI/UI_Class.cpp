@@ -28,7 +28,7 @@ string UI_Class::ReadFileName()
 }
 
 void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ<Cargo*> dc, LLQ<Truck*> an, LLQ<Truck*> av, LLQ<Truck*> as
-	, PQ<Truck*> ln, PQ<Truck*> lv, PQ<Truck*> ls, PQ<Truck*> uc, PQ<Truck*> m)
+	, PQ<Truck*> l, PQ<Truck*> uc, PQ<Truck*> m)
 {
 	Cargo* c;
 	switch (mode)
@@ -68,9 +68,7 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		cout << "}"<<endl;
 		cout << "------------------------------------------------------";
 		cout <<endl<< "Loading Trucks: ";
-		PrintTruckListP(ln);
-		PrintTruckListP(ls);
-		PrintTruckListP(lv);
+		PrintTruckListP(l);
 		cout << "\n------------------------------------------------------";
 		cout<<endl << "Empty Trucks: ";
 		PrintTruckList(an);
@@ -129,9 +127,7 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		cout << "}" << endl;
 		cout << "------------------------------------------------------";
 		cout << endl << "Loading Trucks: ";
-		PrintTruckListP(ln);
-		PrintTruckListP(ls);
-		PrintTruckListP(lv);
+		PrintTruckListP(l);
 		cout << "\n------------------------------------------------------";
 		cout << endl << "Empty Trucks: ";
 		PrintTruckList(an);

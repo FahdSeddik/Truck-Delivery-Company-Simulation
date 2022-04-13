@@ -1,7 +1,6 @@
 #include "Truck.h"
 Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 {
-	CurCapacity = 0;
 	deliveryInterval = 0;
 	currentJourneyCount = 0;
 	CurAssignedCargos = 0;
@@ -12,6 +11,9 @@ Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 	J = JBM;
 	Ttype = TT;
 	ID = Id;
+	MoveTime = -1;
+	nextDT = -1;
+	LastReturnTime = -1;
 }//constructor.
 
 Truck::~Truck()
@@ -19,25 +21,6 @@ Truck::~Truck()
 	
 }//def destructor.
 
-//Truck::Truck(Truck& T)
-//{
-//	Capacity=T.Capacity;
-//	maintenanceTime=T.maintenanceTime;
-//	speed=T.speed;
-//	J=T.J;
-//	Ttype=T.Ttype;
-//	CurCapacity=T.CurCapacity;
-//	deliveryInterval = T.deliveryInterval;
-//	currentJourneyCount=T.currentJourneyCount;
-//	T.AssignedCargos = new Cargo * [Capacity];//allocating a newarray of max Capacity Size for the copied object
-//	CurAssignedCargos=T.CurAssignedCargos;
-//	MoveTime=T.MoveTime;
-//	activeTime=T.activeTime;
-//	TruckUtlization=T.TruckUtlization;		
-//	TotalCargosDel=T.TotalCargosDel;
-//	TotalDeliveryJour=T.TotalDeliveryJour;
-//	TotalSimTime = T.TotalSimTime;
-//};//copy constructor
 
 //GETTERS
 int Truck::getCapacity()
@@ -90,7 +73,7 @@ int Truck::getMoveTime() //doesnt calculate
 }
 int Truck::getNextDT()
 {
-	return 0;
+	return nextDT;
 }
 int Truck::getFinishCheck()
 {
@@ -98,7 +81,7 @@ int Truck::getFinishCheck()
 }
 int Truck::getLastReturnTime()
 {
-	return 0;
+	return LastReturnTime;
 }
 ;//getter for ID
 
@@ -120,9 +103,15 @@ int* Truck::getCargoIDs() {
 }
 void Truck::UpdateLastReturnTime(int LastReturn)
 {
+	LastReturnTime = LastReturn;
 }
 void Truck::setMoveTime(int time)
 {
+	MoveTime = time;
+}
+void Truck::incrementActiveTime(int time)
+{
+	activeTime += time;
 }
 //METHODS
 bool Truck::isFull()
@@ -132,13 +121,16 @@ bool Truck::isFull()
 
 bool Truck::AssignCargo(Cargo * CargoToAssign)
 {
+	if (!CargoToAssign)
+		return false;
 	if (isFull())//if full return false
 		return false;
-	if (NeedsRepairing())
-		return false;
+	if (CargoToAssign->getDeliveryDistance() >= furthestDistance)
+		furthestDistance = CargoToAssign->getDeliveryDistance();
 	AssignedCargos.enqueue(CargoToAssign, -CargoToAssign->getDeliveryDistance());
 	//add the cargo to the array
 	CurAssignedCargos = AssignedCargos.getSize();
+	
 	return true;//succesfully assigned
 
 };//Assign cargo to Truck
@@ -174,13 +166,26 @@ int Truck::CalcLoadTime() //calculates the load interval (not absolute)
 	
 	return lt;
 }
-int Truck::CalcNextDT()
+int Truck::CalcNextDT(int GT) //calculates absolute next delivery time
 {
-
-	return 0;
+	Cargo* c;
+	if (AssignedCargos.peekFront(c))
+		nextDT = GT + c->getDeliveryDistance() / speed + c->getLoad_Unload_Time();
+	else if(LastReturnTime<GT){
+		nextDT = furthestDistance / speed + GT;
+		UpdateLastReturnTime(nextDT);
+	}
+	return nextDT;
 }
 bool Truck::Update(Company* C, int Global_Time)
 {
+	//if function is called then this means nextDT has come no need to check
+	Cargo* c;
+	if (AssignedCargos.dequeue(c)) {
+		C->AppendDeliveredCargo(c);
+		return true;
+	}
+	//if no cargos to deliver and reach nextDT then this means truck has returned to company
 	return false;
 }
 ;//Calculated the percentage
@@ -190,39 +195,16 @@ bool Truck::Update(Company* C, int Global_Time)
 //SETTERS
 void Truck::setCapacity(int TCap)
 {
-	if (TCap > 0)//validation for Capacity to be Postive
-	{
-		Capacity = TCap;
-	}
-	else//else throw exception
-	{
-		//throw Exception
-	}
-	
+	Capacity = TCap;
 };//capacity setter.
 
 void Truck::setSpeed(int speed)
 {
-	if (speed > 0)//validation for Time to be Postive
-	{
-		this->speed = speed;
-	}
-	else//else throw exception
-	{
-		//throw Exception
-	}
+	this->speed = speed;
 };//speed setter.
 
 
 void Truck::setJ(int j)
 {
-	if (j > 0)//validation for Time to be Postive
-	{
-		J = j;
-	}
-	else//else throw exception
-	{
-		//throw Exception
-	}
-	
+	J = j;
 };//Number of journeys after which the Truck needs maintenance setter (J)

@@ -128,11 +128,7 @@ void Company::ReadFile(string filename)
 //TODO:Phase2 - ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
 // moves cargos from waiting to moving
 void Company:: AssignCargos() {
-	int temp;
-	int t;
 	Cargo* pC;
-	Truck* pT;
-	LLQ<Truck*> * pList;
 	while(Wait_NC.peekFront(pC))
 	{
 		int x = time - pC->getPrepTime();
@@ -146,16 +142,16 @@ void Company:: AssignCargos() {
 			break;
 		}
 	}
-	LoadTrucks(&Wait_VC, &Avail_VT, &Loading_VT, VTC);
-	LoadTrucks(&Wait_VC, &Avail_NT, &Loading_NT, NTC);
-	LoadTrucks(&Wait_VC, &Avail_ST, &Loading_ST, STC);
-	LoadTrucks(&Wait_SC, &Avail_ST, &Loading_ST, STC);
-	LoadTrucks(&Wait_NC, &Avail_NT, &Loading_NT, NTC);
-	LoadTrucks(&Wait_NC, &Avail_VT, &Loading_VT, VTC);
+	LoadTrucks(&Wait_VC, &Avail_VT, VTC);
+	LoadTrucks(&Wait_VC, &Avail_NT, NTC);
+	LoadTrucks(&Wait_VC, &Avail_ST, STC);
+	LoadTrucks(&Wait_SC, &Avail_ST, STC);
+	LoadTrucks(&Wait_NC, &Avail_NT, NTC);
+	LoadTrucks(&Wait_NC, &Avail_VT, VTC);
 
 }
 
-void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*>* LoadingList, int Cap)
+void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 {
 	int temp;
 	int t;
@@ -174,7 +170,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck
 			}
 			int x = pT->CalcLoadTime()+time;
 			pT->setMoveTime(x);
-			LoadingList->enqueue(pT,-x);	//prio call calc load time in truck
+			Loading_Trucks.enqueue(pT,-x);	//prio call calc load time in truck
 		}
 		else if (time - pC->getPrepTime() >= MaxW)
 		{
@@ -186,7 +182,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			LoadingList->enqueue(pT, -x);	//prio call calc load time in truck
+			Loading_Trucks.enqueue(pT, -x);	//prio call calc load time in truck
 		}
 		else
 		{
@@ -195,7 +191,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck
 	}
 }
 
-void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*> * LoadingList, int Cap)
+void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 {
 	int temp;
 	int t;
@@ -214,10 +210,12 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truc
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
+			pT->incrementActiveTime(x-time);
+			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
+
 
 		}
-		else if (time - pC->getPrepTime() >= MaxW)
+		else if ((time - pC->getPrepTime()) >= MaxW)
 		{
 			t = 0;
 			while (CargoList->dequeue(pC) && t <= Cap)
@@ -227,7 +225,8 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truc
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
+			pT->incrementActiveTime(x - time);
+			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
 		}
 		else
 		{
@@ -246,7 +245,7 @@ bool Company::UpdateAll(int Global_Time) {
 	ExecuteEvent();
 	CheckTruckStatus();
 	AssignCargos();
-	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_NT.isEmpty() && Loading_ST.isEmpty() && Loading_VT.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty() && EventList.isEmpty())
+	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_Trucks.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty() && EventList.isEmpty())
 		return false;
 	return true;
 }
@@ -266,61 +265,49 @@ void Company::CheckTruckStatus()
 	// to-do
 	//Check front of Available truck if reached maxW then call AssignCargos()
 
-	if (Loading_NT.peekFront(pTruck)) {
+
+	while (Loading_Trucks.peekFront(pTruck)) {
 		temp = pTruck->getMoveTime();
 		if (temp <= time)
 		{
-			Loading_NT.dequeue(pTruck);
-			temp = pTruck->CalcNextDT();
+			Loading_Trucks.dequeue(pTruck);
+			temp = pTruck->CalcNextDT(time);
 			MovingTrucks.enqueue(pTruck, -temp);
 		}
+		else
+			break;
 	}
-	if (Loading_ST.peekFront(pTruck)) {
-		temp = pTruck->getMoveTime();
-		if (temp <= time)
-		{
-			Loading_ST.dequeue(pTruck);
-			temp = pTruck->CalcNextDT();
-			MovingTrucks.enqueue(pTruck, -temp);
-		}
-	}
-	if (Loading_VT.peekFront(pTruck)) {
-		temp = pTruck->getMoveTime();
-		if (temp <= time)
-		{
-			Loading_VT.dequeue(pTruck);
-			temp = pTruck->CalcNextDT();
-			MovingTrucks.enqueue(pTruck, -temp);
-		}
-	}
-	if (Under_Check.peekFront(pTruck)) {
-		temp = pTruck->getFinishCheck();
-		if (temp <= time)
+	while (Under_Check.peekFront(pTruck)) {
+		temp = time - pTruck->getLastReturnTime(); //time interval
+		Type = pTruck->getTruckType();
+
+		if (Type == NT && temp>=MT_N)
 		{
 			Under_Check.dequeue(pTruck);
-			Type = pTruck->getTruckType();
-			if (Type == NT)
-			{
-				Avail_NT.enqueue(pTruck);
-			}
-			else if (Type == ST)
-			{
-				Avail_ST.enqueue(pTruck);
-			}
-			else if (Type == VT)
-			{
-				Avail_VT.enqueue(pTruck);
-			}
+			Avail_NT.enqueue(pTruck);
 		}
+		else if (Type == ST && temp>= MT_S)
+		{
+			Under_Check.dequeue(pTruck);
+			Avail_ST.enqueue(pTruck);
+		}
+		else if (Type == VT && temp>= MT_V)
+		{
+			Under_Check.dequeue(pTruck);
+			Avail_VT.enqueue(pTruck);
+		}
+		else
+			break;
 	}
-	if (MovingTrucks.peekFront(pTruck)) {
+	while (MovingTrucks.peekFront(pTruck)) {
 		temp = pTruck->getNextDT();
-		if (temp <= time)
+		if (temp == time)
 		{
 			MovingTrucks.dequeue(pTruck);
 			if (pTruck->Update(this, time))
 			{
-				temp = pTruck->CalcNextDT();
+				temp = pTruck->CalcNextDT(time);
+				pTruck->incrementActiveTime(temp-time);
 				MovingTrucks.enqueue(pTruck, -temp);
 			}
 			else if (pTruck->NeedsRepairing())
@@ -335,7 +322,7 @@ void Company::CheckTruckStatus()
 				{
 					prio = time + MT_S;
 				}
-				else if (Type == VT)
+				else
 				{
 					prio = time + MT_V;
 				}
@@ -358,6 +345,8 @@ void Company::CheckTruckStatus()
 				}
 			}
 		}
+		else
+			break;
 	}
 
 }
@@ -384,7 +373,7 @@ void Company::AppendDeliveredCargo(Cargo* c) {
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DeliveredCargos,Avail_NT,Avail_VT,Avail_ST,Loading_NT,Loading_VT,Loading_ST,Under_Check,MovingTrucks);
+	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DeliveredCargos,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
 }
 
 

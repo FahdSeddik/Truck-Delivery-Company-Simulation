@@ -94,6 +94,7 @@ public:
 		if (!Head)
 			return false;
 		Entry = Head->getItem();
+		return true;
 	} //peek front of queue
 
 };

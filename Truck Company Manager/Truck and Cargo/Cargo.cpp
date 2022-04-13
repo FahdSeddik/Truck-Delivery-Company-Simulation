@@ -20,7 +20,7 @@ Cargo::~Cargo()
 
 
 //SETTERS
-void Cargo::setCargoType(Cargo_Type CT) {
+void Cargo::setType(Cargo_Type CT) {
 	Ctype = CT;
 }//Cargo Type Setter
 void Cargo::setload_Unload_Time(int LTime)

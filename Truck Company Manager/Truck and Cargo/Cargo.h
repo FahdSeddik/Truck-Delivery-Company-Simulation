@@ -27,7 +27,7 @@ private:
 	void setload_Unload_Time(int LTime);//load/Unload Time setter.
 	void setDeliveryDistance(int DDistance);//Delivery Distance setter.
 	
-	void setCargoType(Cargo_Type CT);//Cargo Type Setter
+	
 	//(the Time from the preration of the cargo untill its truck starts to move to deliver it (MoveTime-PrepTime))
 
 public:
