@@ -1,0 +1,7 @@
+CDT	ID	PT	WT	TID
+-------------------------------------------
+-------------------------------------------
+Cargos: 6[N: 3,S: 1,V: 2]
+Cargo Avg Wait = 1:0
+Auto-promoted Cargos: 0%
+Trucks: 8[N: 3,S: 3,V: 2]

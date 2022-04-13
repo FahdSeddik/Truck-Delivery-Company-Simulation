@@ -438,7 +438,7 @@ void Company::CheckTruckStatus()
 
 	if (Loading_NT.peekFront(pTruck)) {
 		temp = pTruck->getMoveTime();
-		if (temp >= time)
+		if (temp <= time)
 		{
 			Loading_NT.dequeue(pTruck);
 			temp = pTruck->CalcNextDT();
@@ -447,7 +447,7 @@ void Company::CheckTruckStatus()
 	}
 	if (Loading_ST.peekFront(pTruck)) {
 		temp = pTruck->getMoveTime();
-		if (temp >= time)
+		if (temp <= time)
 		{
 			Loading_ST.dequeue(pTruck);
 			temp = pTruck->CalcNextDT();
@@ -456,7 +456,7 @@ void Company::CheckTruckStatus()
 	}
 	if (Loading_VT.peekFront(pTruck)) {
 		temp = pTruck->getMoveTime();
-		if (temp >= time)
+		if (temp <= time)
 		{
 			Loading_VT.dequeue(pTruck);
 			temp = pTruck->CalcNextDT();
@@ -465,7 +465,7 @@ void Company::CheckTruckStatus()
 	}
 	if (Under_Check.peekFront(pTruck)) {
 		temp = pTruck->getFinishCheck();
-		if (temp >= time)
+		if (temp <= time)
 		{
 			Under_Check.dequeue(pTruck);
 			Type = pTruck->getTruckType();
@@ -485,7 +485,7 @@ void Company::CheckTruckStatus()
 	}
 	if (MovingTrucks.peekFront(pTruck)) {
 		temp = pTruck->getNextDT();
-		if (temp >= time)
+		if (temp <= time)
 		{
 			MovingTrucks.dequeue(pTruck);
 			if (pTruck->Update(this, time))
