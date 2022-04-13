@@ -61,3 +61,18 @@ void UI_Class::Print()
 		break;
 	}
 }
+
+
+
+
+//TODO: takes a truck list copy and its name
+//prints it with appropriate format
+void UI_Class::PrintTruckList() {
+
+}
+
+//TODO: take a cargo list copy and its name
+//prints it with appropriate format
+void UI_Class::PrintCargoList() {
+
+}

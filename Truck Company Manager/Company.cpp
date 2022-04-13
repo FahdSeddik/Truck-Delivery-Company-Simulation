@@ -51,7 +51,7 @@ void Company::ReadFile(string filename)
 			Avail_VT.enqueue(T);
 			ID++;
 		}
-		inputFile.ignore(); // ignores blank line
+		//inputFile.ignore(); // ignores blank line
 		inputFile >> AutoP >> MaxW; //reads auto promotion limit in days and MaxW in hours
 		int n;// number of events
 		inputFile >> n;// reads number of events
@@ -164,7 +164,7 @@ bool Company::UpdateAll(int Global_Time) {
 // simply can be Ready::Execute for example
 void Company::ExecuteEvent() {
 	Event* pE;
-	if (EventList.peekFront(pE) && pE->GetTime() == time) {
+	while (EventList.peekFront(pE) && pE->GetTime() == time) {
 		EventList.dequeue(pE);
 		pE->Execute(this);
 	}
@@ -181,7 +181,7 @@ void Company::AppendDeliveredCargo(Cargo* c) {
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-
+	pUI->Print();
 }
 
 
