@@ -28,22 +28,13 @@ string UI_Class::ReadFileName()
 }
 
 void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ<Cargo*> dc, LLQ<Truck*> an, LLQ<Truck*> av, LLQ<Truck*> as
-	, LLQ<Truck*> ln, LLQ<Truck*> lv, LLQ<Truck*> ls, PQ<Truck*> uc, PQ<Truck*> m)
+	, PQ<Truck*> ln, PQ<Truck*> lv, PQ<Truck*> ls, PQ<Truck*> uc, PQ<Truck*> m)
 {
 	Cargo* c;
 	switch (mode)
 	{
 
 	case(1):
-		/*while(smth)
-		{
-			
-			print out current time
-			cin.ignore();
-			print out information
-		}
-		break;
-		*/
 		cin.ignore();
 		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
 		cout << "Waiting Cargos: ";
@@ -77,9 +68,9 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		cout << "}"<<endl;
 		cout << "------------------------------------------------------";
 		cout <<endl<< "Loading Trucks: ";
-		PrintTruckList(ln);
-		PrintTruckList(ls);
-		PrintTruckList(lv);
+		PrintTruckListP(ln);
+		PrintTruckListP(ls);
+		PrintTruckListP(lv);
 		cout << "\n------------------------------------------------------";
 		cout<<endl << "Empty Trucks: ";
 		PrintTruckList(an);
@@ -138,9 +129,9 @@ void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ
 		cout << "}" << endl;
 		cout << "------------------------------------------------------";
 		cout << endl << "Loading Trucks: ";
-		PrintTruckList(ln);
-		PrintTruckList(ls);
-		PrintTruckList(lv);
+		PrintTruckListP(ln);
+		PrintTruckListP(ls);
+		PrintTruckListP(lv);
 		cout << "\n------------------------------------------------------";
 		cout << endl << "Empty Trucks: ";
 		PrintTruckList(an);

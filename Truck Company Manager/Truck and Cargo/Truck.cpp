@@ -45,10 +45,6 @@ int Truck::getCapacity()
 	return Capacity;
 };//capacity getter.
 
-int Truck::getCurCapacity()
-{
-	return CurCapacity;
-};//Current capacity getter.
 
 
 int  Truck::getDeliveryInterval()
@@ -88,7 +84,7 @@ int Truck::getID()
 {
 	return ID;
 }
-int Truck::getMoveTime()
+int Truck::getMoveTime() //doesnt calculate
 {
 	return MoveTime;
 }
@@ -131,7 +127,7 @@ void Truck::setMoveTime(int time)
 //METHODS
 bool Truck::isFull()
 {
-	return CurCapacity == Capacity;
+	return AssignedCargos.getSize()==Capacity;
 };//checks if the truck is full(max capacity) 
 
 bool Truck::AssignCargo(Cargo * CargoToAssign)
@@ -142,7 +138,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 		return false;
 	AssignedCargos.enqueue(CargoToAssign, -CargoToAssign->getDeliveryDistance());
 	//add the cargo to the array
-	CurAssignedCargos++;//incrementing current Assigned Cargos Count by 1
+	CurAssignedCargos = AssignedCargos.getSize();
 	return true;//succesfully assigned
 
 };//Assign cargo to Truck
@@ -158,9 +154,25 @@ bool Truck::NeedsRepairing()
 	return currentJourneyCount % J == 0;
 };//return journeycount % J;
 
-void  Truck::CalculateTruckUtlization(int SimTime)
+int Truck::CalculateTruckUtlization(int SimTime)
 {
 	TruckUtlization=((TotalCargosDel / (Capacity * currentJourneyCount) * (activeTime * SimTime)));
+	return TruckUtlization;
+}
+int Truck::CalcLoadTime() //calculates the load interval (not absolute)
+{
+	LLQ<Cargo*> temq;
+	Cargo* c;
+	int lt=0;
+	while (AssignedCargos.dequeue(c)) {
+		lt += c->getLoad_Unload_Time();
+		temq.enqueue(c);
+	}
+	while (temq.dequeue(c)) {
+		AssignCargo(c);
+	}
+	
+	return lt;
 }
 int Truck::CalcNextDT()
 {

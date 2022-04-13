@@ -13,7 +13,7 @@ Company::Company(UI_Class* pUI) {
 	this->pUI = pUI;
 	string filename = pUI->ReadFileName();
 	ReadFile(filename);
-	
+
 }
 
 
@@ -21,7 +21,7 @@ Company::Company(UI_Class* pUI) {
 void Company::ReadFile(string filename)
 {
 	ifstream inputFile;
-	inputFile.open(filename, ios::in); // opens the file for input 
+	inputFile.open(filename, ios::in); // opens the file for input
 	int NS, SS, VS;//speeds of each type of truck
 	//int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
@@ -67,7 +67,7 @@ void Company::ReadFile(string filename)
 			inputFile >> State;// reads the type of the event
 			if(State=='R') // decides how to read the info of the event based on the type of the event
 			{
-				
+
 				char TYP;
 				int DIST;
 				int LT;
@@ -118,14 +118,14 @@ void Company::ReadFile(string filename)
 				Event* E = new PromotionEvent(ET, ID, ExtraMoney);
 				EventList.enqueue(E);
 			}
-			
+
 		}
 	}
 	inputFile.close();
 }
 
 
-//TODO:Phase2 - ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES  
+//TODO:Phase2 - ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
 // moves cargos from waiting to moving
 void Company:: AssignCargos() {
 	int temp;
@@ -152,10 +152,10 @@ void Company:: AssignCargos() {
 	LoadTrucks(&Wait_SC, &Avail_ST, &Loading_ST, STC);
 	LoadTrucks(&Wait_NC, &Avail_NT, &Loading_NT, NTC);
 	LoadTrucks(&Wait_NC, &Avail_VT, &Loading_VT, VTC);
-	
+
 }
 
-void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*>* LoadingList, int Cap)
+void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*>* LoadingList, int Cap)
 {
 	int temp;
 	int t;
@@ -172,11 +172,11 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 				CargoList->dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
-
+			int x = pT->CalcLoadTime()+time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT,-x);	//prio call calc load time in truck
 		}
-		else if (pC->getCurrWait() >= MaxW)
+		else if (time - pC->getPrepTime() >= MaxW)
 		{
 			t = 0;
 			while (CargoList->dequeue(pC) && t <= Cap)
@@ -184,8 +184,9 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 				pT->AssignCargo(pC);
 				t++;
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x);	//prio call calc load time in truck
 		}
 		else
 		{
@@ -194,7 +195,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truc
 	}
 }
 
-void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*> * LoadingList, int Cap)
+void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, PQ<Truck*> * LoadingList, int Cap)
 {
 	int temp;
 	int t;
@@ -211,11 +212,12 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Tru
 				CargoList->dequeue(pC);
 				pT->AssignCargo(pC);
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
 
 		}
-		else if (pC->getCurrWait() >= MaxW)
+		else if (time - pC->getPrepTime() >= MaxW)
 		{
 			t = 0;
 			while (CargoList->dequeue(pC) && t <= Cap)
@@ -223,8 +225,9 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, LLQ<Tru
 				pT->AssignCargo(pC);
 				t++;
 			}
-			pT->setMoveTime(time);
-			LoadingList->enqueue(pT);
+			int x = pT->CalcLoadTime() + time;
+			pT->setMoveTime(x);
+			LoadingList->enqueue(pT, -x); //prio call calc load time in truck
 		}
 		else
 		{
@@ -260,7 +263,7 @@ void Company::CheckTruckStatus()
 	int temp;
 	Truck* pTruck;
 	Truck_Type Type;
-	// to-do 
+	// to-do
 	//Check front of Available truck if reached maxW then call AssignCargos()
 
 	if (Loading_NT.peekFront(pTruck)) {
@@ -359,7 +362,7 @@ void Company::CheckTruckStatus()
 
 }
 
-//TODO: to be used in update in case an event is to be done 
+//TODO: to be used in update in case an event is to be done
 // simply can be Ready::Execute for example
 void Company::ExecuteEvent() {
 	Event* pE;
@@ -429,7 +432,7 @@ void Company::CancelCargo(int ID) {
 	}
 	//make sure to empty all remaining cargos in tempq
 	//to maintain order
-	while (Wait_NC.dequeue(c)) 
+	while (Wait_NC.dequeue(c))
 		tempq.enqueue(c);
 
 	//put back all other cargos in main queue
@@ -497,4 +500,3 @@ void Company::WriteOutput() {
 
 	OutputFile.close();
 }
-

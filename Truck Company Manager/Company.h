@@ -40,7 +40,7 @@ private:
 	Moving for all truck types
 	*/
 	LLQ<Truck*> Avail_NT, Avail_VT, Avail_ST;
-	LLQ<Truck*> Loading_NT, Loading_VT, Loading_ST;
+	PQ<Truck*> Loading_NT, Loading_VT, Loading_ST; //priority queue based on finish load first
 	PQ<Truck*> Under_Check; //PQ based on who finished first
 	PQ<Truck*> MovingTrucks; //PQ based on next cargo delivery time
 
@@ -81,8 +81,8 @@ private:
 	// moves cargos from waiting to moving
 	void AssignCargos();
 
-	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList , LLQ<Truck*>* LoadingList,int Cap);
-	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, LLQ<Truck*>* LoadingList, int Cap);
+	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList , PQ<Truck*>* LoadingList,int Cap);
+	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, PQ<Truck*>* LoadingList, int Cap);
 
 	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
