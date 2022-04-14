@@ -143,11 +143,20 @@ void Company:: AssignCargos() {
 		}
 	}
 	LoadTrucks(&Wait_VC, &Avail_VT, VTC);
-	LoadTrucks(&Wait_VC, &Avail_NT, NTC);
-	LoadTrucks(&Wait_VC, &Avail_ST, STC);
+	if (Avail_VT.isEmpty())
+	{
+		LoadTrucks(&Wait_VC, &Avail_NT, NTC);
+	}
+	if (Avail_VT.isEmpty() && Avail_ST.isEmpty())
+	{
+		LoadTrucks(&Wait_VC, &Avail_ST, STC);
+	}
 	LoadTrucks(&Wait_SC, &Avail_ST, STC);
 	LoadTrucks(&Wait_NC, &Avail_NT, NTC);
-	LoadTrucks(&Wait_NC, &Avail_VT, VTC);
+	if (Avail_NT.isEmpty())
+	{
+		LoadTrucks(&Wait_NC, &Avail_VT, VTC);
+	}
 
 }
 
@@ -240,6 +249,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 // Calls AssignCargos()
 // moves cargos/trucks across lists
 // Calls ExecuteEvent()
+
 bool Company::UpdateAll(int Global_Time) {
 	time = Global_Time;
 	ExecuteEvent();

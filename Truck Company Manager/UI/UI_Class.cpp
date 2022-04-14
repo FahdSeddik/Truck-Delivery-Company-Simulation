@@ -181,21 +181,21 @@ void UI_Class::PrintTruckList(LLQ<Truck*>& tl) {
 			int* ids = t->getCargoIDs();
 			if (t->getTruckType() == NT) {
 				cout << "[";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount()-1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount(); i++) {
 					cout << ids[i] << ",";
 				}
 				cout<<"]" << " ";
 			}
 			else if (t->getTruckType() == VT) {
 				cout << "{";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() - 1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
 					cout << ids[i] << ",";
 				}
 				cout << "}" << " ";
 			}
 			else if (t->getTruckType() == ST) {
 				cout << "(";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() - 1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
 					cout << ids[i] << ",";
 				}
 				cout << ")" << " ";
@@ -222,21 +222,21 @@ void UI_Class::PrintTruckListP(PQ<Truck*>& tl) {
 			int* ids = t->getCargoIDs();
 			if (t->getTruckType() == NT) {
 				cout << "[";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() - 1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
 					cout << ids[i] << ",";
 				}
 				cout << "]" << " ";
 			}
 			else if (t->getTruckType() == VT) {
 				cout << "{";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() - 1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
 					cout << ids[i] << ",";
 				}
 				cout << "}" << " ";
 			}
 			else if (t->getTruckType() == ST) {
 				cout << "(";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() - 1; i++) {
+				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
 					cout << ids[i] << ",";
 				}
 				cout << ")" << " ";
