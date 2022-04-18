@@ -27,7 +27,7 @@ string UI_Class::ReadFileName()
 	return filename;
 }
 
-void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, LLQ<Cargo*>& dc, LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
+void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, LLQ<Cargo*>& dn, LLQ<Cargo*>& dv, LLQ<Cargo*>& ds, LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
 	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m)
 {
 	if (mode == 3) {
@@ -68,7 +68,13 @@ void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, 
 		uc.print();
 		cout << "\n------------------------------------------------------";
 		cout << endl << "Delivered Cargos: ";
-		dc.print();
+		cout << "[";
+		dn.print();
+		cout << "] (";
+		ds.print();
+		cout << ") {";
+		dv.print();
+		cout << "}";
 		cout << "\n------------------------------------------------------";
 		cout << endl << endl;
 	}

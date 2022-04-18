@@ -181,12 +181,19 @@ void Company::ExecuteEvent() {
 void Company::AppendDeliveredCargo(Cargo* c) {
 	c->setDeliveryTime(time);
 	DeliveredCargos.enqueue(c);
+	Cargo_Type ct = c->getType();
+	if (ct == NC)
+		DN.enqueue(c);
+	else if (ct == VC)
+		DV.enqueue(c);
+	else if (ct == SC)
+		DS.enqueue(c);
 }
 
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DeliveredCargos,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
+	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
 }
 
 

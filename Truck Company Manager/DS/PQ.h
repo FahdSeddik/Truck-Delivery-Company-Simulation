@@ -92,9 +92,15 @@ public:
 
 
 	void print() {
+		if (!Head)
+			return;
 		PQNode<ItemType>* ptr = Head;
 		for (int i = 0; i < size; i++) {
-			cout << *ptr->getItem() << " ";
+			if (i == size - 1) {
+				cout << *ptr->getItem();
+				break;
+			}
+			cout << *ptr->getItem() << ", ";
 			ptr = ptr->getNext();
 		}
 	}

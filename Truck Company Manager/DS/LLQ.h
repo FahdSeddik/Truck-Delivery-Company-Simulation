@@ -80,9 +80,15 @@ public:
 
 
 	void print() {
+		if (!Tail)
+			return;
 		Node<ItemType>* ptr = Tail->getNext();
 		for (int i = 0; i < size; i++) {
-			cout << *ptr->getItem() << " ";
+			if (i == size - 1) {
+				cout << *ptr->getItem();
+				break;
+			}
+			cout << *ptr->getItem() << ", ";
 			ptr = ptr->getNext();
 		}
 	}

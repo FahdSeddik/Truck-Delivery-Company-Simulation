@@ -112,14 +112,6 @@ void Cargo::setDeliveryTime(int t) {
 
 
 ostream& operator << (ostream& os, Cargo& c) {
-	if (c.getType() == NT) {
-		os << "[" << c.getID() << "]";
-	}
-	else if (c.getType() == VT) {
-		os << "{" << c.getID() << "}";
-	}
-	else if (c.getType() == ST) {
-		os << "(" << c.getID() << ")";
-	}
+	os << c.getID();
 	return os;
 }
