@@ -1,6 +1,9 @@
 #pragma once
-#include <iostream>
 #include "../INFO.h"
+#include <iostream>
+using namespace std;
+class Cargo;
+ostream& operator<<(ostream* os, Cargo& c);
 //GENERAL CARGO CLASS
 class Cargo
 {
@@ -66,9 +69,7 @@ public:
 
 	//Methods
 
-	//TODO: to be used when a cargo is assigned to a truck to have cargo sorted in prio queue in truck
-	// gets movetime passed from truck
-	// assigns data member: deliveryTime with appriopriate value
-	//void CalculateDeliveryTime(int MoveTime);
 
 };
+
+

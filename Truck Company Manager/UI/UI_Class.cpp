@@ -27,250 +27,59 @@ string UI_Class::ReadFileName()
 	return filename;
 }
 
-void UI_Class::Print(int time, LLQ<Cargo*> wn, LLQ<Cargo*> ws, PQ<Cargo*>wv, LLQ<Cargo*> dc, LLQ<Truck*> an, LLQ<Truck*> av, LLQ<Truck*> as
-	, PQ<Truck*> l, PQ<Truck*> uc, PQ<Truck*> m)
+void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, LLQ<Cargo*>& dn, LLQ<Cargo*>& dv, LLQ<Cargo*>& ds, LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
+	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m)
 {
-	Cargo* c;
-	switch (mode)
-	{
-
-	case(1):
-		cin.ignore();
-		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
-		cout << "Waiting Cargos: ";
-		
-		cout << "[";
-		while (wn.dequeue(c)) {
-			if (wn.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << "]";
-		cout << "(";
-		while (ws.dequeue(c)) {
-			if (ws.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << ")";
-		cout << "{";
-		while (wv.dequeue(c)) {
-			if (wv.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << "}"<<endl;
-		cout << "------------------------------------------------------";
-		cout <<endl<< "Loading Trucks: ";
-		PrintTruckListP(l);
-		cout << "\n------------------------------------------------------";
-		cout<<endl << "Empty Trucks: ";
-		PrintTruckList(an);
-		PrintTruckList(av);
-		PrintTruckList(as);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "Moving Cargos: ";
-		PrintTruckListP(m);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "In-Checkup Trucks: ";
-		PrintTruckListP(uc);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "Delivered Cargos: ";
-		PrintCargoList(dc);
-		cout << "\n------------------------------------------------------";
-		cout << endl << endl;
-		break;
-	case(2):
-		/*while(smth)
-		{
-			print out current time
-			Sleep(1000);
-			print out information
-		}
-		break;
-		*/
-		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
-		cout << "Waiting Cargos: ";
-
-		cout << "[";
-		while (wn.dequeue(c)) {
-			if (wn.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << "]";
-		cout << "(";
-		while (ws.dequeue(c)) {
-			if (ws.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << ")";
-		cout << "{";
-		while (wv.dequeue(c)) {
-			if (wv.isEmpty()) {
-				cout << c->getID();
-				break;
-			}
-			cout << c->getID() << ",";
-		}
-		cout << "}" << endl;
-		cout << "------------------------------------------------------";
-		cout << endl << "Loading Trucks: ";
-		PrintTruckListP(l);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "Empty Trucks: ";
-		PrintTruckList(an);
-		PrintTruckList(av);
-		PrintTruckList(as);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "Moving Cargos: ";
-		PrintTruckListP(m);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "In-Checkup Trucks: ";
-		PrintTruckListP(uc);
-		cout << "\n------------------------------------------------------";
-		cout << endl << "Delivered Cargos: ";
-		PrintCargoList(dc);
-		cout << "\n------------------------------------------------------";
-		cout << endl << endl;
-		Sleep(1000);
-		break;
-	case(3):
+	if (mode == 3) {
 		if (!pSilent) {
 			cout << "Silent Mode " << endl;
 			cout << "Simulation Starts... " << endl;
 			cout << "Simulation end, Output file create " << endl;
 			pSilent = true;
 		}
-		break;
+	}
+	else{
+		if(mode==1)
+			cin.ignore();
+		if (mode == 2)
+			Sleep(1000);
+		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
+		cout << "Waiting Cargos: ";
+		cout << "[";
+		wn.print();
+		cout << "] (";
+		ws.print();
+		cout << ") {";
+		wv.print();
+		cout << "}\n";
+		cout << "------------------------------------------------------";
+		cout << endl << "Loading Trucks: ";
+		l.print();
+		cout << "\n------------------------------------------------------";
+		cout << endl << "Empty Trucks: ";
+		an.print();
+		as.print();
+		av.print();
+		cout << "\n------------------------------------------------------";
+		cout << endl << "Moving Cargos: ";
+		m.print();
+		cout << "\n------------------------------------------------------";
+		cout << endl << "In-Checkup Trucks: ";
+		uc.print();
+		cout << "\n------------------------------------------------------";
+		cout << endl << "Delivered Cargos: ";
+		cout << "[";
+		dn.print();
+		cout << "] (";
+		ds.print();
+		cout << ") {";
+		dv.print();
+		cout << "}";
+		cout << "\n------------------------------------------------------";
+		cout << endl << endl;
 	}
 }
 
 
 
 
-//TODO: takes a truck list copy and its name
-	//prints it with appropriate format
-void UI_Class::PrintTruckList(LLQ<Truck*>& tl) {
-	Truck* t;
-	while (tl.dequeue(t)) {
-		if (t->getCurrentAssignedCargosCount() == 0) {
-			if (t->getTruckType() == NT) {
-				cout << "[" << t->getID() << "]"<<" ";
-			}
-			else if (t->getTruckType() == VT) {
-				cout << "{" << t->getID() << "}" << " ";
-			}
-			else if (t->getTruckType() == ST) {
-				cout << "(" << t->getID() << ")" << " ";
-			}
-		}
-		else {
-			cout << t->getID();
-			int* ids = t->getCargoIDs();
-			if (t->getTruckType() == NT) {
-				cout << "[";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount(); i++) {
-					cout << ids[i] << ",";
-				}
-				cout<<"]" << " ";
-			}
-			else if (t->getTruckType() == VT) {
-				cout << "{";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
-					cout << ids[i] << ",";
-				}
-				cout << "}" << " ";
-			}
-			else if (t->getTruckType() == ST) {
-				cout << "(";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
-					cout << ids[i] << ",";
-				}
-				cout << ")" << " ";
-			}
-		}
-	}
-}
-void UI_Class::PrintTruckListP(PQ<Truck*>& tl) {
-	Truck* t;
-	while (tl.dequeue(t)) {
-		if (t->getCurrentAssignedCargosCount() == 0) {
-			if (t->getTruckType() == NT) {
-				cout << "[" << t->getID() << "]" << " ";
-			}
-			else if (t->getTruckType() == VT) {
-				cout << "{" << t->getID() << "}" << " ";
-			}
-			else if (t->getTruckType() == ST) {
-				cout << "(" << t->getID() << ")" << " ";
-			}
-		}
-		else {
-			cout << t->getID();
-			int* ids = t->getCargoIDs();
-			if (t->getTruckType() == NT) {
-				cout << "[";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
-					cout << ids[i] << ",";
-				}
-				cout << "]" << " ";
-			}
-			else if (t->getTruckType() == VT) {
-				cout << "{";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
-					cout << ids[i] << ",";
-				}
-				cout << "}" << " ";
-			}
-			else if (t->getTruckType() == ST) {
-				cout << "(";
-				for (int i = 0; i < t->getCurrentAssignedCargosCount() ; i++) {
-					cout << ids[i] << ",";
-				}
-				cout << ")" << " ";
-			}
-		}
-	}
-}
-//TODO: take a cargo list copy and its name
-//prints it with appropriate format
-void UI_Class::PrintCargoList(LLQ<Cargo*>& cl) {
-	Cargo* c;
-	while (cl.dequeue(c)) {
-		if (c->getType() == NC) {
-			cout << "[" << c->getID() << "]" << " ";
-		}
-		else if (c->getType() == VC) {
-			cout << "{" << c->getID() << "}" << " ";
-		}
-		else if (c->getType() == SC) {
-			cout << "(" << c->getID() << ")" << " ";
-		}
-	}
-}
-void UI_Class::PrintCargoListP(PQ<Cargo*>& cl) {
-	Cargo* c;
-	while (cl.dequeue(c)) {
-		if (c->getType() == NC) {
-			cout << "[" << c->getID() << "]" << " ";
-		}
-		else if (c->getType() == VC) {
-			cout << "{" << c->getID() << "}" << " ";
-		}
-		else if (c->getType() == SC) {
-			cout << "(" << c->getID() << ")" << " ";
-		}
-	}
-}

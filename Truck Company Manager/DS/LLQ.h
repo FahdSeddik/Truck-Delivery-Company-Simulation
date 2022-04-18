@@ -1,7 +1,8 @@
 #pragma once
 #include "Node.h"
 #include "QueueADT.h"
-
+#include <iostream>
+using namespace std;
 
 template <class ItemType>
 class LLQ : public QueueADT<ItemType> {
@@ -21,19 +22,6 @@ public:
 	~LLQ() {
 		ItemType t;
 		while (dequeue(t));
-	}
-	LLQ(LLQ<ItemType>& q) {
-		Tail = nullptr;
-		size = 0;
-		ItemType t;
-		LLQ<ItemType> tempq;
-		while (q.dequeue(t)) {
-			tempq.enqueue(t);
-			enqueue(t);
-		}
-		while (tempq.dequeue(t)) {
-			q.enqueue(t);
-		}
 	}
 	//size of queue
 	int getSize()const {
@@ -89,4 +77,19 @@ public:
 		Entry = ptr->getItem();
 		return true;
 	}//peek front of queue
+
+
+	void print() {
+		if (!Tail)
+			return;
+		Node<ItemType>* ptr = Tail->getNext();
+		for (int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				cout << *ptr->getItem();
+				break;
+			}
+			cout << *ptr->getItem() << ", ";
+			ptr = ptr->getNext();
+		}
+	}
 };

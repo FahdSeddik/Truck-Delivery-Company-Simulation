@@ -31,7 +31,7 @@ private:
 	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
-	
+	LLQ<Cargo*> DN, DV, DS; //to only be used in print
 	//TRUCK LISTS
 	/*
 	Each truck type	has its own available list.
@@ -56,7 +56,7 @@ private:
 	int AutoP, MaxW; //in hours
 	int AutoPcount; // number of cargos auto-promoted
 	int MT_N, MT_V, MT_S; //maintenance time of each truck type
-	int NTC, STC, VTC; // capacity of each truck type
+	
 	UI_Class* pUI;
 
 
@@ -79,7 +79,8 @@ private:
 
 	//TODO: ASSIGNS CARGOS TO TRUCKs OF ITS TYPE OR BASED ON DOCUMENT RULES
 	// moves cargos from waiting to moving
-	void AssignCargos();
+	// returns false if there are no available cargos to assign (ie. empty cargo list)
+	bool AssignCargos();
 
 	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap);
 	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, int Cap);

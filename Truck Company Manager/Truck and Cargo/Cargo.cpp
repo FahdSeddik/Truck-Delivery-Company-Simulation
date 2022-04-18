@@ -1,4 +1,6 @@
 #include "Cargo.h"
+#include <iostream>
+using namespace std;
 
 Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT, int Id)
 {
@@ -105,4 +107,11 @@ Cargo_Type Cargo::getType() {
 
 void Cargo::setDeliveryTime(int t) {
 	deliveryTime = t;
+}
+
+
+
+ostream& operator << (ostream& os, Cargo& c) {
+	os << c.getID();
+	return os;
 }

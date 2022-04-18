@@ -23,7 +23,7 @@ void Company::ReadFile(string filename)
 	ifstream inputFile;
 	inputFile.open(filename, ios::in); // opens the file for input
 	int NS, SS, VS;//speeds of each type of truck
-	//int NTC, STC, VTC;//capacity of each tyoe of truck
+	int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
 	int ID = 0;//ID used to identify each truck
 	if (inputFile.is_open()) // checks if file has been opened successfully and ready to be read from
@@ -114,10 +114,8 @@ void Company::ReadFile(string filename)
 				inputFile.ignore();// ignores the ":"
 				inputFile >> ET;// inputs the hour part of the time
 				ET = ET + (days - 1) * 24; // converts the time to be in hours
+
 				inputFile >> ID >> ExtraMoney;
-				Event* E = new PromotionEvent(ET, ID, ExtraMoney);
-				EventList.enqueue(E);
-			}
 
 		}
 	}
@@ -251,7 +249,10 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 // Calls ExecuteEvent()
 
 bool Company::UpdateAll(int Global_Time) {
+	//Phase1 - used as the Simple Simulate function
+	//Phase2 - does proper function
 	time = Global_Time;
+	
 	ExecuteEvent();
 	CheckTruckStatus();
 	AssignCargos();
@@ -378,12 +379,19 @@ void Company::ExecuteEvent() {
 void Company::AppendDeliveredCargo(Cargo* c) {
 	c->setDeliveryTime(time);
 	DeliveredCargos.enqueue(c);
+	Cargo_Type ct = c->getType();
+	if (ct == NC)
+		DN.enqueue(c);
+	else if (ct == VC)
+		DV.enqueue(c);
+	else if (ct == SC)
+		DS.enqueue(c);
 }
 
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DeliveredCargos,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
+	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
 }
 
 

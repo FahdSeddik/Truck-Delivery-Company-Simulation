@@ -1,7 +1,10 @@
 #pragma once
 #include "PQNode.h"
 #include "QueueADT.h"
-
+#include <iostream>
+using namespace std;
+class Cargo;
+ostream& operator << (ostream& os, Cargo& c);
 
 template <typename ItemType>
 class PQ {
@@ -22,15 +25,6 @@ public:
 		ItemType x;
 		while (dequeue(x));
 		
-	}
-	PQ(PQ<ItemType>& q) {
-		Head = nullptr;
-		size = 0;
-		PQNode<ItemType>* ptr = q.Head;
-		while (ptr) {
-			enqueue(ptr->getItem(), ptr->getPrio());
-			ptr = ptr->getNext();
-		}
 	}
 	//size of queue
 	int getSize()const {
@@ -97,4 +91,18 @@ public:
 		return true;
 	} //peek front of queue
 
+
+	void print() {
+		if (!Head)
+			return;
+		PQNode<ItemType>* ptr = Head;
+		for (int i = 0; i < size; i++) {
+			if (i == size - 1) {
+				cout << *ptr->getItem();
+				break;
+			}
+			cout << *ptr->getItem() << ", ";
+			ptr = ptr->getNext();
+		}
+	}
 };
