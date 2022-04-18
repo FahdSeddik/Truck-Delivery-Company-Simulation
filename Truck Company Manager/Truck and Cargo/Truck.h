@@ -1,13 +1,10 @@
 #pragma once
+#include <iostream>
 #include "Cargo.h"
 #include "../INFO.h"
 #include "../Company.h"
-#include <iostream>
-using namespace std;
-
+ 
 class Company; //forward declaration
-class Truck;
-ostream& operator<<(ostream& os, Truck& t);
 
 class Truck
 {
@@ -38,7 +35,9 @@ private:
 						//tAt total truck active time
 						//TSim total simulation time
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
-
+	int nextDT;//Time at which the truck reaches its next destination
+	int finishCheck;//time at which the check-up ends
+	int LastReturnTime; // 
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
 	
@@ -66,6 +65,10 @@ public:
 					//time a truck is loading or in delivering cargos,
 				   //doesn't include time for a truck to return after delivery
 	int getID();//getter for ID
+	int getMoveTime();//getter for Move Time
+	int getNextDT();//getter for next DT
+	int getFinishCheck();//getter for finish check
+	int getLastReturnTime();//getter for LastReturnTime
 	Truck_Type getTruckType();//type of truck getter.
 	
 
@@ -79,7 +82,7 @@ public:
 	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
 	bool NeedsRepairing();//return journeycount % J;
 	int  CalculateTruckUtlization(int SimTime);//Calculated the percentage
-
+	PQ<Cargo*>* getAssignedList();
 
 	//TODO: calculates loading time 
 	// goes through cargos and adds up loading times
@@ -96,8 +99,7 @@ public:
 	// if so call AppendDeliveredCargo() method in Company passing the cargo and return true
 	// if no cargos to deliver then this means it has returned (ie. finished cargos)
 	// return false in this case
-	//bool Update(Company* C,int Global_Time);
+	bool Update(Company* C,int Global_Time);
 
-	
+
 };
-

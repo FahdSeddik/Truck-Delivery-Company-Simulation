@@ -109,8 +109,6 @@ void Cargo::setDeliveryTime(int t) {
 	deliveryTime = t;
 }
 
-
-
 ostream& operator << (ostream& os, Cargo& c) {
 	os << c.getID();
 	return os;

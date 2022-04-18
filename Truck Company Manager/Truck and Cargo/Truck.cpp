@@ -1,16 +1,9 @@
 #include "Truck.h"
-#include "../DS/LLQ.h"
-#include "../DS/PQ.h"
-
-#include <iostream>
-using namespace std;
-
 Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 {
 	deliveryInterval = 0;
 	currentJourneyCount = 0;
 	CurAssignedCargos = 0;
-	furthestDistance = 0;
 	activeTime = 0;
 	TotalCargosDel = 0;
 	Capacity = CAP;
@@ -92,8 +85,22 @@ int Truck::getLastReturnTime()
 }
 ;//getter for ID
 
+int* Truck::getCargoIDs() {
+	LLQ<Cargo*> tempq;
+	Cargo* c;
+	int* ids = new int[CurAssignedCargos];
+	int i = 0;
+	while (AssignedCargos.dequeue(c)) {
+		ids[i] = c->getID();
+		i++;
+		tempq.enqueue(c);
+	}
 
+	while (tempq.dequeue(c))
+		AssignCargo(c);
 
+	return ids;
+}
 void Truck::UpdateLastReturnTime(int LastReturn)
 {
 	LastReturnTime = LastReturn;
@@ -205,8 +212,6 @@ void Truck::setJ(int j)
 PQ<Cargo*>* Truck::getAssignedList() {
 	return &AssignedCargos;
 }
-
-
 
 ostream& operator<<(ostream& os, Truck& t) {
 	os << t.getID();

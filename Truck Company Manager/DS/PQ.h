@@ -4,7 +4,9 @@
 #include <iostream>
 using namespace std;
 class Cargo;
-ostream& operator << (ostream& os, Cargo& c);
+ostream& operator<<(ostream& os, Cargo& c);
+class Truck;
+ostream& operator<<(ostream& os, Truck& t);
 
 template <typename ItemType>
 class PQ {
