@@ -191,6 +191,8 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
+			pT->incrementActiveTime(x - time);
+			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -x);	//prio call calc load time in truck
 		}
 		else
@@ -235,6 +237,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
 			pT->incrementActiveTime(x - time);
+			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
 		}
 		else
