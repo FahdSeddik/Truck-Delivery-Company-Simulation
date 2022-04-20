@@ -264,9 +264,11 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 
 bool Company::UpdateAll(int Global_Time) {
 	time = Global_Time;
+	bool offhours = time % 24 <=4;
 	ExecuteEvent();
 	CheckTruckStatus();
-	AssignCargos();
+	if(!offhours)
+		AssignCargos();
 	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_Trucks.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty() && EventList.isEmpty())
 		return false;
 	return true;
