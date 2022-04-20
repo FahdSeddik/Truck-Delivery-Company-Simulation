@@ -9,7 +9,7 @@ using namespace std;
 #include "Events/ReadyEvent.h" //after company
 Company::Company(UI_Class* pUI) {
 	time = 0;
-	NCcount = SCcount = VCcount = 0;
+	NCcount = SCcount = VCcount = AutoPcount = 0;
 	this->pUI = pUI;
 	ofname = pUI->ReadFileName("output");
 	string ifilename = pUI->ReadFileName("input");
@@ -136,6 +136,9 @@ void Company:: AssignCargos() {
 		if (x >= (AutoP * 24)) {
 			Wait_NC.dequeue(pC);
 			pC->setType(VC);
+			NCcount--;
+			VCcount++;
+			AutoPcount++;
 			AppendWaitingCargo(pC);
 		}
 		else
@@ -176,6 +179,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 			for (int i = 0; i < Cap; i++)
 			{
 				CargoList->dequeue(pC);
+				pC->setTID(pT->getID());
 				pT->AssignCargo(pC);
 			}
 			int x = pT->CalcLoadTime()+time;
@@ -188,6 +192,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 			while (CargoList->dequeue(pC) && t <= Cap)
 			{
 				pT->AssignCargo(pC);
+				pC->setTID(pT->getID());
 				t++;
 			}
 			int x = pT->CalcLoadTime() + time;
@@ -218,6 +223,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			for (int i = 0; i < Cap; i++)
 			{
 				CargoList->dequeue(pC);
+				pC->setTID(pT->getID());
 				pT->AssignCargo(pC);
 			}
 			int x = pT->CalcLoadTime() + time;
@@ -233,6 +239,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			while (CargoList->dequeue(pC) && t <= Cap)
 			{
 				pT->AssignCargo(pC);
+				pC->setTID(pT->getID());
 				t++;
 			}
 			int x = pT->CalcLoadTime() + time;
@@ -416,6 +423,8 @@ void Company::PromoteCargo(int ID,int ExtraMoney) {
 			c->setCost(c->getcost() + ExtraMoney);
 			int prio = 0; //perform prio calculation
 			Wait_VC.enqueue(c, prio);
+			NCcount--;
+			VCcount++;
 			break;
 		}
 		tempq.enqueue(c);
@@ -443,6 +452,7 @@ void Company::CancelCargo(int ID) {
 		if (c->getID() == ID) { //if found
 			delete c;
 			c = nullptr;
+			NCcount--;
 			break;
 		}
 		tempq.enqueue(c);
@@ -498,9 +508,9 @@ void Company::WriteOutput() {
 		temp = temp % 24;
 		OutputFile << day << ":" << temp << "\t";
 		temp = pC->getWatingTime();
-		day = temp / 24 + 1;
-		temp = temp % 24;
 		waitTime += temp;
+		day = temp / 24;
+		temp = temp % 24;
 		OutputFile << day << ":" << temp << "\t";
 		temp = pC->getTID();
 		OutputFile << temp << endl;
@@ -508,7 +518,8 @@ void Company::WriteOutput() {
 	OutputFile << "-------------------------------------------" << endl;
 	OutputFile << "-------------------------------------------" << endl;
 	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount << "]" << endl;
-	day = waitTime / 24 + 1;
+	waitTime = waitTime / (NCcount + VCcount + SCcount);
+	day = waitTime / 24;
 	temp = waitTime % 24;
 	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
 	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;

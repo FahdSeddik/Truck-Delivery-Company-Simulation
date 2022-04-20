@@ -21,7 +21,7 @@ private:
 	//(MoveTime-PrepTime)
 	int deliveryTime;//cargo delivery time from company to the destination 
 					 //((MT)+(cargo distance/truck speed)+(cargo unload time))
-	
+	int moveTime;
 	
 	//PRIVATE SETTERS TO GET INPUT IN LEGAL LIMIT(VALIDATION)
 	void setload_Unload_Time(int LTime);//load/Unload Time setter.
@@ -36,7 +36,7 @@ public:
 	~Cargo();//destructor.
 
 	
-
+	void setMoveTime(int t);
 
 	//PUBLIC GETTERS
 	
@@ -45,7 +45,7 @@ public:
 	int getDeliveryDistance();//DeliveryDistance getter.
 	int getcost();//cost getter.
 	int getPrepTime();//getter for PrepTIme(time when the cargo is ready to be assigned to truck stored in hours).
-	int getCurrWait();//getter for Current waiting time
+	
 	//(the Time from the preration of the cargo untill its truck starts to move to deliver it (MoveTime-PrepTime))
 	int getWatingTime();//getter for cargo delivery time from company to the destination 
 	//((MT)+(cargo distance/truck speed)+(cargo unload time))

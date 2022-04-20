@@ -19,24 +19,17 @@ private:
 
 	//DATA MEMBERS CHANGES THROUGHOUT PROGRAM
 	
-	int deliveryInterval;//time needed to deliver all cargos.
+	
 	int currentJourneyCount;//current number of journeys done by the truck
 	int furthestDistance;
 	int CurAssignedCargos;//count of Current assigned cargos (0 initialy)
 	int MoveTime;//the time at which the truck carrying the cargo starts to move.
 	int activeTime;//time a truck is loading or in delivering cargos,
 				   //doesn't include time for a truck to return after delivery
-	int TruckUtlization;//percentage%
-						//TDC/(TC*N)*(TAT/TSim)
-						//N not equal 0
-						 //TDC TOTAl Cargos delivered by this truck
-						//TC truck capacity
-						//N total delivery journeys of this truck
-						//tAt total truck active time
-						//TSim total simulation time
+	
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
 	int nextDT;//Time at which the truck reaches its next destination
-	int finishCheck;//time at which the check-up ends
+	
 	int LastReturnTime; // 
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
@@ -56,23 +49,22 @@ public:
 	//Truck(Truck& T);//copy constructor
 
 	//GETTERS
-	int getCapacity();//capacity getter.
-	int getDeliveryInterval();//delivery Interval getter. //returns data member.
+	
+	
 	int getCurrentJourneyCount();//Number of Current journeys .
-	int getCurrentAssignedCargosCount();//Number of Current Assigned cargos.
-	int getSpeed();//Truck Speed Getter.
+	
+	
 	int getActiveTime();//getter for active time
 					//time a truck is loading or in delivering cargos,
 				   //doesn't include time for a truck to return after delivery
 	int getID();//getter for ID
 	int getMoveTime();//getter for Move Time
 	int getNextDT();//getter for next DT
-	int getFinishCheck();//getter for finish check
 	int getLastReturnTime();//getter for LastReturnTime
 	Truck_Type getTruckType();//type of truck getter.
 	
 
-	int* getCargoIDs();
+	
 	//SETTERS
 	void UpdateLastReturnTime(int LastReturn);
 	void setMoveTime(int time);
@@ -81,7 +73,7 @@ public:
 	bool isFull();//checks if the truck is full(max capacity) 
 	bool AssignCargo(Cargo* CargoToAssign);//Assign cargo to Truck and increments cargos assigned if it did
 	bool NeedsRepairing();//return journeycount % J;
-	int  CalculateTruckUtlization(int SimTime);//Calculated the percentage
+	float  CalculateTruckUtlization(int SimTime);//Calculated the percentage
 	PQ<Cargo*>* getAssignedList();
 
 	//TODO: calculates loading time 

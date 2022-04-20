@@ -1,7 +1,6 @@
 #include "Truck.h"
 Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 {
-	deliveryInterval = 0;
 	currentJourneyCount = 0;
 	CurAssignedCargos = 0;
 	activeTime = 0;
@@ -14,6 +13,7 @@ Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 	MoveTime = -1;
 	nextDT = -1;
 	LastReturnTime = -1;
+	furthestDistance = -1;
 }//constructor.
 
 Truck::~Truck()
@@ -23,32 +23,15 @@ Truck::~Truck()
 
 
 //GETTERS
-int Truck::getCapacity()
-{
-	return Capacity;
-};//capacity getter.
 
 
-
-int  Truck::getDeliveryInterval()
-{
-	return deliveryInterval;
-};//delivery Interval getter.
 
 int Truck::getCurrentJourneyCount()
 {
 	return currentJourneyCount;
 };//Number of Current journeys
 
-int Truck::getCurrentAssignedCargosCount()
-{
-	return CurAssignedCargos;
-};//Number of Current Assigned cargos
 
-int Truck::getSpeed()
-{
-	return speed;
-};//Truck Speed Getter.
 
 
 int Truck::getActiveTime()
@@ -75,32 +58,14 @@ int Truck::getNextDT()
 {
 	return nextDT;
 }
-int Truck::getFinishCheck()
-{
-	return 0;
-}
+
 int Truck::getLastReturnTime()
 {
 	return LastReturnTime;
 }
 ;//getter for ID
 
-int* Truck::getCargoIDs() {
-	LLQ<Cargo*> tempq;
-	Cargo* c;
-	int* ids = new int[CurAssignedCargos];
-	int i = 0;
-	while (AssignedCargos.dequeue(c)) {
-		ids[i] = c->getID();
-		i++;
-		tempq.enqueue(c);
-	}
 
-	while (tempq.dequeue(c))
-		AssignCargo(c);
-
-	return ids;
-}
 void Truck::UpdateLastReturnTime(int LastReturn)
 {
 	LastReturnTime = LastReturn;
@@ -108,6 +73,14 @@ void Truck::UpdateLastReturnTime(int LastReturn)
 void Truck::setMoveTime(int time)
 {
 	MoveTime = time;
+	Cargo* c;
+	LLQ<Cargo*> temq;
+	while (AssignedCargos.dequeue(c)) {
+		c->setMoveTime(time);
+		temq.enqueue(c);
+	}
+	while (temq.dequeue(c))
+		AssignCargo(c);
 }
 void Truck::incrementActiveTime(int time)
 {
@@ -146,10 +119,9 @@ bool Truck::NeedsRepairing()
 	return currentJourneyCount % J == 0;
 };//return journeycount % J;
 
-int Truck::CalculateTruckUtlization(int SimTime)
+float Truck::CalculateTruckUtlization(int SimTime)
 {
-	TruckUtlization=((TotalCargosDel / (Capacity * currentJourneyCount) * (activeTime * SimTime)));
-	return TruckUtlization;
+	return (((float)TotalCargosDel / (Capacity * currentJourneyCount) * ((float)activeTime / SimTime)));
 }
 int Truck::CalcLoadTime() //calculates the load interval (not absolute)
 {
@@ -183,9 +155,12 @@ bool Truck::Update(Company* C, int Global_Time)
 	Cargo* c;
 	if (AssignedCargos.dequeue(c)) {
 		C->AppendDeliveredCargo(c);
+		TotalCargosDel++;
 		return true;
 	}
 	//if no cargos to deliver and reach nextDT then this means truck has returned to company
+	currentJourneyCount++;
+	furthestDistance = -1;
 	return false;
 }
 ;//Calculated the percentage

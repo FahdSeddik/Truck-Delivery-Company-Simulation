@@ -11,6 +11,7 @@ Cargo::Cargo(int PREPT,int LOADTIME, int DELIVERYDIST, int COST, Cargo_Type CT, 
 	Ctype = CT;
 	deliveryTime = -1;
 	ID = Id;
+	moveTime = -1;
 };//constructor.
 
 
@@ -42,6 +43,7 @@ void Cargo::setCost(int cost)
 
 void Cargo::setTID(int id)
 {
+	TID = id;
 }
 
 ;//cost setter.
@@ -73,16 +75,11 @@ int Cargo::getPrepTime() {
 	return prepTime;
 }
 
-//getter for Current waiting time
-//(the Time from the preration of the cargo untill its truck starts to move to deliver it (MoveTime-PrepTime))
-int Cargo::getCurrWait() {
-	return 0;
-}
 
 //getter for cargo delivery time from company to the destination 
 //((MT)+(cargo distance/truck speed)+(cargo unload time))
 int Cargo::getWatingTime() {
-	return 0;
+	return moveTime-prepTime;
 }
 
 
@@ -95,7 +92,7 @@ int Cargo::getDeliveryTime() {
 
 int Cargo::getTID()
 {
-	return 0;
+	return TID;
 }
 
 //Cargo Type getter.
@@ -112,4 +109,8 @@ void Cargo::setDeliveryTime(int t) {
 ostream& operator << (ostream& os, Cargo& c) {
 	os << c.getID();
 	return os;
+}
+
+void Cargo::setMoveTime(int t) {
+	moveTime = t;
 }
