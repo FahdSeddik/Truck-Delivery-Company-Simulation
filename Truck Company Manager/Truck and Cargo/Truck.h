@@ -29,7 +29,7 @@ private:
 	
 	int TotalCargosDel;//TDC TOTAl Cargos delivered by this truck
 	int nextDT;//Time at which the truck reaches its next destination
-	
+	int loadtime;
 	int LastReturnTime; // 
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
@@ -84,7 +84,7 @@ public:
 	//if finished cargos then calculate the return time to company
 	int CalcNextDT(int GT);
 
-	//int CalculateDeliveryTime(); //calculates DT and set el data member
+	bool isEmpty();//to return true if no assigned cargos
 
 	//Update method to be called from company
 	// checks first if there is cargo to be delivered in Global_Time

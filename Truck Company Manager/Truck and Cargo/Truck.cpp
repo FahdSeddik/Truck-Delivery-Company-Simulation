@@ -12,6 +12,7 @@ Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 	ID = Id;
 	MoveTime = -1;
 	nextDT = -1;
+	loadtime = 0;
 	LastReturnTime = -1;
 	furthestDistance = -1;
 }//constructor.
@@ -121,6 +122,8 @@ bool Truck::NeedsRepairing()
 
 float Truck::CalculateTruckUtlization(int SimTime)
 {
+	if (currentJourneyCount == 0)
+		return 0;
 	return (((float)TotalCargosDel / (Capacity * currentJourneyCount) * ((float)activeTime / SimTime)));
 }
 int Truck::CalcLoadTime() //calculates the load interval (not absolute)
@@ -135,7 +138,7 @@ int Truck::CalcLoadTime() //calculates the load interval (not absolute)
 	while (temq.dequeue(c)) {
 		AssignCargo(c);
 	}
-	
+	loadtime = lt;
 	return lt;
 }
 int Truck::CalcNextDT(int GT) //calculates absolute next delivery time
@@ -156,6 +159,8 @@ bool Truck::Update(Company* C, int Global_Time)
 	if (AssignedCargos.dequeue(c)) {
 		C->AppendDeliveredCargo(c);
 		TotalCargosDel++;
+		if(AssignedCargos.isEmpty())
+			activeTime += Global_Time - MoveTime + loadtime;
 		return true;
 	}
 	//if no cargos to deliver and reach nextDT then this means truck has returned to company
@@ -218,3 +223,7 @@ ostream& operator<<(ostream& os, Truck& t) {
 		os << ")";
 	return os;
 }
+
+bool Truck::isEmpty() {
+	return AssignedCargos.getSize() == 0;
+}//to return true if no assigned cargos

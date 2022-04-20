@@ -184,6 +184,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 			}
 			int x = pT->CalcLoadTime()+time;
 			pT->setMoveTime(x);
+			//pT->incrementActiveTime(x - time);
 			Loading_Trucks.enqueue(pT,-x);	//prio call calc load time in truck
 		}
 		else if (time - pC->getPrepTime() >= MaxW)
@@ -197,7 +198,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			pT->incrementActiveTime(x - time);
+			//pT->incrementActiveTime(x - time);
 			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -x);	//prio call calc load time in truck
 		}
@@ -228,7 +229,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			pT->incrementActiveTime(x-time);
+			//pT->incrementActiveTime(x-time);
 			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
 
 
@@ -244,7 +245,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			}
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
-			pT->incrementActiveTime(x - time);
+			//pT->incrementActiveTime(x - time);
 			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
 		}
@@ -328,7 +329,8 @@ void Company::CheckTruckStatus()
 			if (pTruck->Update(this, time))
 			{
 				temp = pTruck->CalcNextDT(time);
-				pTruck->incrementActiveTime(temp-time);
+				//if(!pTruck->isEmpty())
+					//pTruck->incrementActiveTime(temp - time);
 				MovingTrucks.enqueue(pTruck, -temp);
 			}
 			else if (pTruck->NeedsRepairing())
@@ -525,6 +527,23 @@ void Company::WriteOutput() {
 	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;
 	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
 	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
-
+	float activetime = 0, utilization = 0;
+	Truck* t;
+	while (Avail_NT.dequeue(t)) {
+		utilization+=t->CalculateTruckUtlization(time);
+		activetime += t->getActiveTime();
+	}
+	while (Avail_VT.dequeue(t)) {
+		utilization += t->CalculateTruckUtlization(time);
+		activetime += t->getActiveTime();
+	}
+	while (Avail_ST.dequeue(t)) {
+		utilization += t->CalculateTruckUtlization(time);
+		activetime += t->getActiveTime();
+	}
+	activetime = (activetime / (N + V + S));
+	utilization = utilization / (N + V + S) *100;
+	OutputFile << "Avg Active time = " << (int)activetime / 24 << ":" << (int)activetime % 24 << endl;
+	OutputFile << "Avg utilization = " << round(utilization) << "%" << endl;
 	OutputFile.close();
 }
