@@ -423,7 +423,7 @@ void Company::PromoteCargo(int ID,int ExtraMoney) {
 	while (Wait_NC.dequeue(c)) {
 		if (c->getID() == ID) {
 			c->setCost(c->getcost() + ExtraMoney);
-			int prio = 0; //perform prio calculation
+			int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime();
 			Wait_VC.enqueue(c, prio);
 			NCcount--;
 			VCcount++;
@@ -481,7 +481,7 @@ void Company::AppendWaitingCargo(Cargo* c) {
 		Wait_NC.enqueue(c);
 	}
 	else if (c->getType() == VC) {
-		int prio = 0; //calculation to be done
+		int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime();
 		Wait_VC.enqueue(c,prio);
 	}
 	else if (c->getType() == SC) {
