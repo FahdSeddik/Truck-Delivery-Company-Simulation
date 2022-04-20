@@ -11,8 +11,9 @@ Company::Company(UI_Class* pUI) {
 	time = 0;
 	NCcount = SCcount = VCcount = 0;
 	this->pUI = pUI;
-	string filename = pUI->ReadFileName();
-	ReadFile(filename);
+	ofname = pUI->ReadFileName("output");
+	string ifilename = pUI->ReadFileName("input");
+	ReadFile(ifilename);
 
 }
 
@@ -476,7 +477,7 @@ void Company::WriteOutput() {
 	int temp, day;
 	int waitTime = 0;
 	Cargo* pC;
-	OutputFile.open("OutPut.txt", ios::out);
+	OutputFile.open(ofname, ios::out);
 	OutputFile << "CDT\tID\tPT\tWT\tTID" << endl;
 	while (DeliveredCargos.dequeue(pC))
 	{

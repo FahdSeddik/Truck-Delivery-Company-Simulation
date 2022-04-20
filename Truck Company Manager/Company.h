@@ -58,6 +58,7 @@ private:
 	int AutoPcount; // number of cargos auto-promoted
 	int MT_N, MT_V, MT_S; //maintenance time of each truck type
 	int NTC, STC, VTC; // capacity of each truck type
+	string ofname;
 	UI_Class* pUI;
 
 

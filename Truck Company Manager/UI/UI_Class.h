@@ -15,7 +15,7 @@ private:
 	bool pSilent; //to know if in silent mode and already printed info
 public:
 	UI_Class();
-	string ReadFileName();
+	string ReadFileName(string io);
 
 
 	//TODO: takes copies of all lists

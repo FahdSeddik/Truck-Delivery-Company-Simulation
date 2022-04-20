@@ -19,10 +19,10 @@ UI_Class::UI_Class()
 	}
 }
 
-string UI_Class::ReadFileName()
+string UI_Class::ReadFileName(string io)
 {
 	string filename;
-	cout << "Please enter the input file's name: ";
+	cout << "Please enter the " + io + " file's name: ";
 	cin >> filename;
 	return filename;
 }
