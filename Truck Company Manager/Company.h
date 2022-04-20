@@ -32,7 +32,7 @@ private:
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
 
-	LLQ<Cargo*> DN, DV, DS; //to only be used in print
+	
 	//TRUCK LISTS
 	/*
 	Each truck type	has its own available list.
