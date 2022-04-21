@@ -31,7 +31,7 @@ private:
 	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
-
+	string DN, DV, DS;
 	
 	//TRUCK LISTS
 	/*
