@@ -60,7 +60,7 @@ private:
 	int NTC, STC, VTC; // capacity of each truck type
 	string ofname;
 	UI_Class* pUI;
-
+	int movc;
 
 	//*****************************
 	//---====UTILITY METHODS====---

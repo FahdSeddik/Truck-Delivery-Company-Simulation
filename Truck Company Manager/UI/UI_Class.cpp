@@ -28,7 +28,7 @@ string UI_Class::ReadFileName(string io)
 }
 
 void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, string& dn, string& dv, string& ds, LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
-	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m,int del)
+	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m,int del,int n)
 {
 	if (mode == 3) {
 		if (!pSilent) {
@@ -64,7 +64,7 @@ void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, 
 		cout<<" ";
 		av.print();
 		cout << "\n------------------------------------------------------";
-		cout << endl << m.getSize() << " " << "Moving Cargos: ";
+		cout << endl << n << " " << "Moving Cargos: ";
 		m.print();
 		cout << "\n------------------------------------------------------";
 		cout << endl << uc.getSize() << " " << "In-Checkup Trucks: ";
