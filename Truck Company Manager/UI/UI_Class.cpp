@@ -59,8 +59,12 @@ void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, 
 		cout << "\n------------------------------------------------------";
 		cout << endl << an.getSize() + as.getSize() + av.getSize() << " " << "Empty Trucks: ";
 		an.print();
+		if (an.getSize() != 0 && (as.getSize()!=0 || av.getSize()!=0))
+			cout << ",";
 		cout<<" ";
 		as.print();
+		if (av.getSize() != 0 && as.getSize()!=0)
+			cout << ",";
 		cout<<" ";
 		av.print();
 		cout << "\n------------------------------------------------------";
