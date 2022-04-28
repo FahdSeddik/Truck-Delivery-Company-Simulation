@@ -419,8 +419,7 @@ void Company::AppendDeliveredCargo(Cargo* c) {
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
-	//to remove last comma
-	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks);
+	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks,DeliveredCargos.getSize());
 }
 
 

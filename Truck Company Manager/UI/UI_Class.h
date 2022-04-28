@@ -21,6 +21,6 @@ public:
 	//TODO: takes copies of all lists
 	//calls other print methods
 	void Print(int time,LLQ<Cargo*>& wn,LLQ<Cargo*>& ws,PQ<Cargo*>&wv, string& dn, string& dv, string& ds,LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
-	, PQ<Truck*>& l,PQ<Truck*>& uc,PQ<Truck*>& m);
+	, PQ<Truck*>& l,PQ<Truck*>& uc,PQ<Truck*>& m,int del);
 };
 

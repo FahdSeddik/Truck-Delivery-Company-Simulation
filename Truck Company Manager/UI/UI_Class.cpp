@@ -28,7 +28,7 @@ string UI_Class::ReadFileName(string io)
 }
 
 void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, string& dn, string& dv, string& ds, LLQ<Truck*>& an, LLQ<Truck*>& av, LLQ<Truck*>& as
-	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m)
+	, PQ<Truck*>& l, PQ<Truck*>& uc, PQ<Truck*>& m,int del)
 {
 	if (mode == 3) {
 		if (!pSilent) {
@@ -44,6 +44,7 @@ void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, 
 		if (mode == 2)
 			Sleep(1000);
 		cout << "Current Time (Day:Hour): " << 1 + (time / 24) << ":" << time % 24 << endl;
+		cout << wn.getSize() + ws.getSize() + wv.getSize()<<" ";
 		cout << "Waiting Cargos: ";
 		cout << "[";
 		wn.print();
@@ -53,23 +54,23 @@ void UI_Class::Print(int time, LLQ<Cargo*>& wn, LLQ<Cargo*>& ws, PQ<Cargo*>&wv, 
 		wv.print();
 		cout << "}\n";
 		cout << "------------------------------------------------------";
-		cout << endl << "Loading Trucks: ";
+		cout << endl << l.getSize() << " " << "Loading Trucks: ";
 		l.print();
 		cout << "\n------------------------------------------------------";
-		cout << endl << "Empty Trucks: ";
+		cout << endl << an.getSize() + as.getSize() + av.getSize() << " " << "Empty Trucks: ";
 		an.print();
 		cout<<" ";
 		as.print();
 		cout<<" ";
 		av.print();
 		cout << "\n------------------------------------------------------";
-		cout << endl << "Moving Cargos: ";
+		cout << endl << m.getSize() << " " << "Moving Cargos: ";
 		m.print();
 		cout << "\n------------------------------------------------------";
-		cout << endl << "In-Checkup Trucks: ";
+		cout << endl << uc.getSize() << " " << "In-Checkup Trucks: ";
 		uc.print();
 		cout << "\n------------------------------------------------------";
-		cout << endl << "Delivered Cargos: ";
+		cout << endl<<del << " Delivered Cargos: ";
 		cout << "[";
 		cout << dn;
 		cout << "] (";
