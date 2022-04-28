@@ -432,6 +432,7 @@ void Company::PromoteCargo(int ID,int ExtraMoney) {
 	while (Wait_NC.dequeue(c)) {
 		if (c->getID() == ID) {
 			c->setCost(c->getcost() + ExtraMoney);
+			c->setType(VC);
 			int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime();
 			Wait_VC.enqueue(c, prio);
 			NCcount--;
