@@ -31,6 +31,7 @@ private:
 	int nextDT;//Time at which the truck reaches its next destination
 	int loadtime;
 	int LastReturnTime; // 
+	int LastDist;//distance of the last delivered cargo
 	PQ<Cargo*> AssignedCargos; //priority queue sorted based on cargo distance
 
 	

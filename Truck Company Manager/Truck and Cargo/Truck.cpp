@@ -15,6 +15,7 @@ Truck::Truck(int CAP, int SPEED, int JBM, Truck_Type TT,int Id)
 	loadtime = 0;
 	LastReturnTime = -1;
 	furthestDistance = -1;
+	LastDist = 0;
 }//constructor.
 
 Truck::~Truck()
@@ -145,7 +146,7 @@ int Truck::CalcNextDT(int GT) //calculates absolute next delivery time
 {
 	Cargo* c;
 	if (AssignedCargos.peekFront(c))
-		nextDT = GT + c->getDeliveryDistance() / speed + c->getLoad_Unload_Time();
+		nextDT = GT + (c->getDeliveryDistance() - LastDist) / speed + c->getLoad_Unload_Time();
 	else if(LastReturnTime<GT){
 		nextDT = furthestDistance / speed + GT;
 		UpdateLastReturnTime(nextDT);
@@ -157,6 +158,7 @@ bool Truck::Update(Company* C, int Global_Time)
 	//if function is called then this means nextDT has come no need to check
 	Cargo* c;
 	if (AssignedCargos.dequeue(c)) {
+		LastDist = c->getDeliveryDistance();
 		C->AppendDeliveredCargo(c);
 		TotalCargosDel++;
 		if(AssignedCargos.isEmpty())
@@ -166,6 +168,7 @@ bool Truck::Update(Company* C, int Global_Time)
 	//if no cargos to deliver and reach nextDT then this means truck has returned to company
 	currentJourneyCount++;
 	furthestDistance = -1;
+	LastDist = 0;
 	return false;
 }
 ;//Calculated the percentage
