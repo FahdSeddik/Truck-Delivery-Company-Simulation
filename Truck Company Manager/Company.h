@@ -61,7 +61,7 @@ private:
 	string ofname;
 	UI_Class* pUI;
 	int movc;
-
+	bool LoadN, LoadS, LoadV; //bool flags to only have 1 type of each truck loading at max
 	//*****************************
 	//---====UTILITY METHODS====---
 	//*****************************
@@ -83,8 +83,8 @@ private:
 	// moves cargos from waiting to moving
 	void AssignCargos();
 
-	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap);
-	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, int Cap);
+	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap,bool& flag);
+	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag);
 
 	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR

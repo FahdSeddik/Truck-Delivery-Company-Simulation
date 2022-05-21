@@ -16,6 +16,7 @@ Company::Company(UI_Class* pUI) {
 	string ifilename = pUI->ReadFileName("input");
 	ReadFile(ifilename);
 	movc = 0;
+	LoadN = LoadS = LoadV = false;
 }
 
 
@@ -147,36 +148,40 @@ void Company:: AssignCargos() {
 			break;
 		}
 	}
-	LoadTrucks(&Wait_VC, &Avail_VT, VTC);
-	if (Avail_VT.isEmpty())
+	if(!LoadV)
+		LoadTrucks(&Wait_VC, &Avail_VT, VTC,LoadV);
+	if (Avail_VT.isEmpty()&& !LoadN)
 	{
-		LoadTrucks(&Wait_VC, &Avail_NT, NTC);
+		LoadTrucks(&Wait_VC, &Avail_NT, NTC,LoadN);
 	}
-	if (Avail_VT.isEmpty() && Avail_NT.isEmpty())
+	if (Avail_VT.isEmpty() && Avail_NT.isEmpty() && !LoadS)
 	{
-		LoadTrucks(&Wait_VC, &Avail_ST, STC);
+		LoadTrucks(&Wait_VC, &Avail_ST, STC,LoadS);
 	}
-	LoadTrucks(&Wait_SC, &Avail_ST, STC);
-	LoadTrucks(&Wait_NC, &Avail_NT, NTC);
-	if (Avail_NT.isEmpty())
+	if(!LoadS)
+		LoadTrucks(&Wait_SC, &Avail_ST, STC,LoadS);
+	if(!LoadN)
+		LoadTrucks(&Wait_NC, &Avail_NT, NTC,LoadN);
+	if (Avail_NT.isEmpty() && !LoadV)
 	{
-		LoadTrucks(&Wait_NC, &Avail_VT, VTC);
+		LoadTrucks(&Wait_NC, &Avail_VT, VTC,LoadV);
 	}
 
 }
 
-void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
+void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag)
 {
 	int temp;
 	int t;
 	Cargo* pC;
 	Truck* pT;
-	while (CargoList->peekFront(pC) && TruckList->peekFront(pT))
+	while (CargoList->peekFront(pC) && TruckList->peekFront(pT) &&!flag)
 	{
 		temp = CargoList->getSize();
 		if (temp >= Cap)
 		{
 			TruckList->dequeue(pT);
+			flag = true;
 			for (int i = 0; i < Cap; i++)
 			{
 				CargoList->dequeue(pC);
@@ -197,6 +202,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 				pC->setTID(pT->getID());
 				t++;
 			}
+			flag = true;
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
 			//pT->incrementActiveTime(x - time);
@@ -210,18 +216,19 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
 	}
 }
 
-void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap)
+void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag)
 {
 	int temp;
 	int t;
 	Cargo* pC;
 	Truck* pT;
-	while (CargoList->peekFront(pC) && TruckList->peekFront(pT))
+	while (CargoList->peekFront(pC) && TruckList->peekFront(pT) &&!flag)
 	{
 		temp = CargoList->getSize();
 		if (temp >= Cap)
 		{
 			TruckList->dequeue(pT);
+			flag = true;
 			for (int i = 0; i < Cap; i++)
 			{
 				CargoList->dequeue(pC);
@@ -244,6 +251,7 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 				pC->setTID(pT->getID());
 				t++;
 			}
+			flag = true;
 			int x = pT->CalcLoadTime() + time;
 			pT->setMoveTime(x);
 			//pT->incrementActiveTime(x - time);
@@ -297,6 +305,13 @@ void Company::CheckTruckStatus()
 		{
 			Loading_Trucks.dequeue(pTruck);
 			temp = pTruck->CalcNextDT(time);
+			Truck_Type Tt = pTruck->getTruckType();
+			if (Tt == NT)
+				LoadN = false;
+			else if (Tt == VT)
+				LoadV = false;
+			else if (Tt == ST)
+				LoadS = false;
 			MovingTrucks.enqueue(pTruck, -temp);
 			movc += pTruck->getAssignedList()->getSize();
 		}
