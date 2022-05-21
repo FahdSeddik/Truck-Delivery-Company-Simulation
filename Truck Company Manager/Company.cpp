@@ -152,7 +152,7 @@ void Company:: AssignCargos() {
 	{
 		LoadTrucks(&Wait_VC, &Avail_NT, NTC);
 	}
-	if (Avail_VT.isEmpty() && Avail_ST.isEmpty())
+	if (Avail_VT.isEmpty() && Avail_NT.isEmpty())
 	{
 		LoadTrucks(&Wait_VC, &Avail_ST, STC);
 	}
