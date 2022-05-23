@@ -26,14 +26,10 @@ Truck::~Truck()
 
 //GETTERS
 
-
-
 int Truck::getCurrentJourneyCount()
 {
 	return currentJourneyCount;
 };//Number of Current journeys
-
-
 
 
 int Truck::getActiveTime()
@@ -51,47 +47,73 @@ Truck_Type Truck::getTruckType()
 int Truck::getID()
 {
 	return ID;
-}
-int Truck::getMoveTime() //doesnt calculate
+}//ID getter.
+
+int Truck::getMoveTime()
 {
 	return MoveTime;
-}
+}//move time getter.
+
 int Truck::getNextDT()
 {
 	return nextDT;
-}
+}//next distance getter.
 
 int Truck::getLastReturnTime()
 {
 	return LastReturnTime;
-}
-;//getter for ID
+};//last return time getter.
 
+
+//SETTERS
+void Truck::setCapacity(int TCap)
+{
+	Capacity = TCap;
+};//capacity setter.
+
+void Truck::setSpeed(int speed)
+{
+	this->speed = speed;
+};//speed setter.
+
+
+void Truck::setJ(int j)
+{
+	J = j;
+};//Number of journeys after which the Truck needs maintenance setter (J)
+
+PQ<Cargo*>* Truck::getAssignedList() {
+	return &AssignedCargos;
+}//assigned cargos getter.
 
 void Truck::UpdateLastReturnTime(int LastReturn)
 {
 	LastReturnTime = LastReturn;
-}
+}//update last return time.
+
 void Truck::setMoveTime(int time)
 {
 	MoveTime = time;
 	Cargo* c;
 	LLQ<Cargo*> temq;
-	while (AssignedCargos.dequeue(c)) {
+	while (AssignedCargos.dequeue(c))
+	{
 		c->setMoveTime(time);
 		temq.enqueue(c);
 	}
 	while (temq.dequeue(c))
 		AssignCargo(c);
-}
+}//move time setter.
+
 void Truck::incrementActiveTime(int time)
 {
 	activeTime += time;
-}
+}//increment active time.
+
 //METHODS
 bool Truck::isFull()
 {
-	return AssignedCargos.getSize()==Capacity;
+	return AssignedCargos.getSize() == Capacity;
 };//checks if the truck is full(max capacity) 
 
 bool Truck::AssignCargo(Cargo * CargoToAssign)
@@ -110,11 +132,6 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 };//Assign cargo to Truck
 
-//int Truck::CalculateDeliveryTime()
-//{
-//	return 0;
-//	
-//}//calculates DT and set el data member
 
 bool Truck::NeedsRepairing()
 {
@@ -126,17 +143,20 @@ float Truck::CalculateTruckUtlization(int SimTime)
 	if (currentJourneyCount == 0)
 		return 0;
 	return (((float)TotalCargosDel / (Capacity * currentJourneyCount) * ((float)activeTime / SimTime)));
-}
+}//calculartes utlization.
+
 int Truck::CalcLoadTime() //calculates the load interval (not absolute)
 {
 	LLQ<Cargo*> temq;
 	Cargo* c;
 	int lt=0;
-	while (AssignedCargos.dequeue(c)) {
+	while (AssignedCargos.dequeue(c))
+	{
 		lt += c->getLoad_Unload_Time();
 		temq.enqueue(c);
 	}
-	while (temq.dequeue(c)) {
+	while (temq.dequeue(c))
+	{
 		AssignCargo(c);
 	}
 	loadtime = lt;
@@ -173,29 +193,12 @@ bool Truck::Update(Company* C, int Global_Time)
 }
 ;//Calculated the percentage
 
-
-
-//SETTERS
-void Truck::setCapacity(int TCap)
+bool Truck::isEmpty() 
 {
-	Capacity = TCap;
-};//capacity setter.
+	return AssignedCargos.getSize() == 0;
+}//to return true if no assigned cargos
 
-void Truck::setSpeed(int speed)
-{
-	this->speed = speed;
-};//speed setter.
-
-
-void Truck::setJ(int j)
-{
-	J = j;
-};//Number of journeys after which the Truck needs maintenance setter (J)
-
-PQ<Cargo*>* Truck::getAssignedList() {
-	return &AssignedCargos;
-}
-
+//operator overloading.
 ostream& operator<<(ostream& os, Truck& t) {
 	os << t.getID();
 	if (t.getTruckType() == NT)
@@ -227,6 +230,3 @@ ostream& operator<<(ostream& os, Truck& t) {
 	return os;
 }
 
-bool Truck::isEmpty() {
-	return AssignedCargos.getSize() == 0;
-}//to return true if no assigned cargos
