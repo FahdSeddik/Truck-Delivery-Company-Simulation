@@ -23,9 +23,11 @@ Cargo::~Cargo()
 
 
 //SETTERS
-void Cargo::setType(Cargo_Type CT) {
+void Cargo::setType(Cargo_Type CT) 
+{
 	Ctype = CT;
 }//Cargo Type Setter
+
 void Cargo::setload_Unload_Time(int LTime)
 {
 	load_Unload_Time = LTime;
@@ -39,15 +41,22 @@ void Cargo::setDeliveryDistance(int DDistance)
 void Cargo::setCost(int cost)
 {
 	Cost = cost;
- }
+ }//cost setter.
 
 void Cargo::setTID(int id)
 {
 	TID = id;
-}
+};//Cargo ID setter
 
-;//cost setter.
+void Cargo::setDeliveryTime(int t) {
+	deliveryTime = t;
+}//delivery time setter.
 
+void Cargo::setMoveTime(int t) {
+	moveTime = t;
+}//move time setter.
+
+//GETTERS
 int Cargo::getLoad_Unload_Time()
 {
 	return load_Unload_Time;
@@ -67,50 +76,38 @@ int Cargo::getcost()
 int Cargo::getID()
 {
 	return ID;
-};//getter for ID
-
+};//getter for Cargo ID
 
 //getter for PrepTIme(time when the cargo is ready to be assigned to truck stored in hours).
 int Cargo::getPrepTime() {
 	return prepTime;
 }
 
-
-//getter for cargo delivery time from company to the destination 
-//((MT)+(cargo distance/truck speed)+(cargo unload time))
+//the Time from the preparation of the cargo untill its truck starts to move to deliver it 
+//(MoveTime-PrepTime)).
 int Cargo::getWatingTime() {
 	return moveTime-prepTime;
 }
 
-
 ///getter cargo delivery time from company to the destination 
-//((MT)+(cargo distance/truck speed)+(cargo unload time))
+//((MT)+(cargo distance/truck speed)+(cargo unload time)).
 int Cargo::getDeliveryTime() {
 	return deliveryTime;
 }
 
-
 int Cargo::getTID()
 {
 	return TID;
-}
+}//Truck ID getter.
 
-//Cargo Type getter.
 Cargo_Type Cargo::getType() {
 	return Ctype;
-}
+}//Cargo Type getter.
 
 
-
-void Cargo::setDeliveryTime(int t) {
-	deliveryTime = t;
-}
 
 ostream& operator << (ostream& os, Cargo& c) {
 	os << c.getID();
 	return os;
-}
+}//operator overloading.
 
-void Cargo::setMoveTime(int t) {
-	moveTime = t;
-}
