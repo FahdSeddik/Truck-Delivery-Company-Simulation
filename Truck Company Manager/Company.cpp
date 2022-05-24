@@ -550,7 +550,7 @@ void Company::WriteOutput() {
 	day = waitTime / 24;
 	temp = waitTime % 24;
 	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
-	temp = AutoPcount / (VCcount + NCcount + SCcount) * 100;
+	temp = round((float)AutoPcount / (VCcount + NCcount + SCcount) * 100);
 	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
 	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
 	float activetime = 0, utilization = 0;
