@@ -24,7 +24,7 @@ Company::Company(UI_Class* pUI) {
 void Company::ReadFile(string filename)
 {
 	ifstream inputFile;
-	inputFile.open(filename, ios::in); // opens the file for input
+	inputFile.open("Input-Output files/"+ filename, ios::in); // opens the file for input
 	int NS, SS, VS;//speeds of each type of truck
 	//int NTC, STC, VTC;//capacity of each tyoe of truck
 	int J;// number of trips before need for check-up
@@ -522,7 +522,7 @@ void Company::WriteOutput() {
 	int temp, day;
 	int waitTime = 0;
 	Cargo* pC;
-	OutputFile.open(ofname, ios::out);
+	OutputFile.open("Input-Output files/"+ofname, ios::out);
 	OutputFile << "CDT\tID\tPT\tWT\tTID" << endl;
 	while (DeliveredCargos.dequeue(pC))
 	{
