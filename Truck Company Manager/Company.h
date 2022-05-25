@@ -1,9 +1,7 @@
 #pragma once
 #include "INFO.h"
-#include "DS/LLBag.h"
 #include "DS/LLQ.h"
 #include "DS/PQ.h"
-#include "DS/Linked_List.h"
 #include "Truck and Cargo/Cargo.h"
 #include "Truck and Cargo/Truck.h" //after company
 #include "Events/Event.h"
@@ -27,11 +25,10 @@ private:
 	However delivered list has all cargo types
 	*/
 	LLQ<Cargo*> Wait_NC, Wait_SC; //first come first served
-	PQ<Cargo*> Wait_VC; //priority queues  array or tree (load when you have truck cap)
-	//LLQ<Cargo*> Loading_NC,Loading_VC,Loading_SC; //Queue for loading time is constant for each type
+	PQ<Cargo*> Wait_VC; //priority queue
 	LLQ<Cargo*> DeliveredCargos; //queue linked
 
-	string DN, DV, DS;
+	string DN, DV, DS; //strings for printing delivered separated
 	
 	//TRUCK LISTS
 	/*
@@ -45,23 +42,22 @@ private:
 	PQ<Truck*> Under_Check; //PQ based on who finished first
 	PQ<Truck*> MovingTrucks; //PQ based on next cargo delivery time
 
-	
-
 
 	//Events
-	LLQ<Event*> EventList;   // to be implemented
+	LLQ<Event*> EventList;   
 
 	int time; //time in hours is also simulation time
 	int N, S, V;//numbers of each type of truck
 	int NCcount, SCcount, VCcount; // count number of each type of cargo
-	int AutoP, MaxW; //in hours
+	int AutoP, MaxW; //AutoP in days MaxW in hours
 	int AutoPcount; // number of cargos auto-promoted
 	int MT_N, MT_V, MT_S; //maintenance time of each truck type
 	int NTC, STC, VTC; // capacity of each truck type
-	string ofname;
-	UI_Class* pUI;
-	int movc;
+	string ofname;//output file name
+	UI_Class* pUI; //ui pointer
+	int movc; //moving cargos count (for printing)
 	bool LoadN, LoadS, LoadV; //bool flags to only have 1 type of each truck loading at max
+
 	//*****************************
 	//---====UTILITY METHODS====---
 	//*****************************
@@ -83,8 +79,11 @@ private:
 	// moves cargos from waiting to moving
 	void AssignCargos();
 
-	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap,bool& flag);
+
+	//Loads From cargo list in truck list if conditions are correct 
 	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag);
+	//Overloaded version (vip cargos are priority queues and have different conditions (no MaxW)
+	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap,bool& flag);
 
 	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR

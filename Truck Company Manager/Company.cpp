@@ -12,8 +12,8 @@ Company::Company(UI_Class* pUI) {
 	NCcount = SCcount = VCcount = AutoPcount = 0;
 	DN = DV = DS = "";
 	this->pUI = pUI;
-	ofname = pUI->ReadFileName("output");
 	string ifilename = pUI->ReadFileName("input");
+	ofname = pUI->ReadFileName("output");
 	ReadFile(ifilename);
 	movc = 0;
 	LoadN = LoadS = LoadV = false;
@@ -34,7 +34,7 @@ void Company::ReadFile(string filename)
 		inputFile >> N >> S >> V; // reads number of trucks frome input file
 		inputFile >> NS >> SS >> VS; // reads tuck speed of each type of truck from input file
 		inputFile >> NTC >> STC >> VTC;// reads the capacity of each type of truck from input file
-		inputFile >> MT_N >> MT_S >> MT_V >> J; // reads check up duration in hours for each type of truck & number of trips before need for check-up from input file
+		inputFile >>  J >> MT_N >> MT_S >> MT_V; // reads check up duration in hours for each type of truck & number of trips before need for check-up from input file
 		// create the specified trucks based on read info
 		for (int i = 0; i < N; i++)
 		{
@@ -56,7 +56,6 @@ void Company::ReadFile(string filename)
 			Avail_VT.enqueue(T);
 			ID++;
 		}
-		//inputFile.ignore(); // ignores blank line
 		inputFile >> AutoP >> MaxW; //reads auto promotion limit in days and MaxW in hours
 		int n;// number of events
 		inputFile >> n;// reads number of events
@@ -132,12 +131,12 @@ void Company::ReadFile(string filename)
 // moves cargos from waiting to moving
 void Company:: AssignCargos() {
 	Cargo* pC;
-	while(Wait_NC.peekFront(pC))
+	while(Wait_NC.peekFront(pC)) //checks normal cargos
 	{
-		int x = time - pC->getPrepTime();
-		if (x >= (AutoP * 24)) {
+		int Wait_interval = time - pC->getPrepTime();
+		if (Wait_interval >= (AutoP * 24)) { //if reached autop to promote
 			Wait_NC.dequeue(pC);
-			pC->setType(VC);
+			pC->setType(VC);//change type
 			NCcount--;
 			VCcount++;
 			AutoPcount++;
@@ -148,21 +147,21 @@ void Company:: AssignCargos() {
 			break;
 		}
 	}
-	if(!LoadV)
+	if(!LoadV)//Load VIP cargos into VIP trucks
 		LoadTrucks(&Wait_VC, &Avail_VT, VTC,LoadV);
-	if (Avail_VT.isEmpty()&& !LoadN)
+	if (Avail_VT.isEmpty()&& !LoadN)//Load VIP cargos into Normal trucks
 	{
 		LoadTrucks(&Wait_VC, &Avail_NT, NTC,LoadN);
 	}
-	if (Avail_VT.isEmpty() && Avail_NT.isEmpty() && !LoadS)
+	if (Avail_VT.isEmpty() && Avail_NT.isEmpty() && !LoadS)//Load VIP cargos into Special trucks
 	{
 		LoadTrucks(&Wait_VC, &Avail_ST, STC,LoadS);
 	}
-	if(!LoadS)
+	if(!LoadS)//Load special cargos into special trucks
 		LoadTrucks(&Wait_SC, &Avail_ST, STC,LoadS);
-	if(!LoadN)
+	if(!LoadN)//Load normal cargos into normal trucks
 		LoadTrucks(&Wait_NC, &Avail_NT, NTC,LoadN);
-	if (Avail_NT.isEmpty() && !LoadV)
+	if (Avail_NT.isEmpty() && !LoadV)//Load normal cargos into VIP trucks
 	{
 		LoadTrucks(&Wait_NC, &Avail_VT, VTC,LoadV);
 	}
@@ -177,37 +176,36 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 	Truck* pT;
 	while (CargoList->peekFront(pC) && TruckList->peekFront(pT) &&!flag)
 	{
-		temp = CargoList->getSize();
-		if (temp >= Cap)
+		temp = CargoList->getSize(); //cargos count
+		if (temp >= Cap) //if present more than truck capacity
 		{
 			TruckList->dequeue(pT);
-			flag = true;
-			for (int i = 0; i < Cap; i++)
+			for (int i = 0; i < Cap; i++) //load all
 			{
 				CargoList->dequeue(pC);
 				pC->setTID(pT->getID());
 				pT->AssignCargo(pC);
 			}
-			int x = pT->CalcLoadTime()+time;
-			pT->setMoveTime(x);
-			//pT->incrementActiveTime(x - time);
-			Loading_Trucks.enqueue(pT,-x);	//prio call calc load time in truck
+			flag = true;
+			int finishloadtime = pT->CalcLoadTime()+time; //calculate finish time (loading)
+			pT->setMoveTime(finishloadtime);
+			Loading_Trucks.enqueue(pT,-finishloadtime);	//enqueue in loading
 		}
-		else if (time - pC->getPrepTime() >= MaxW)
-		{
+		else if (EventList.getSize()==0) //not enough cargos for capacity but no events
+		{								//this would happen at the end of the program
+										//if 2 VIP cargos left but not enough for capacity(no maxW for VIP)
 			t = 0;
-			while (CargoList->dequeue(pC) && t <= Cap)
+			while (CargoList->dequeue(pC) && t <= Cap) //load cargos into truck
 			{
 				pT->AssignCargo(pC);
 				pC->setTID(pT->getID());
 				t++;
 			}
 			flag = true;
-			int x = pT->CalcLoadTime() + time;
-			pT->setMoveTime(x);
-			//pT->incrementActiveTime(x - time);
+			int finishloadtime = pT->CalcLoadTime() + time; //calculate finish time (loading)
+			pT->setMoveTime(finishloadtime);
 			TruckList->dequeue(pT);
-			Loading_Trucks.enqueue(pT, -x);	//prio call calc load time in truck
+			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
 		}
 		else
 		{
@@ -224,39 +222,37 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 	Truck* pT;
 	while (CargoList->peekFront(pC) && TruckList->peekFront(pT) &&!flag)
 	{
-		temp = CargoList->getSize();
-		if (temp >= Cap)
+		temp = CargoList->getSize();//cargos count
+		if (temp >= Cap)//if present more than truck capacity
 		{
 			TruckList->dequeue(pT);
 			flag = true;
-			for (int i = 0; i < Cap; i++)
+			for (int i = 0; i < Cap; i++)//load all
 			{
 				CargoList->dequeue(pC);
 				pC->setTID(pT->getID());
 				pT->AssignCargo(pC);
 			}
-			int x = pT->CalcLoadTime() + time;
-			pT->setMoveTime(x);
-			//pT->incrementActiveTime(x-time);
-			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
+			int finishloadtime = pT->CalcLoadTime() + time;//calculate finish time (loading)
+			pT->setMoveTime(finishloadtime);
+			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
 
 
 		}
-		else if ((time - pC->getPrepTime()) >= MaxW)
+		else if ((time - pC->getPrepTime()) >= MaxW) //check for maxW if not enough cargos for capacity
 		{
 			t = 0;
-			while (CargoList->dequeue(pC) && t <= Cap)
+			while (CargoList->dequeue(pC) && t <= Cap) //load all
 			{
 				pT->AssignCargo(pC);
 				pC->setTID(pT->getID());
 				t++;
 			}
 			flag = true;
-			int x = pT->CalcLoadTime() + time;
-			pT->setMoveTime(x);
-			//pT->incrementActiveTime(x - time);
+			int finishloadtime = pT->CalcLoadTime() + time; //calculate finish time (loading)
+			pT->setMoveTime(finishloadtime);
 			TruckList->dequeue(pT);
-			Loading_Trucks.enqueue(pT, -x); //prio call calc load time in truck
+			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
 		}
 		else
 		{
@@ -295,34 +291,30 @@ void Company::CheckTruckStatus()
 	int temp;
 	Truck* pTruck;
 	Truck_Type Type;
-	// to-do
-	//Check front of Available truck if reached maxW then call AssignCargos()
-
-
-	while (Loading_Trucks.peekFront(pTruck)) {
+	while (Loading_Trucks.peekFront(pTruck)) { //checks if loading needs updating
 		temp = pTruck->getMoveTime();
-		if (temp <= time)
+		if (temp <= time) //did finish time arrive?
 		{
 			Loading_Trucks.dequeue(pTruck);
-			temp = pTruck->CalcNextDT(time);
+			temp = pTruck->CalcNextDT(time); //calculate first update time (next delivery)
 			Truck_Type Tt = pTruck->getTruckType();
-			if (Tt == NT)
+			if (Tt == NT) //reset loading boolean for type (1 loading of each type)
 				LoadN = false;
 			else if (Tt == VT)
 				LoadV = false;
 			else if (Tt == ST)
 				LoadS = false;
-			MovingTrucks.enqueue(pTruck, -temp);
-			movc += pTruck->getAssignedList()->getSize();
+			MovingTrucks.enqueue(pTruck, -temp); //enqueue in moving
+			movc += pTruck->getAssignedList()->getSize(); //increment counter for moving cargos
 		}
 		else
 			break;
 	}
-	while (Under_Check.peekFront(pTruck)) {
+	while (Under_Check.peekFront(pTruck)) { //if under check trucks needs updating
 		temp = time - pTruck->getLastReturnTime(); //time interval
 		Type = pTruck->getTruckType();
 
-		if (Type == NT && temp>=MT_N)
+		if (Type == NT && temp>=MT_N) //enqueue in available if passed maintenance time
 		{
 			Under_Check.dequeue(pTruck);
 			Avail_NT.enqueue(pTruck);
@@ -340,23 +332,21 @@ void Company::CheckTruckStatus()
 		else
 			break;
 	}
-	while (MovingTrucks.peekFront(pTruck)) {
+	while (MovingTrucks.peekFront(pTruck)) { //check moving trucks
 		temp = pTruck->getNextDT();
-		if (temp == time)
+		if (temp == time) //if next delivery time arrived (or returned to company)
 		{
 			MovingTrucks.dequeue(pTruck);
-			if (pTruck->Update(this, time))
+			if (pTruck->Update(this, time)) //update-> true if cargo delivery event ////  ->false if return to company
 			{
-				temp = pTruck->CalcNextDT(time);
-				//if(!pTruck->isEmpty())
-					//pTruck->incrementActiveTime(temp - time);
+				temp = pTruck->CalcNextDT(time); //calc next delivery and enqueue back
 				MovingTrucks.enqueue(pTruck, -temp);
 			}
-			else if (pTruck->NeedsRepairing())
+			else if (pTruck->NeedsRepairing()) //if returned to company check if need repairing
 			{
 				Type = pTruck->getTruckType();
 				int prio;
-				if (Type == NT)
+				if (Type == NT) //calc finish maintenance time (prio in undercheck)
 				{
 					prio = time + MT_N;
 				}
@@ -368,12 +358,12 @@ void Company::CheckTruckStatus()
 				{
 					prio = time + MT_V;
 				}
-				Under_Check.enqueue(pTruck, -prio);
+				Under_Check.enqueue(pTruck, -prio); //enqueue in maintenance
 			}
-			else
+			else //doesnt need maintenance
 			{
 				Type = pTruck->getTruckType();
-				if (Type == NT)
+				if (Type == NT) //enqueue in available
 				{
 					Avail_NT.enqueue(pTruck);
 				}
@@ -408,10 +398,10 @@ void Company::ExecuteEvent() {
 //TODO: to be used form each truck when a cargo is delivered
 // appends a cargo to delivered list
 void Company::AppendDeliveredCargo(Cargo* c) {
-	c->setDeliveryTime(time);
-	DeliveredCargos.enqueue(c);
+	c->setDeliveryTime(time); //set delivery time
+	DeliveredCargos.enqueue(c); //enqueue in delivered cargos
 	Cargo_Type ct = c->getType();
-	if (ct == NC) {
+	if (ct == NC) { //edit delivered strings (for printing)
 		if (DN.empty())
 			DN += to_string(c->getID());
 		else
@@ -429,12 +419,23 @@ void Company::AppendDeliveredCargo(Cargo* c) {
 		else
 			DS += "," + to_string(c->getID());
 	}
-	movc--;
+	movc--; //decrement moving cargos count (for printing)
 }
 
 //PHASE-1
 //TODO: takes care of all print functions in UI Class
 void Company::PrintStatus() {
+	//Sends all needed information to print
+	/*
+	This includes: 
+	-Global Time
+	-Waiting cargos lists
+	-Delivered strings
+	-Available Trucks
+	-Loading ,Under Check, and Moving trucks
+	-Number of delivered cargos
+	-moving cargos count
+	*/
 	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks,DeliveredCargos.getSize(),movc);
 }
 
@@ -503,11 +504,11 @@ void Company::AppendWaitingCargo(Cargo* c) {
 	if (!c)
 		return;
 
-	if (c->getType() == NC) {
+	if (c->getType() == NC) { //checks type and append accordingly
 		Wait_NC.enqueue(c);
 	}
 	else if (c->getType() == VC) {
-		int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime();
+		int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime(); //prio equation
 		Wait_VC.enqueue(c,prio);
 	}
 	else if (c->getType() == SC) {
@@ -524,38 +525,38 @@ void Company::WriteOutput() {
 	Cargo* pC;
 	OutputFile.open("Input-Output files/"+ofname, ios::out);
 	OutputFile << "CDT\tID\tPT\tWT\tTID" << endl;
-	while (DeliveredCargos.dequeue(pC))
+	while (DeliveredCargos.dequeue(pC)) //printing delivered cargos
 	{
-		temp = pC->getDeliveryTime();
+		temp = pC->getDeliveryTime(); 
 		day = temp / 24 + 1;
 		temp = temp % 24;
-		OutputFile << day << ":" << temp << "\t";
-		OutputFile << pC->getID() << "\t";
+		OutputFile << day << ":" << temp << "\t";//delivery time
+		OutputFile << pC->getID() << "\t"; //ID
 		temp = pC->getPrepTime();
 		day = temp / 24 + 1;
 		temp = temp % 24;
-		OutputFile << day << ":" << temp << "\t";
+		OutputFile << day << ":" << temp << "\t";//preparation time
 		temp = pC->getWatingTime();
 		waitTime += temp;
 		day = temp / 24;
 		temp = temp % 24;
-		OutputFile << day << ":" << temp << "\t";
+		OutputFile << day << ":" << temp << "\t";//waiting time
 		temp = pC->getTID();
-		OutputFile << temp << endl;
+		OutputFile << temp << endl;//truck ID
 	}
 	OutputFile << "-------------------------------------------" << endl;
 	OutputFile << "-------------------------------------------" << endl;
-	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount << "]" << endl;
+	OutputFile << "Cargos: " << VCcount + NCcount + SCcount << "[N: " << NCcount << ",S: " << SCcount << ",V: " << VCcount << "]" << endl;//cargos counts
 	waitTime = waitTime / (NCcount + VCcount + SCcount);
 	day = waitTime / 24;
 	temp = waitTime % 24;
-	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl;
+	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl; //avg wait
 	temp = round((float)AutoPcount / (VCcount + NCcount + SCcount) * 100);
-	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;
-	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;
+	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;//autop
+	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;//number of trucks
 	float activetime = 0, utilization = 0;
 	Truck* t;
-	while (Avail_NT.dequeue(t)) {
+	while (Avail_NT.dequeue(t)) {// calculates all utilization and active times
 		utilization+=t->CalculateTruckUtlization(time);
 		activetime += t->getActiveTime();
 	}
@@ -567,8 +568,8 @@ void Company::WriteOutput() {
 		utilization += t->CalculateTruckUtlization(time);
 		activetime += t->getActiveTime();
 	}
-	activetime = (activetime / (N + V + S));
-	utilization = utilization / (N + V + S) *100;
+	activetime = (activetime / (N + V + S)); //calcs avg active
+	utilization = utilization / (N + V + S) *100; //calcs avg util
 	OutputFile << "Avg Active time = " << (int)activetime / 24 << ":" << (int)activetime % 24 << endl;
 	OutputFile << "Avg utilization = " << round(utilization) << "%" << endl;
 	OutputFile.close();

@@ -10,7 +10,7 @@ UI_Class::UI_Class()
 		<< "1- Interactive mode" << endl 
 		<< "2- Step-by-step mode" << endl 
 		<< "3- Silent mode" <<endl;
-
+	cout << "Selection: ";
 	cin >> mode;
 	while (mode < 1 || mode>3)
 	{

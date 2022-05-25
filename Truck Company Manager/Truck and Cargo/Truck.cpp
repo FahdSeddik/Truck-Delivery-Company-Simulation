@@ -96,12 +96,12 @@ void Truck::setMoveTime(int time)
 	MoveTime = time;
 	Cargo* c;
 	LLQ<Cargo*> temq;
-	while (AssignedCargos.dequeue(c))
+	while (AssignedCargos.dequeue(c)) //update all movetimes of cargos
 	{
 		c->setMoveTime(time);
-		temq.enqueue(c);
+		temq.enqueue(c);//temq
 	}
-	while (temq.dequeue(c))
+	while (temq.dequeue(c))//reassign cargos
 		AssignCargo(c);
 }//move time setter.
 
@@ -135,7 +135,7 @@ bool Truck::AssignCargo(Cargo * CargoToAssign)
 
 bool Truck::NeedsRepairing()
 {
-	return currentJourneyCount % J == 0;
+	return ((currentJourneyCount % J) == 0);
 };//return journeycount % J;
 
 float Truck::CalculateTruckUtlization(int SimTime)
@@ -182,7 +182,7 @@ bool Truck::Update(Company* C, int Global_Time)
 		C->AppendDeliveredCargo(c);
 		TotalCargosDel++;
 		if(AssignedCargos.isEmpty())
-			activeTime += Global_Time - MoveTime + loadtime;
+			activeTime += Global_Time - MoveTime + loadtime; //increment active time
 		return true;
 	}
 	//if no cargos to deliver and reach nextDT then this means truck has returned to company

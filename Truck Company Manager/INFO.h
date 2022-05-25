@@ -1,6 +1,5 @@
 #pragma once
 
-//Add info (enums, etc)
 
 //Cargo types include 
 /*

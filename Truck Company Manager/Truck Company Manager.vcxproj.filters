@@ -56,12 +56,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DS\BagADT.h">
-      <Filter>DS</Filter>
-    </ClInclude>
-    <ClInclude Include="DS\LLBag.h">
-      <Filter>DS</Filter>
-    </ClInclude>
     <ClInclude Include="DS\LLQ.h">
       <Filter>DS</Filter>
     </ClInclude>
@@ -94,9 +88,6 @@
     </ClInclude>
     <ClInclude Include="INFO.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DS\Linked_List.h">
-      <Filter>DS</Filter>
     </ClInclude>
     <ClInclude Include="UI\UI_Class.h">
       <Filter>UI</Filter>

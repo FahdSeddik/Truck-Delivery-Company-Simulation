@@ -151,9 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Company.h" />
-    <ClInclude Include="DS\BagADT.h" />
-    <ClInclude Include="DS\Linked_List.h" />
-    <ClInclude Include="DS\LLBag.h" />
     <ClInclude Include="DS\LLQ.h" />
     <ClInclude Include="DS\Node.h" />
     <ClInclude Include="DS\PQ.h" />

@@ -3,7 +3,7 @@ using namespace std;
 #include "Company.h"
 
 /*
-Classes to be developed:
+Classes:
 1- Event Classes (Event Abstract)
         - Preparation
         - Cancel
@@ -23,11 +23,11 @@ int main()
     Company TC(&UI); //truck company instantiation
     int Global_Time = 0; //global time in hours
 
-    while (TC.UpdateAll(Global_Time)) {
-        TC.PrintStatus();
-        Global_Time++;
+    while (TC.UpdateAll(Global_Time)) { //calls updateAll
+        TC.PrintStatus(); //print
+        Global_Time++;//increment global time +1 hour
     }
-
+    TC.PrintStatus();//print last status after UpdateAll returned false (i.e. finish state)
     TC.WriteOutput();
        
 }
