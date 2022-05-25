@@ -191,7 +191,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 			pT->setMoveTime(finishloadtime);
 			Loading_Trucks.enqueue(pT,-finishloadtime);	//enqueue in loading
 		}
-		else if (EventList.getSize()==0) //not enough cargos for capacity but no events
+		else if (EventList.isEmpty()) //not enough cargos for capacity but no events
 		{								//this would happen at the end of the program
 										//if 2 VIP cargos left but not enough for capacity(no maxW for VIP)
 			t = 0;
