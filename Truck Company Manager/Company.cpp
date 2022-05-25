@@ -578,7 +578,7 @@ void Company::WriteOutput() {
 	}
 	activetime = (activetime / (N + V + S)); //calcs avg active
 	utilization = utilization / (N + V + S) *100; //calcs avg util
-	OutputFile << "Avg Active time = " << (int)activetime / 24 << ":" << (int)activetime % 24 << endl;
+	OutputFile << "Avg Active time = " << round((float)activetime / time * 100) << "%" << endl;
 	OutputFile << "Avg utilization = " << round(utilization) << "%" << endl;
 	OutputFile.close();
 }

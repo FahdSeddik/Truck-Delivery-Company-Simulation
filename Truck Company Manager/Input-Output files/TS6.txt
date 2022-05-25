@@ -44,5 +44,5 @@ Cargos: 39[N: 8,S: 11,V: 20]
 Cargo Avg Wait = 0:22
 Auto-promoted Cargos: 43%
 Trucks: 5[N: 2,S: 2,V: 1]
-Avg Active time = 2:10
+Avg Active time = 44%
 Avg utilization = 30%
