@@ -188,6 +188,8 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 			}
 			flag = true;
 			int finishloadtime = pT->CalcLoadTime()+time; //calculate finish time (loading)
+			if (time / 24 != finishloadtime / 24) //if day changed from start to finish then we passed offhours
+				finishloadtime += 6;//increment offhours to edit finish load time (11pm->4am are 5 hours but start working at 5)
 			pT->setMoveTime(finishloadtime);
 			Loading_Trucks.enqueue(pT,-finishloadtime);	//enqueue in loading
 		}
@@ -203,6 +205,8 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 			}
 			flag = true;
 			int finishloadtime = pT->CalcLoadTime() + time; //calculate finish time (loading)
+			if (time / 24 != finishloadtime / 24) //if day changed from start to finish then we passed offhours
+				finishloadtime += 6;//increment offhours to edit finish load time (11pm->4am are 5 hours but start working at 5)
 			pT->setMoveTime(finishloadtime);
 			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
@@ -234,6 +238,8 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 				pT->AssignCargo(pC);
 			}
 			int finishloadtime = pT->CalcLoadTime() + time;//calculate finish time (loading)
+			if (time/24 != finishloadtime/24) //if day changed from start to finish then we passed offhours
+				finishloadtime += 6;//increment offhours to edit finish load time (11pm->4am are 5 hours but start working at 5)
 			pT->setMoveTime(finishloadtime);
 			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
 
@@ -250,6 +256,8 @@ void Company::LoadTrucks(LLQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap
 			}
 			flag = true;
 			int finishloadtime = pT->CalcLoadTime() + time; //calculate finish time (loading)
+			if (time / 24 != finishloadtime / 24) //if day changed from start to finish then we passed offhours
+				finishloadtime += 6;//increment offhours to edit finish load time (11pm->4am are 5 hours but start working at 5)
 			pT->setMoveTime(finishloadtime);
 			TruckList->dequeue(pT);
 			Loading_Trucks.enqueue(pT, -finishloadtime); //enqueue in loading
@@ -551,7 +559,7 @@ void Company::WriteOutput() {
 	day = waitTime / 24;
 	temp = waitTime % 24;
 	OutputFile << "Cargo Avg Wait = " << day << ":" << temp << endl; //avg wait
-	temp = round((float)AutoPcount / (VCcount + NCcount + SCcount) * 100);
+	temp = round((float)AutoPcount / (AutoPcount + NCcount) * 100);
 	OutputFile << "Auto-promoted Cargos: " << temp << "%" << endl;//autop
 	OutputFile << "Trucks: " << N + V + S << "[N: " << N << ",S: " << S << ",V: " << V << "]" << endl;//number of trucks
 	float activetime = 0, utilization = 0;
