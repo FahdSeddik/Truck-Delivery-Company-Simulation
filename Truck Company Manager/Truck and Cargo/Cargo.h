@@ -58,7 +58,21 @@ public:
 	int getID();//getter for ID
 	int getTID(); // getter for TID
 
-	
+	int getPrio()const;
 
-
+	bool operator>(Cargo Right) {
+		int rPrio = Right.getPrio();
+		if (getPrio() > rPrio)return true;
+		else return false;
+	}
+	bool operator<(Cargo Right) {
+		int rPrio = Right.getPrio();
+		if (getPrio() < rPrio)return true;
+		else return false;
+	}
+	bool operator==(Cargo Right) {
+		int rPrio = Right.getPrio();
+		if (getPrio() == rPrio)return true;
+		else return false;
+	}
 };

@@ -5,7 +5,7 @@
 #include "Truck and Cargo/Cargo.h"
 #include "Truck and Cargo/Truck.h" //after company
 #include "Events/Event.h"
-
+#include "DS/MaxHeap.h"
 #include "UI/UI_Class.h"
 #include <fstream>
 #include <string>
@@ -25,11 +25,12 @@ private:
 	However delivered list has all cargo types
 	*/
 	LLQ<Cargo*> Wait_NC, Wait_SC; //first come first served
-	PQ<Cargo*> Wait_VC; //priority queue
+	MaxHeap<Cargo*> Wait_VC; //priority queue
 	LLQ<Cargo*> DeliveredCargos; //queue linked
-
 	string DN, DV, DS; //strings for printing delivered separated
 	
+	int mode;
+	bool pSilent;
 	//TRUCK LISTS
 	/*
 	Each truck type	has its own available list.
@@ -39,12 +40,12 @@ private:
 	*/
 	LLQ<Truck*> Avail_NT, Avail_VT, Avail_ST;
 	PQ<Truck*> Loading_Trucks; //priority queue based on finish load first
-	PQ<Truck*> Under_Check; //PQ based on who finished first
+	LLQ<Truck*> UNT,UVT,UST; //PQ based on who finished first
 	PQ<Truck*> MovingTrucks; //PQ based on next cargo delivery time
 
 
 	//Events
-	LLQ<Event*> EventList;   
+	LLQ<Event*> EventList;
 
 	int time; //time in hours is also simulation time
 	int N, S, V;//numbers of each type of truck
@@ -69,7 +70,9 @@ private:
 	// multiple trucks may need moving to another list
 	// however, if so, then they should be after each other due to implemented data structure
 	void CheckTruckStatus();
-
+	void UpdateLoading();
+	void UpdateMoving();
+	void UpdateRepairing();
 	//PHASE-1
 	//TODO: to be used in update in case an event is to be done 
 	// simply can be Ready::Execute for example
@@ -83,7 +86,7 @@ private:
 	//Loads From cargo list in truck list if conditions are correct 
 	void LoadTrucks(LLQ<Cargo*> * CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag);
 	//Overloaded version (vip cargos are priority queues and have different conditions (no MaxW)
-	void LoadTrucks(PQ<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap,bool& flag);
+	void LoadTrucks(MaxHeap<Cargo*> * CargoList , LLQ<Truck*>* TruckList,int Cap,bool& flag);
 
 	//PHASE-1
 	//TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
@@ -94,6 +97,7 @@ public:
 	//Constructor to read from file and set time to 0 
 	Company(UI_Class* pUI);
 
+	
 
 	//PHASE-1 (only part of the implementaion)
 	//TODO:
@@ -132,5 +136,22 @@ public:
 
 	//TODO: writes output file
 	void WriteOutput();
+
+	//***************************************
+	//				Getters					*
+	//***************************************
+	LLQ<Cargo*>const* getWaitNC()const;
+	LLQ<Cargo*>const* getWaitSC()const;
+	MaxHeap<Cargo*>const* getWaitVC()const;
+	LLQ<Truck*>const* getAvailNT()const;
+	LLQ<Truck*>const* getAvailST()const;
+	LLQ<Truck*>const* getAvailVT()const;
+	LLQ<Truck*>const* getUNT()const;
+	LLQ<Truck*>const* getUST()const;
+	LLQ<Truck*>const* getUVT()const;
+	int getGlobalTime()const;
+	PQ<Truck*>const* getMovingT()const;
+	PQ<Truck*>const* getLoadingT()const;
+
 };
 

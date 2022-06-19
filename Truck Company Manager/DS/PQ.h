@@ -94,7 +94,7 @@ public:
 	} //peek front of queue
 
 
-	void print() {
+	void print() const{
 		if (!Head)
 			return;
 		PQNode<ItemType>* ptr = Head;

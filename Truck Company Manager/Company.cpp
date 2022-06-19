@@ -17,7 +17,10 @@ Company::Company(UI_Class* pUI) {
 	ReadFile(ifilename);
 	movc = 0;
 	LoadN = LoadS = LoadV = false;
+	mode = pUI->getMode();
+	pSilent = false;
 }
+
 
 
 //TODO: READ FROM INPUT FILE CALLED ONLY IN CONSTRUCTOR
@@ -168,13 +171,13 @@ void Company:: AssignCargos() {
 
 }
 
-void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag)
+void Company::LoadTrucks(MaxHeap<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,bool& flag)
 {
 	int temp;
 	int t;
 	Cargo* pC;
 	Truck* pT;
-	while (CargoList->peekFront(pC) && TruckList->peekFront(pT) &&!flag)
+	while (!CargoList->isEmpty() && TruckList->peekFront(pT) &&!flag)
 	{
 		temp = CargoList->getSize(); //cargos count
 		if (temp >= Cap) //if present more than truck capacity
@@ -182,7 +185,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 			TruckList->dequeue(pT);
 			for (int i = 0; i < Cap; i++) //load all
 			{
-				CargoList->dequeue(pC);
+				CargoList->ExtractMax(pC);
 				pC->setTID(pT->getID());
 				pT->AssignCargo(pC);
 			}
@@ -197,7 +200,7 @@ void Company::LoadTrucks(PQ<Cargo*>* CargoList, LLQ<Truck*>* TruckList, int Cap,
 		{								//this would happen at the end of the program
 										//if 2 VIP cargos left but not enough for capacity(no maxW for VIP)
 			t = 0;
-			while (CargoList->dequeue(pC) && t <= Cap) //load cargos into truck
+			while (CargoList->ExtractMax(pC) && t <= Cap) //load cargos into truck
 			{
 				pT->AssignCargo(pC);
 				pC->setTID(pT->getID());
@@ -282,7 +285,7 @@ bool Company::UpdateAll(int Global_Time) {
 	CheckTruckStatus();
 	if(!offhours)
 		AssignCargos();
-	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_Trucks.isEmpty() && MovingTrucks.isEmpty() && Under_Check.isEmpty() && EventList.isEmpty())
+	if (Wait_NC.isEmpty() && Wait_SC.isEmpty() && Wait_VC.isEmpty() && Loading_Trucks.isEmpty() && MovingTrucks.isEmpty() && UNT.isEmpty() && UVT.isEmpty() && UST.isEmpty() && EventList.isEmpty())
 		return false;
 	return true;
 }
@@ -296,6 +299,11 @@ bool Company::UpdateAll(int Global_Time) {
 // however, if so, then they should be after each other due to implemented data structure
 void Company::CheckTruckStatus()
 {
+	UpdateLoading();
+	UpdateRepairing();
+	UpdateMoving();
+}
+void Company::UpdateLoading() {
 	int temp;
 	Truck* pTruck;
 	Truck_Type Type;
@@ -318,28 +326,49 @@ void Company::CheckTruckStatus()
 		else
 			break;
 	}
-	while (Under_Check.peekFront(pTruck)) { //if under check trucks needs updating
+}
+void Company::UpdateRepairing() {
+	int temp;
+	Truck* pTruck;
+	Truck_Type Type;
+	while (!UNT.isEmpty()) { //if under check trucks needs updating
+		UNT.peekFront(pTruck);
 		temp = time - pTruck->getLastReturnTime(); //time interval
 		Type = pTruck->getTruckType();
-
-		if (Type == NT && temp>=MT_N) //enqueue in available if passed maintenance time
+		if (temp >= MT_N) //enqueue in available if passed maintenance time
 		{
-			Under_Check.dequeue(pTruck);
+			UNT.dequeue(pTruck);
 			Avail_NT.enqueue(pTruck);
 		}
-		else if (Type == ST && temp>= MT_S)
+		else break;
+	}
+	while (!UST.isEmpty()) { //if under check trucks needs updating
+		UST.peekFront(pTruck);
+		temp = time - pTruck->getLastReturnTime(); //time interval
+		Type = pTruck->getTruckType();
+		if (temp >= MT_S) //enqueue in available if passed maintenance time
 		{
-			Under_Check.dequeue(pTruck);
+			UST.dequeue(pTruck);
 			Avail_ST.enqueue(pTruck);
 		}
-		else if (Type == VT && temp>= MT_V)
+		else break;
+	}
+	while (!UVT.isEmpty()) { //if under check trucks needs updating
+		UVT.peekFront(pTruck);
+		temp = time - pTruck->getLastReturnTime(); //time interval
+		Type = pTruck->getTruckType();
+		if (temp >= MT_V) //enqueue in available if passed maintenance time
 		{
-			Under_Check.dequeue(pTruck);
+			UVT.dequeue(pTruck);
 			Avail_VT.enqueue(pTruck);
 		}
-		else
-			break;
+		else break;
 	}
+}
+void Company::UpdateMoving() {
+	int temp;
+	Truck* pTruck;
+	Truck_Type Type;
 	while (MovingTrucks.peekFront(pTruck)) { //check moving trucks
 		temp = pTruck->getNextDT();
 		if (temp == time) //if next delivery time arrived (or returned to company)
@@ -353,20 +382,19 @@ void Company::CheckTruckStatus()
 			else if (pTruck->NeedsRepairing()) //if returned to company check if need repairing
 			{
 				Type = pTruck->getTruckType();
-				int prio;
-				if (Type == NT) //calc finish maintenance time (prio in undercheck)
+				if (Type == NT)
 				{
-					prio = time + MT_N;
+
+					UNT.enqueue(pTruck);
 				}
 				else if (Type == ST)
 				{
-					prio = time + MT_S;
+					UST.enqueue(pTruck);
 				}
 				else
 				{
-					prio = time + MT_V;
+					UVT.enqueue(pTruck);
 				}
-				Under_Check.enqueue(pTruck, -prio); //enqueue in maintenance
 			}
 			else //doesnt need maintenance
 			{
@@ -388,9 +416,7 @@ void Company::CheckTruckStatus()
 		else
 			break;
 	}
-
 }
-
 //TODO: to be used in update in case an event is to be done
 // simply can be Ready::Execute for example
 void Company::ExecuteEvent() {
@@ -444,7 +470,8 @@ void Company::PrintStatus() {
 	-Number of delivered cargos
 	-moving cargos count
 	*/
-	pUI->Print(time,Wait_NC,Wait_SC,Wait_VC,DN,DV,DS,Avail_NT,Avail_VT,Avail_ST,Loading_Trucks,Under_Check,MovingTrucks,DeliveredCargos.getSize(),movc);
+	if(mode!=3)
+		pUI->Print(this,DN,DV,DS,DeliveredCargos.getSize(),movc);
 }
 
 
@@ -458,8 +485,7 @@ void Company::PromoteCargo(int ID,int ExtraMoney) {
 		if (c->getID() == ID) {
 			c->setCost(c->getcost() + ExtraMoney);
 			c->setType(VC);
-			int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime();
-			Wait_VC.enqueue(c, prio);
+			Wait_VC.Insert(c);
 			NCcount--;
 			VCcount++;
 			break;
@@ -516,8 +542,7 @@ void Company::AppendWaitingCargo(Cargo* c) {
 		Wait_NC.enqueue(c);
 	}
 	else if (c->getType() == VC) {
-		int prio = 5 * c->getcost() - 3 * c->getDeliveryDistance() - 2 * c->getPrepTime(); //prio equation
-		Wait_VC.enqueue(c,prio);
+		Wait_VC.Insert(c);
 	}
 	else if (c->getType() == SC) {
 		Wait_SC.enqueue(c);
@@ -581,4 +606,64 @@ void Company::WriteOutput() {
 	OutputFile << "Avg Active time = " << round((float)activetime / time * 100) << "%" << endl;
 	OutputFile << "Avg utilization = " << round(utilization) << "%" << endl;
 	OutputFile.close();
+}
+
+LLQ<Cargo*>const*  Company::getWaitNC() const
+{
+	return &Wait_NC;
+}
+
+LLQ<Cargo*>const* Company::getWaitSC() const
+{
+	return &Wait_SC;
+}
+
+MaxHeap<Cargo*>const* Company::getWaitVC() const
+{
+	return &Wait_VC;
+}
+
+LLQ<Truck*>const* Company::getAvailNT() const
+{
+	return &Avail_NT;
+}
+
+LLQ<Truck*>const* Company::getAvailST() const
+{
+	return &Avail_ST;
+}
+
+LLQ<Truck*>const* Company::getAvailVT() const
+{
+	return &Avail_VT;
+}
+
+LLQ<Truck*>const* Company::getUNT() const
+{
+	return &UNT;
+}
+
+LLQ<Truck*>const* Company::getUST() const
+{
+	return &UST;
+}
+
+LLQ<Truck*>const* Company::getUVT() const
+{
+	return &UVT;
+}
+
+int Company::getGlobalTime() const
+{
+	return time;
+}
+
+PQ<Truck*>const* Company::getMovingT() const
+{
+	return &MovingTrucks;
+}
+
+PQ<Truck*> const* Company::getLoadingT() const
+{
+	return &Loading_Trucks;
 }

@@ -79,7 +79,7 @@ public:
 	}//peek front of queue
 
 
-	void print() {
+	void print() const{
 		if (!Tail)
 			return;
 		Node<ItemType>* ptr = Tail->getNext();

@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Company.h" />
     <ClInclude Include="DS\LLQ.h" />
+    <ClInclude Include="DS\MaxHeap.h" />
     <ClInclude Include="DS\Node.h" />
     <ClInclude Include="DS\PQ.h" />
     <ClInclude Include="DS\PQNode.h" />

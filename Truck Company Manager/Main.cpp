@@ -22,11 +22,13 @@ int main()
     UI_Class UI;
     Company TC(&UI); //truck company instantiation
     int Global_Time = 0; //global time in hours
-
+    int mode = UI.getMode();
     while (TC.UpdateAll(Global_Time)) { //calls updateAll
         TC.PrintStatus(); //print
         Global_Time++;//increment global time +1 hour
     }
+    if (mode == 3)
+        UI.PrintSilent();
     TC.PrintStatus();//print last status after UpdateAll returned false (i.e. finish state)
     TC.WriteOutput();
        

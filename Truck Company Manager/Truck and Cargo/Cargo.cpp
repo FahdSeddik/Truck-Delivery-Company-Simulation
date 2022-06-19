@@ -98,7 +98,12 @@ int Cargo::getDeliveryTime() {
 int Cargo::getTID()
 {
 	return TID;
-}//Truck ID getter.
+}
+//Truck ID getter.
+int Cargo::getPrio() const
+{
+	return 5 * Cost - 3 * deliveryDistance - 2 * prepTime;
+}
 
 Cargo_Type Cargo::getType() {
 	return Ctype;
