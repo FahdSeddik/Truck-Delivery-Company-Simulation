@@ -36,9 +36,9 @@ This is a simulation of a truck delivery company written in C++. This was made a
   
    
 #### After running the program you will have 3 modes to choose from:
-* **Interactive Mode:** Would allow you to manually increment hours by pressing Enter
-* **Step-by-Step Mode:** Automatically increment hours by 1 each second
-* **Silent Mode:** Just produce an output file  
+* **Interactive Mode:** Would allow you to manually increment hours by pressing Enter.
+* **Step-by-Step Mode:** Automatically increment hours by 1 each second.
+* **Silent Mode:** Just produce an output file.  
   
   
 **You would then be asked to enter the input file's name aswell as the output file's name**  
