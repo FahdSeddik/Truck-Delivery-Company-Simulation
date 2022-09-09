@@ -60,7 +60,7 @@ This is a simulation of a truck delivery company written in C++. This was made a
 **0 Waiting Cargos: [] () {}** 0 total number of cargos [] for normal () for special {} for VIP  
 **Rest of Items are displayed similarily**
 
-## Contributers
+## Contributors
 - @FahdSeddik
 - @AbdulrahmanEl-Bedewy
 - @amrashraf2001
